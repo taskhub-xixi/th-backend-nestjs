@@ -8,6 +8,7 @@ import {
 import { JwtService } from "@nestjs/jwt";
 import { InjectRepository } from "@nestjs/typeorm";
 import * as bcrypt from "bcrypt";
+import { Response } from "express";
 import { WINSTON_MODULE_PROVIDER } from "nest-winston";
 import { LoginDTO, RegisterDTO, UserResponse } from "src/model/auth.model";
 import { UserEntity } from "src/user/user.entity";
@@ -15,7 +16,6 @@ import { Repository } from "typeorm";
 import { Logger } from "winston";
 import { jwtConstants } from "./constants";
 import { JwtPayload } from "./dto/payload-interface";
-import { Response } from "express";
 
 @Injectable()
 export class AuthService {
@@ -57,35 +57,27 @@ export class AuthService {
       const token = await this.getTokens(
         userRegistered?.id,
         userRegistered?.email,
+        response,
       );
       await this.updateRtHash(userRegistered.id, token.refresh_token);
       // WINSTON LOGGER
       this.logger.debug(
-        `AUTH_SERVICE: ID: ${JSON.stringify(userRegistered.id)}`,
+        `AUTH_SERVICE: CREATE_: ID ${JSON.stringify(userRegistered.id)}`,
       );
-      response.cookie("refresh_token", token.refresh_token, {
-        httpOnly: true,
-        secure: true,
-        sameSite: "lax",
-      });
-      response.cookie("access_token", token.access_token, {
-        httpOnly: true,
-        secure: true,
-        sameSite: "lax",
-      });
+
       return {
         username: request.username,
         access_token: token.access_token,
         refresh_token: token.refresh_token,
       };
     } catch (err: unknown) {
-      throw new BadRequestException((err as Error).message || "unknown error");
+      throw new HttpException((err as Error).message, 401);
     }
   }
 
   // login SQL
-  async login(request: LoginDTO): Promise<UserResponse> {
-    this.logger.debug(`LOGIN: ${request}`);
+  async login(request: LoginDTO, response: Response): Promise<UserResponse> {
+    this.logger.debug(`AUTH_SERVICE: LOGIN_: ${JSON.stringify(request)}`);
     const data = await this.authRepository.findOne({
       where: { email: request.email },
     });
@@ -95,10 +87,10 @@ export class AuthService {
 
     const match = await bcrypt.compare(request.password, data.password);
     if (!match) {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException("Something went wrong");
     }
 
-    const token = await this.getTokens(data.id, data.email);
+    const token = await this.getTokens(data.id, data.email, response);
     if (!data.hashedAccessToken) {
       throw new HttpException("Something went wrong", 401);
     }
@@ -176,7 +168,7 @@ export class AuthService {
   }
 
   // delete with SQL
-  async deleteSQL(email: string): Promise<void> {
+  async deleteSQL(email: string, response: Response): Promise<void> {
     const data = await this.authRepository.findOne({ where: { email } });
     if (!data) {
       throw new BadRequestException("account is missing");
@@ -184,6 +176,7 @@ export class AuthService {
     await this.authRepository.query("DELETE from users WHERE email = ? ", [
       email,
     ]);
+    this.deleteTokens(response);
   }
 
   // reset password SQL
@@ -200,7 +193,7 @@ export class AuthService {
   }
 
   // logout
-  async logout(email: string): Promise<void> {
+  async logout(email: string, response: Response): Promise<void> {
     const data = await this.authRepository.findOne({ where: { email } });
     if (!data) {
       throw new BadRequestException("account is missing");
@@ -214,9 +207,9 @@ export class AuthService {
 
   // =============== HELPER FUNCTION =====================
 
-  // update RtHash
+  // update RtHash -> login function helpers
   async updateRtHash(userId: number, rt: string): Promise<void> {
-    this.logger.debug(`AUTH_SERVICE: Update RtHash ID: ${userId} token: ${rt}`);
+    this.logger.debug(`AUTH_SERVICE: UpdateRtHash_ID: ${userId} token: ${rt}`);
     const hash = await bcrypt.hash(rt, 12);
     await this.authRepository.query(
       "UPDATE users SET hashedAccessToken = ? WHERE id = ?",
@@ -224,8 +217,13 @@ export class AuthService {
     );
   }
 
+  deleteTokens(response: Response) {
+    response.clearCookie("refresh_token");
+    response.clearCookie("access_token");
+  }
+
   // get token
-  async getTokens(userId: number, email: string) {
+  async getTokens(userId: number, email: string, response: Response) {
     const jwtPayload: JwtPayload = {
       sub: userId,
       email: email,
@@ -234,13 +232,23 @@ export class AuthService {
     const [at, rt] = await Promise.all([
       this.jwtService.signAsync(jwtPayload, {
         secret: jwtConstants.secrets,
-        expiresIn: "60s",
+        expiresIn: "15m",
       }),
       this.jwtService.signAsync(jwtPayload, {
         secret: jwtConstants.secrets,
         expiresIn: "7d",
       }),
     ]);
+    response.cookie("access_token", at, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "lax",
+    });
+    response.cookie("refresh_token", rt, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "lax",
+    });
     return {
       access_token: at,
       refresh_token: rt,
@@ -249,6 +257,7 @@ export class AuthService {
 
   // =============== HELPER FUNCTION =====================
 
+  // =============== VALIDATE FUNCTION =====================
   // validate
   async validateUser(email: string, pass: string) {
     const user = await this.authRepository.findOne({ where: { email } });
@@ -256,6 +265,7 @@ export class AuthService {
       const { password, ...result } = user;
       return result;
     }
-    throw new HttpException("AuthService: Unauthorized Exception", 401);
+    throw new HttpException("AUTH_SERVICE: Unauthorized Exception", 401);
   }
+  // =============== VALIDATE FUNCTION =====================
 }
