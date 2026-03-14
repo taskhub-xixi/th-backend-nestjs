@@ -4,6 +4,7 @@
 /build
 /.gitignore_folder
 /.opencode
+/.swarm
 
 # Logs
 logs

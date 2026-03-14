@@ -3,15 +3,16 @@ import {
   Controller,
   Get,
   HttpCode,
+  HttpStatus,
   Patch,
   Req,
   UseGuards,
 } from "@nestjs/common";
+import { JwtAuthGuard } from "src/auth/guards/jwt-auth.guard";
 import { Auth } from "src/common/auth.decorator";
 import { GetUserById, UpdateUserRequest } from "../model/user.model";
 import { UserEntity } from "./user.entity";
 import { UserService } from "./user.service";
-import { LocalStrategy } from "src/auth/strategies/local.strategy";
 
 @Controller("/api/users")
 export class UserController {
@@ -32,14 +33,15 @@ export class UserController {
     };
   }
 
-  @UseGuards(LocalStrategy)
+  @UseGuards(JwtAuthGuard)
   @Patch("/update/username")
-  @HttpCode(200)
+  @HttpCode(HttpStatus.OK)
   async changeUsername(@Body() request: UpdateUserRequest) {
     const result = await this.userService.changeUsername(request);
     return { data: result };
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get("/all")
   @HttpCode(200)
   async all() {
@@ -49,6 +51,7 @@ export class UserController {
     };
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get()
   @HttpCode(200)
   async get(@Auth() user: UserEntity) {
@@ -58,6 +61,7 @@ export class UserController {
     };
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get("/:id")
   @HttpCode(200)
   async getUser(@Req() request: GetUserById) {

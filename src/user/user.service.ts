@@ -23,7 +23,7 @@ export class UserService {
   // change username
   async changeUsername(request: UpdateUserRequest): Promise<UserEntity> {
     try {
-      this.logger.debug(`UserService.update(  ${JSON.stringify(request)} )`);
+      this.logger.debug(`UserService.update(${JSON.stringify(request)})`);
       if (
         !(await this.userRepository.findOne({
           where: { email: request.email },

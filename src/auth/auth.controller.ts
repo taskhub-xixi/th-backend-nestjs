@@ -5,6 +5,7 @@ import {
   Get,
   HttpCode,
   HttpException,
+  HttpStatus,
   Post,
   Put,
   Req,
@@ -23,14 +24,15 @@ import {
 } from "../model/auth.model";
 import { AuthService } from "./auth.service";
 import { LocalAuthGuard } from "./local-auth.guard";
-import { GetCurrentUserId } from "src/common/decorator/get-current-user-id.decorator";
+import { JwtStrategy } from "./strategies/jwt.strategy";
+import { LocalStrategy } from "./strategies/local.strategy";
 
 @Controller("/api/auth")
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post("register")
-  @HttpCode(200)
+  @HttpCode(HttpStatus.OK)
   async register(
     @Body() registerDTO: RegisterDTO,
     @Res({ passthrough: true }) response: Response,
@@ -60,23 +62,11 @@ export class AuthController {
       throw new HttpException("email must be atleast 8 charachter", 401);
     }
 
-    const result = await this.authService.create(registerDTO);
-
-    response.cookie("refresh_token", result.refresh_token, {
-      httpOnly: true,
-      secure: true,
-      sameSite: "lax",
-    });
-    response.cookie("access_token", result.access_token, {
-      httpOnly: true,
-      secure: true,
-      sameSite: "lax",
-    });
-
+    const result = await this.authService.create(registerDTO, response);
     return { data: result };
   }
 
-  @UseGuards(LocalAuthGuard)
+  @UseGuards(LocalStrategy)
   @Post("login")
   @HttpCode(200)
   async login(
@@ -99,17 +89,6 @@ export class AuthController {
 
     // validate user
     const result = await this.authService.login(loginDTO);
-
-    response.cookie("refresh_token", result.refresh_token, {
-      httpOnly: true,
-      secure: true,
-      sameSite: "lax",
-    });
-    response.cookie("access_token", result.access_token, {
-      httpOnly: true,
-      secure: true,
-      sameSite: "lax",
-    });
 
     return {
       data: result,
@@ -227,8 +206,8 @@ export class AuthController {
     @Body("email") email: string,
     @Res({ passthrough: true }) response: Response,
   ): Promise<{ message: string }> {
-    response.clearCookie("refreshToken");
-    response.clearCookie("accessToken");
+    response.clearCookie("refresh_token");
+    response.clearCookie("access_token");
     await this.authService.logout(email);
     return {
       message: "clear Cookie",

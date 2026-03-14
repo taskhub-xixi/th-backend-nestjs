@@ -6,6 +6,7 @@ import {
 
 export const Auth = createParamDecorator(
   (data: unknown, context: ExecutionContext) => {
+    console.log(`AUTH DECORATOR: Context: ${context}`);
     const request = context.switchToHttp().getRequest();
     const user = request.user;
     if (user) {

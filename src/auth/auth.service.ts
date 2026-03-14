@@ -15,6 +15,7 @@ import { Repository } from "typeorm";
 import { Logger } from "winston";
 import { jwtConstants } from "./constants";
 import { JwtPayload } from "./dto/payload-interface";
+import { Response } from "express";
 
 @Injectable()
 export class AuthService {
@@ -27,7 +28,10 @@ export class AuthService {
   ) {}
 
   // SQL QUERY
-  async create(request: RegisterDTO): Promise<UserResponse> {
+  async create(
+    request: RegisterDTO,
+    response: Response,
+  ): Promise<UserResponse> {
     try {
       if (
         await this.authRepository.findOne({ where: { email: request.email } })
@@ -59,6 +63,16 @@ export class AuthService {
       this.logger.debug(
         `AUTH_SERVICE: ID: ${JSON.stringify(userRegistered.id)}`,
       );
+      response.cookie("refresh_token", token.refresh_token, {
+        httpOnly: true,
+        secure: true,
+        sameSite: "lax",
+      });
+      response.cookie("access_token", token.access_token, {
+        httpOnly: true,
+        secure: true,
+        sameSite: "lax",
+      });
       return {
         username: request.username,
         access_token: token.access_token,
@@ -78,24 +92,22 @@ export class AuthService {
     if (!data) {
       throw new HttpException("Something went wrong", 401);
     }
+
     const match = await bcrypt.compare(request.password, data.password);
     if (!match) {
       throw new UnauthorizedException();
     }
-    const accessToken = await this.jwtService.signAsync(
-      { sub: data.id },
-      { expiresIn: "60s" },
-    );
-    const refreshToken = await this.jwtService.signAsync(
-      { sub: data.id },
-      { expiresIn: "7d" },
-    );
-    const hashed = await bcrypt.hash(refreshToken, 12);
-    await this.authRepository.query(
-      "UPDATE users SET hashedAccessToken = ? WHERE email = ?",
-      [hashed, request.email],
-    );
-    return { refresh_token: refreshToken, access_token: accessToken };
+
+    const token = await this.getTokens(data.id, data.email);
+    if (!data.hashedAccessToken) {
+      throw new HttpException("Something went wrong", 401);
+    }
+    await this.updateRtHash(data.id, data.hashedAccessToken);
+
+    return {
+      refresh_token: token.refresh_token,
+      access_token: token.access_token,
+    };
   }
 
   async verify(cookie: string): Promise<{ id: number }> {
