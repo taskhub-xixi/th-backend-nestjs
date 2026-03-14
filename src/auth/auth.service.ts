@@ -39,7 +39,7 @@ export class AuthService {
         throw new BadRequestException("email already used");
       }
 
-      const hashPassword = await bcrypt.hash(request.password, 12);
+      const hashPassword = await this.hash(request.password);
 
       await this.authRepository.query(
         "INSERT INTO users (username, email, password) VALUES(?, ?, ?)",
@@ -54,12 +54,9 @@ export class AuthService {
         throw new HttpException("Unexpected error", 401);
       }
 
-      const token = await this.getTokens(
-        userRegistered?.id,
-        userRegistered?.email,
-        response,
-      );
-      await this.updateRtHash(userRegistered.id, token.refresh_token);
+      const payload = { id: userRegistered.id, email: userRegistered.email };
+      const token = await this.UpdateToken(payload, response);
+
       // WINSTON LOGGER
       this.logger.debug(
         `AUTH_SERVICE: CREATE_: ID ${JSON.stringify(userRegistered.id)}`,
@@ -90,11 +87,11 @@ export class AuthService {
       throw new UnauthorizedException("Something went wrong");
     }
 
-    const token = await this.getTokens(data.id, data.email, response);
+    const payload = { id: data.id, email: data.email };
+    const token = await this.UpdateToken(payload, response);
     if (!data.hashedAccessToken) {
       throw new HttpException("Something went wrong", 401);
     }
-    await this.updateRtHash(data.id, data.hashedAccessToken);
 
     return {
       refresh_token: token.refresh_token,
@@ -117,12 +114,13 @@ export class AuthService {
   }
 
   async refresh(
-    refreshToken: string,
+    oldRefreshToken: string,
+    response: Response,
   ): Promise<{ accessToken: string; refreshToken: string }> {
     // make payload variable global
     let payload: JwtPayload;
     try {
-      payload = await this.jwtService.verifyAsync<JwtPayload>(refreshToken);
+      payload = await this.jwtService.verifyAsync<JwtPayload>(oldRefreshToken);
     } catch {
       throw new UnauthorizedException();
     }
@@ -139,31 +137,16 @@ export class AuthService {
     if (!user.hashedAccessToken) {
       throw new UnauthorizedException();
     }
-
-    // check
-    const valid = await bcrypt.compare(refreshToken, user.hashedAccessToken);
-    if (!valid) {
-      throw new UnauthorizedException();
+    if (await bcrypt.compare(oldRefreshToken, user?.hashedAccessToken)) {
+      throw new HttpException("Token Invalid", 401);
     }
 
     // create token
-    const accessToken = await this.jwtService.signAsync(
-      { id: user.id },
-      { expiresIn: "15m" },
-    );
-    const newRefresh = await this.jwtService.signAsync(
-      { id: user.id },
-      { expiresIn: "7d" },
-    );
-    const hash = await bcrypt.hash(newRefresh, 12);
-    await this.authRepository.update(
-      { id: user.id },
-      { hashedAccessToken: hash },
-    );
+    const token = await this.UpdateToken(payload, response);
 
     return {
-      accessToken,
-      refreshToken: newRefresh,
+      accessToken: token.access_token,
+      refreshToken: token.refresh_token,
     };
   }
 
@@ -185,7 +168,7 @@ export class AuthService {
     if (!data) {
       throw new BadRequestException("account is missing");
     }
-    const hashPassword = await bcrypt.hash(password, 12);
+    const hashPassword = await this.hash(password);
     await this.authRepository.query(
       "UPDATE users SET password = ? WHERE email = ?",
       [hashPassword, email],
@@ -207,28 +190,37 @@ export class AuthService {
 
   // =============== HELPER FUNCTION =====================
 
+  // DO NOT CALL THIS FUNCTION INDEPENDENT , THIS FUNCTION ALREADY CALLED BY `UpdateToken` Function
   // update RtHash -> login function helpers
-  async updateRtHash(userId: number, rt: string): Promise<void> {
-    this.logger.debug(`AUTH_SERVICE: UpdateRtHash_ID: ${userId} token: ${rt}`);
-    const hash = await bcrypt.hash(rt, 12);
+  async updateRtHash(id: number, rt: string, exp: Date): Promise<void> {
+    this.logger.debug(`AUTH_SERVICE: UpdateRtHash_ID: ${id} token: ${rt}`);
+    const hash = await this.hash(rt);
     await this.authRepository.query(
-      "UPDATE users SET hashedAccessToken = ? WHERE id = ?",
-      [hash, userId],
+      "UPDATE users SET hashedAccessToken = ?, refeshTokenExpAt = ? WHERE id = ?",
+      [hash, exp, id],
     );
   }
 
+  // hash -> logic function helpers
+  async hash(pass: string) {
+    return await bcrypt.hash(pass, 12);
+  }
+
+  // delete token -> logic function helpers
   deleteTokens(response: Response) {
     response.clearCookie("refresh_token");
     response.clearCookie("access_token");
   }
 
-  // get token
-  async getTokens(userId: number, email: string, response: Response) {
+  // UPDATE TOKEN TO DB AND GET TOKEN -> logic function helpers
+  async UpdateToken(payload: JwtPayload, response: Response) {
+    // DEFINE JWT PAYLOAD
     const jwtPayload: JwtPayload = {
-      sub: userId,
-      email: email,
+      sub: payload.id,
+      email: payload.email,
     };
 
+    // GENERATE TOKEN
     const [at, rt] = await Promise.all([
       this.jwtService.signAsync(jwtPayload, {
         secret: jwtConstants.secrets,
@@ -249,6 +241,16 @@ export class AuthService {
       secure: true,
       sameSite: "lax",
     });
+
+    // GET EXPIRES DATE AND SET DATE
+    const expiresAt = new Date();
+    expiresAt.setDate(expiresAt.getDate() + 7);
+    if (!payload.id) {
+      throw new HttpException("Something Wrong", 401);
+    }
+    // UPDATE DATABASE
+    await this.updateRtHash(payload.id, rt, expiresAt);
+    // RETURN VALUE
     return {
       access_token: at,
       refresh_token: rt,
@@ -258,7 +260,7 @@ export class AuthService {
   // =============== HELPER FUNCTION =====================
 
   // =============== VALIDATE FUNCTION =====================
-  // validate
+  // validate Guard --> logic function
   async validateUser(email: string, pass: string) {
     const user = await this.authRepository.findOne({ where: { email } });
     if (user && (await bcrypt.compare(pass, user.password))) {
