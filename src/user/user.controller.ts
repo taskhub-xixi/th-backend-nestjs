@@ -8,8 +8,8 @@ import {
   Req,
   UseGuards,
 } from "@nestjs/common";
-import { JwtAuthGuard } from "src/auth/guards/jwt-auth.guard";
-import { Auth } from "src/common/auth.decorator";
+import { JwtAuthGuard } from "src/auth/guards/index";
+import { Auth } from "src/common/decorator";
 import { GetUserById, UpdateUserRequest } from "../model/user.model";
 import { UserEntity } from "./user.entity";
 import { UserService } from "./user.service";
@@ -18,12 +18,10 @@ import { UserService } from "./user.service";
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  @UseGuards(JwtAuthGuard)
   @Patch("/update/email")
-  @HttpCode(200)
-  async changeEmail(
-    @Auth() user: UserEntity,
-    @Body() request: UpdateUserRequest,
-  ) {
+  @HttpCode(HttpStatus.OK)
+  async changeEmail(@Body() request: UpdateUserRequest) {
     const result = await this.userService.changeEmail(
       request.email as string,
       request.emailUpdate as string,
@@ -43,7 +41,7 @@ export class UserController {
 
   @UseGuards(JwtAuthGuard)
   @Get("/all")
-  @HttpCode(200)
+  @HttpCode(HttpStatus.OK)
   async all() {
     const result = await this.userService.getAllUser();
     return {
@@ -52,8 +50,8 @@ export class UserController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get()
-  @HttpCode(200)
+  @Get("user")
+  @HttpCode(HttpStatus.OK)
   async get(@Auth() user: UserEntity) {
     const result = await this.userService.get(user);
     return {

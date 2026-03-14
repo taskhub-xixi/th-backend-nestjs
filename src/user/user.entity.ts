@@ -6,16 +6,19 @@ export class UserEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ unique: true, length: 100 })
   @IsEmail()
   email: string;
 
-  @Column({ unique: true })
+  @Column({ unique: true, length: 100 })
   username: string;
 
-  @Column()
+  @Column({ length: 100 })
   password: string;
 
-  @Column({ nullable: true })
+  @Column({ type: "text", nullable: true })
   hashedAccessToken?: string;
+
+  @Column({ type: "timestamp", nullable: true })
+  refrehTokenExpAt?: Date;
 }
