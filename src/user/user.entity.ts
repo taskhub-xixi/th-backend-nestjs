@@ -10,15 +10,15 @@ export class UserEntity {
   @IsEmail()
   email: string;
 
-  @Column({ unique: true, length: 100 })
+  @Column({ unique: true, length: 100, nullable: true })
   username: string;
 
   @Column({ length: 100 })
   password: string;
 
   @Column({ type: "text", nullable: true })
-  hashedAccessToken?: string;
+  hashedRefreshToken?: string;
 
   @Column({ type: "timestamp", nullable: true })
-  refrehTokenExpAt?: Date;
+  refreshTokenExpAt?: Date;
 }
