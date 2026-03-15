@@ -26,7 +26,6 @@ import {
 import { AuthService } from "./auth.service";
 import { CheckUserGuard } from "./guards/check-user.guard";
 import { JwtAuthGuard } from "./guards/jwt-auth.guard";
-import { GetCurrentUserId } from "src/common/decorator";
 
 @Controller("/api/auth")
 export class AuthController {
@@ -36,9 +35,8 @@ export class AuthController {
   @HttpCode(HttpStatus.CREATED)
   async register(
     @Body() registerDTO: RegisterDTO,
-    @Res({ passthrough: true }) response: Response,
   ): Promise<WebResponse<UserResponse>> {
-    const result = await this.authService.create(registerDTO, response);
+    const result = await this.authService.create(registerDTO);
     return { data: result };
   }
 
@@ -56,8 +54,6 @@ export class AuthController {
     };
   }
 
-  @UseGuards(JwtAuthGuard)
-  @UseGuards(CheckUserGuard)
   @Post("refresh")
   @HttpCode(HttpStatus.OK)
   async refresh(
@@ -67,7 +63,9 @@ export class AuthController {
     const refreshToken = (req.cookies as CookiePayload)["refresh_token"];
 
     if (!refreshToken) {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException(
+        `AUTH_CONTROLLER.refresh: ${refreshToken}`,
+      );
     }
 
     const tokens = await this.authService.refresh(refreshToken, res);
@@ -107,7 +105,7 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   @Get("verify")
   @HttpCode(HttpStatus.OK)
-  async verify(@GetCurrentUserId() userId: number, @Req() request: Request) {
+  async verify(@Req() request: Request) {
     // take cookie from browser
     const cookie = (request.cookies as CookiePayload).accessToken;
     console.log(cookie);
