@@ -8,8 +8,8 @@ import {
   Req,
   UseGuards,
 } from "@nestjs/common";
-import { JwtAuthGuard } from "src/auth/guards/index";
-import { Auth } from "src/common/decorator";
+import { JwtAuthGuard } from "../auth/guards/index";
+import { Auth } from "../common/decorator/auth.decorator";
 import { GetUserById, UpdateUserRequest } from "../model/user.model";
 import { UserEntity } from "./user.entity";
 import { UserService } from "./user.service";
