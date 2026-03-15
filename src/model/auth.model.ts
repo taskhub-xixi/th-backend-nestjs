@@ -2,6 +2,7 @@ import {
   IsEmail,
   IsEmpty,
   IsNotEmpty,
+  IsOptional,
   IsString,
   Max,
   MaxLength,
@@ -33,11 +34,11 @@ export class RegisterDTO {
   @MaxLength(100)
   password: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   @MinLength(3)
   @MaxLength(100)
-  username: string;
+  username?: string;
 }
 
 export class UpdateDTO {
@@ -92,6 +93,7 @@ export class UserResponse {
   username?: string;
   access_token?: string;
   refresh_token?: string;
+  email?: string;
 }
 
 // REGISTER DTO --> logic code
