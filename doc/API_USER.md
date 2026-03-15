@@ -8,9 +8,9 @@ Request Body :
 
 ```json
 {
-  "username": "khannedy",
-  "password": "rahasia",
-  "name": "Eko Khannedy"
+  "email": "",
+  "password": "",
+  "username": ""
 }
 ```
 
@@ -19,8 +19,8 @@ Response Body (Success) :
 ```json
 {
   "data": {
-    "username": "khannedy",
-    "name": "Eko Khannedy"
+    "email": "khannedy",
+    "username": "Eko Khannedy"
   }
 }
 ```
@@ -41,7 +41,7 @@ Request Body :
 
 ```json
 {
-  "username": "khannedy",
+  "email": "khannedy",
   "password": "rahasia"
 }
 ```
@@ -51,9 +51,9 @@ Response Body (Success) :
 ```json
 {
   "data": {
-    "username": "khannedy",
-    "name": "Eko Khannedy",
-    "token": "session_id_generated"
+    "email": "khannedy",
+    "username": "Eko Khannedy",
+    "access_token": "session_id_generated"
   }
 }
 ```
@@ -115,8 +115,8 @@ Response Body (Success) :
 ```json
 {
   "data": {
-    "username": "khannedy",
-    "name": "Eko Khannedy"
+    "email": "khannedy",
+    "username": "Eko Khannedy"
   }
 }
 ```
