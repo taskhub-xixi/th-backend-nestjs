@@ -94,6 +94,7 @@ export class UserResponse {
   access_token?: string;
   refresh_token?: string;
   email?: string;
+  exp?: Date;
 }
 
 // REGISTER DTO --> logic code

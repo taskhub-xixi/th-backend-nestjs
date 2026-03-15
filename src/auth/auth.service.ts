@@ -11,7 +11,7 @@ import * as bcrypt from "bcrypt";
 import { Response } from "express";
 import { WINSTON_MODULE_PROVIDER } from "nest-winston";
 import { LoginDTO, RegisterDTO, UserResponse } from "src/model/auth.model";
-import { UserEntity } from "src/user/user.entity";
+import { UserEntity } from "../user/user.entity";
 import { Repository } from "typeorm";
 import { Logger } from "winston";
 import { jwtConstants } from "./constants";
@@ -58,7 +58,7 @@ export class AuthService {
       where: { email: request.email },
     });
     if (!data) {
-      throw new HttpException("email or password is invalid", 400);
+      throw new HttpException("Email or password is invalid", 400);
     }
 
     const match = await bcrypt.compare(request.password, data.password);
@@ -68,13 +68,17 @@ export class AuthService {
 
     const payload = { sub: data.id, email: data.email };
     const token = await this.UpdateToken(payload, response);
+    if (!token.refresh_token) {
+      throw new HttpException("Token Is not generated", 400);
+    }
     await this.updateRtHashDatabase(
       payload.sub,
       token.refresh_token,
-      token.update_exp,
+      token.exp,
     );
 
     return {
+      email: request.email,
       refresh_token: token.refresh_token,
       access_token: token.access_token,
     };
@@ -84,7 +88,7 @@ export class AuthService {
     try {
       const data = await this.jwtService.verifyAsync<{ id: number }>(cookie);
       if (!data) {
-        throw new UnauthorizedException();
+        throw new HttpException("Unauthorized User", 401);
       }
       return data;
     } catch (err: unknown) {
@@ -97,7 +101,7 @@ export class AuthService {
   async refresh(
     oldRefreshToken: string,
     response: Response,
-  ): Promise<{ accessToken: string; refreshToken: string }> {
+  ): Promise<UserResponse> {
     this.logger.info(`AUTH_SERVICE.refresh: ${oldRefreshToken}`);
     // make payload variable global
 
@@ -135,11 +139,14 @@ export class AuthService {
 
     // create token
     const token = await this.UpdateToken(payload, response);
+    if (!token.refresh_token) {
+      throw new HttpException("Token not generated", 400);
+    }
     await this.updateRtHashDatabase(user.id, token.refresh_token);
 
     return {
-      accessToken: token.access_token,
-      refreshToken: token.refresh_token,
+      access_token: token.access_token,
+      refresh_token: token.refresh_token,
     };
   }
 
@@ -147,7 +154,7 @@ export class AuthService {
   async deleteSQL(email: string, response: Response): Promise<void> {
     const data = await this.authRepository.findOne({ where: { email } });
     if (!data) {
-      throw new BadRequestException("account is missing");
+      throw new HttpException("Account is missing", 404);
     }
     await this.authRepository.query("DELETE from users WHERE email = ? ", [
       email,
@@ -159,7 +166,7 @@ export class AuthService {
   async resetPassword(email: string, password: string): Promise<void> {
     const data = await this.authRepository.findOne({ where: { email } });
     if (!data) {
-      throw new HttpException("account is missing", 400);
+      throw new HttpException("Account is missing", 404);
     }
     const hashPassword = await this.hash(password);
     await this.authRepository.query(
@@ -172,7 +179,7 @@ export class AuthService {
   async logout(email: string, response: Response): Promise<void> {
     const data = await this.authRepository.findOne({ where: { email } });
     if (!data) {
-      throw new BadRequestException("account is missing");
+      throw new HttpException("Account is missing", 404);
     }
     const token = "";
     await this.authRepository.query(
@@ -187,7 +194,11 @@ export class AuthService {
 
   // DO NOT CALL THIS FUNCTION INDEPENDENT , THIS FUNCTION ALREADY CALLED BY `UpdateToken` Function
   // update RtHash -> login function helpers
-  async updateRtHashDatabase(id: number, rt: string, exp?: Date) {
+  async updateRtHashDatabase(
+    id: number,
+    rt: string,
+    exp?: Date,
+  ): Promise<{ hash: string; id: number; exp?: Date }> {
     // GET EXPIRES DATE AND SET DATE
     const expiresAt = new Date();
     expiresAt.setDate(expiresAt.getDate() + 7);
@@ -195,9 +206,7 @@ export class AuthService {
       throw new HttpException("Something Wrong", 401);
     }
     const hash = await this.hash(rt);
-    this.logger.debug(
-      `AUTH_SERVICE.UpdateRtHash ID: ${id} token: ${rt} hash: ${hash}`,
-    );
+
     if (!exp) {
       this.logger.debug(`AUTH_SERVICE.updateRtHash.access_token: ${rt}`);
       return await this.authRepository.query(
@@ -214,8 +223,9 @@ export class AuthService {
   }
 
   // hash -> logic function helpers
-  async hash(pass: string) {
-    return await bcrypt.hash(pass, 12);
+  async hash(pass: string): Promise<string> {
+    pass = await bcrypt.hash(pass, 12);
+    return pass;
   }
 
   // delete token -> logic function helpers
@@ -225,7 +235,10 @@ export class AuthService {
   }
 
   // UPDATE TOKEN TO DB AND GET TOKEN -> logic function helpers
-  async UpdateToken(payload: JwtPayload, response: Response) {
+  async UpdateToken(
+    payload: JwtPayload,
+    response: Response,
+  ): Promise<UserResponse> {
     this.logger.info(`AUTH_SERVICE.UpdateToken: ${JSON.stringify(payload)}`);
     // DEFINE JWT PAYLOAD
     const jwtPayload: JwtPayload = {
@@ -246,12 +259,12 @@ export class AuthService {
     ]);
     response.cookie("access_token", at, {
       httpOnly: true,
-      secure: true,
+      secure: false,
       sameSite: "lax",
     });
     response.cookie("refresh_token", rt, {
       httpOnly: true,
-      secure: true,
+      secure: false,
       sameSite: "lax",
     });
     // GET EXPIRES DATE AND SET DATE
@@ -262,7 +275,7 @@ export class AuthService {
     return {
       access_token: at,
       refresh_token: rt,
-      update_exp: expiresAt,
+      exp: expiresAt,
     };
   }
 
@@ -276,7 +289,10 @@ export class AuthService {
       const { password, ...result } = user;
       return result;
     }
-    throw new HttpException("AUTH_SERVICE: Unauthorized Exception", 401);
+    throw new HttpException(
+      "AUTH_SERVICE.validateUser: Unauthorized Exception",
+      400,
+    );
   }
   // =============== VALIDATE FUNCTION =====================
 }

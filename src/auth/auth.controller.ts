@@ -26,6 +26,7 @@ import {
 import { AuthService } from "./auth.service";
 import { CheckUserGuard } from "./guards/check-user.guard";
 import { JwtAuthGuard } from "./guards/jwt-auth.guard";
+import { RTGuard } from "./guards/rt-token.guard";
 
 @Controller("/api/auth")
 export class AuthController {
@@ -37,7 +38,9 @@ export class AuthController {
     @Body() registerDTO: RegisterDTO,
   ): Promise<WebResponse<UserResponse>> {
     const result = await this.authService.create(registerDTO);
-    return { data: result };
+    return {
+      data: result,
+    };
   }
 
   @UseGuards(CheckUserGuard)
@@ -54,12 +57,13 @@ export class AuthController {
     };
   }
 
+  @UseGuards(RTGuard)
   @Post("refresh")
   @HttpCode(HttpStatus.OK)
   async refresh(
     @Req() req: Request,
     @Res({ passthrough: true }) res: Response,
-  ) {
+  ): Promise<WebResponse<UserResponse>> {
     const refreshToken = (req.cookies as CookiePayload)["refresh_token"];
 
     if (!refreshToken) {
@@ -71,8 +75,10 @@ export class AuthController {
     const tokens = await this.authService.refresh(refreshToken, res);
 
     return {
-      access_token: tokens.accessToken,
-      refresh_token: tokens.refreshToken,
+      data: {
+        access_token: tokens.access_token,
+        refresh_token: tokens.refresh_token,
+      },
     };
   }
 

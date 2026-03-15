@@ -4,7 +4,6 @@ import { ExtractJwt, Strategy } from "passport-jwt";
 import { jwtConstants } from "../constants";
 import { JwtPayload } from "../dto/payload-interface";
 
-// IMPORTANT: NEED HEADER AUTHORIZATION
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, "JWT_STRATEGY") {
   constructor() {
@@ -12,6 +11,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, "JWT_STRATEGY") {
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
       secretOrKey: jwtConstants.secrets,
+      passReqToCallback: true,
     });
   }
   validate(payload: JwtPayload) {
