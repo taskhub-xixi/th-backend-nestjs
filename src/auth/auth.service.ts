@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   HttpException,
   Inject,
   Injectable,
@@ -10,18 +9,20 @@ import { InjectRepository } from "@nestjs/typeorm";
 import * as bcrypt from "bcrypt";
 import { Response } from "express";
 import { WINSTON_MODULE_PROVIDER } from "nest-winston";
-import { LoginDTO, RegisterDTO, UserResponse } from "src/model/auth.model";
-import { UserEntity } from "../user/user.entity";
 import { Repository } from "typeorm";
 import { Logger } from "winston";
+import { LoginDTO, RegisterDTO, UserResponse } from "../model/auth.model";
+import { UserEntity } from "../user/user.entity";
 import { jwtConstants } from "./constants";
 import { JwtPayload } from "./dto/payload-interface";
+import { AuthRepositorySQL } from "./repository_query/auth.repository";
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectRepository(UserEntity)
     private readonly authRepository: Repository<UserEntity>,
+    private readonly repositoryQuery: AuthRepositorySQL,
     @Inject(WINSTON_MODULE_PROVIDER)
     private logger: Logger,
     private readonly jwtService: JwtService,
@@ -40,10 +41,11 @@ export class AuthService {
     }
 
     const hashPassword = await this.hash(request.password);
-    await this.authRepository.query(
-      "INSERT INTO users (username, email, password) VALUES(?, ?, ?)",
-      [request.username, request.email, hashPassword],
-    );
+    await this.authRepository.query(this.repositoryQuery.insertUser(), [
+      request.email,
+      request.username,
+      hashPassword,
+    ]);
 
     return {
       username: request.username,

@@ -6,10 +6,11 @@ import { UserEntity } from "../user/user.entity";
 import { AuthController } from "./auth.controller";
 import { AuthService } from "./auth.service";
 import { jwtConstants } from "./constants";
-import { LocalStrategy } from "./strategies/local.strategy";
-import { JwtStrategy } from "./strategies/jwt.strategy";
-import { RtStrategy } from "./strategies/rt.strategy";
-import { AtStrategy } from "./strategies/at.strategy";
+import { LocalStrategy } from "../common/strategies/local.strategy";
+import { JwtStrategy } from "../common/strategies/jwt.strategy";
+import { RtStrategy } from "../common/strategies/rt.strategy";
+import { AtStrategy } from "../common/strategies/at.strategy";
+import { AuthRepositorySQL } from "./repository_query/auth.repository";
 
 @Module({
   imports: [
@@ -20,7 +21,14 @@ import { AtStrategy } from "./strategies/at.strategy";
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, LocalStrategy, JwtStrategy, RtStrategy, AtStrategy],
+  providers: [
+    AuthService,
+    LocalStrategy,
+    JwtStrategy,
+    RtStrategy,
+    AtStrategy,
+    AuthRepositorySQL,
+  ],
   exports: [AuthService, LocalStrategy, PassportModule, JwtStrategy],
 })
 export class AuthModule {}

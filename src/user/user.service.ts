@@ -6,9 +6,9 @@ import {
 } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { WINSTON_MODULE_PROVIDER } from "nest-winston";
-import { UpdateUserRequest } from "src/model/user.model";
 import type { Repository } from "typeorm";
 import { Logger } from "winston";
+import { UpdateUserRequest } from "../model/user.model";
 import { UserEntity } from "./user.entity";
 
 @Injectable()

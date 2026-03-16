@@ -3,6 +3,7 @@ import { ConfigModule } from "@nestjs/config";
 import { WinstonModule } from "nest-winston";
 import * as winston from "winston";
 import { myFormat } from "./format.logger";
+import { PrismaService } from "./prisma.service";
 
 @Global()
 @Module({
@@ -30,7 +31,7 @@ import { myFormat } from "./format.logger";
     }),
     ConfigModule.forRoot({ isGlobal: true }),
   ],
-  providers: [],
-  exports: [],
+  providers: [PrismaService],
+  exports: [PrismaService],
 })
 export class CommonModule {}

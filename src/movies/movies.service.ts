@@ -1,7 +1,7 @@
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { TitleBacis } from 'src/typeorm/entities/title-basisc';
-import { Repository } from 'typeorm';
+import { Injectable } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { TitleBacis } from "../typeorm/entities/title-basisc";
+import { Repository } from "typeorm";
 
 @Injectable()
 export class MovieService {

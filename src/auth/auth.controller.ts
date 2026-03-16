@@ -14,7 +14,6 @@ import {
   UseGuards,
 } from "@nestjs/common";
 import { Request, Response } from "express";
-import { WebResponse } from "src/model/web.mode";
 import {
   CookiePayload,
   DeleteDTO,
@@ -23,10 +22,11 @@ import {
   UpdateDTO,
   UserResponse,
 } from "../model/auth.model";
+import { WebResponse } from "../model/web.mode";
 import { AuthService } from "./auth.service";
-import { CheckUserGuard } from "./guards/check-user.guard";
-import { JwtAuthGuard } from "./guards/jwt-auth.guard";
-import { RTGuard } from "./guards/rt-token.guard";
+import { CheckUserGuard } from "../common/guards/check-user.guard";
+import { JwtAuthGuard } from "../common/guards/jwt-auth.guard";
+import { RTGuard } from "../common/guards/rt-token.guard";
 
 @Controller("/api/auth")
 export class AuthController {
@@ -67,9 +67,7 @@ export class AuthController {
     const refreshToken = (req.cookies as CookiePayload)["refresh_token"];
 
     if (!refreshToken) {
-      throw new UnauthorizedException(
-        `AUTH_CONTROLLER.refresh: ${refreshToken}`,
-      );
+      throw new HttpException(`AUTH_CONTROLLER.refresh: ${refreshToken}`, 401);
     }
 
     const tokens = await this.authService.refresh(refreshToken, res);

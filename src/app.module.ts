@@ -10,6 +10,7 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { AuthModule } from "./auth/auth.module";
 import { CommonModule } from "./common/common.module";
 import { LogMiddleware } from "./log/log.middleware";
+import { ProductModule } from "./product/product.module";
 import { UserEntity } from "./user/user.entity";
 import { UserModule } from "./user/user.module";
 
@@ -27,6 +28,7 @@ import { UserModule } from "./user/user.module";
       synchronize: true,
     }),
     CommonModule,
+    ProductModule,
     UserModule,
     AuthModule,
   ],
