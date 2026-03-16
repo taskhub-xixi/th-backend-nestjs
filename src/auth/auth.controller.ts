@@ -27,6 +27,7 @@ import { AuthService } from "./auth.service";
 import { CheckUserGuard } from "../common/guards/check-user.guard";
 import { JwtAuthGuard } from "../common/guards/jwt-auth.guard";
 import { RTGuard } from "../common/guards/rt-token.guard";
+import { Public } from "../common/decorator";
 
 @Controller("/api/auth")
 export class AuthController {

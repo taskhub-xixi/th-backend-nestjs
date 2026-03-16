@@ -16,6 +16,7 @@ import { UserEntity } from "../user/user.entity";
 import { jwtConstants } from "./constants";
 import { JwtPayload } from "./dto/payload-interface";
 import { AuthRepositorySQL } from "./repository_query/auth.repository";
+import { Public } from "../common/decorator";
 
 @Injectable()
 export class AuthService {
