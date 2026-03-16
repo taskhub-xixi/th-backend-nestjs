@@ -35,12 +35,64 @@ export class CreateProductResponseSuccess {
     category: string;
     image: string;
   };
+  statusCode: number;
   message?: string;
 }
 
 export class CreateProductResponseError {
+  message: string[];
+  statusCode: number;
+}
+
+export class GetProductsRequest {
+  @IsNumber()
+  @IsOptional()
+  @Min(1)
+  page?: number;
+
+  @IsNumber()
+  @IsOptional()
+  limit?: number = 10;
+
+  @IsString()
+  @IsOptional()
+  category?: string;
+
+  @IsNumber()
+  @IsOptional()
+  minPrice?: number;
+
+  @IsNumber()
+  @IsOptional()
+  maxPrice?: number;
+
+  @IsString()
+  @IsOptional()
+  search?: string;
+}
+
+export class GetProductsResponseSuccess {
   data: {
-    message: string;
-    statusCode: number;
+    products: [
+      {
+        id: number;
+        name: string;
+        price: number;
+        description: string;
+        category?: string;
+        image: string;
+        createdAt: Date;
+      },
+    ];
+    total: number;
+    page?: number;
+    limit?: number;
+    totalPages: number;
   };
+  statusCode: number;
+}
+
+export class GetProductsResponseError {
+  message: string[];
+  statusCode: number;
 }
