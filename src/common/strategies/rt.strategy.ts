@@ -16,6 +16,7 @@ export class RtStrategy extends PassportStrategy(Strategy, "jwt-refresh") {
     });
   }
 
+  // GET RFERSH TOKEN
   validate(req: Request, payload: JwtPayload) {
     const refreshToken = req.get("authorization")?.replace("Bearer", "").trim();
 
