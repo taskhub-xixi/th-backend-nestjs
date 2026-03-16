@@ -1,9 +1,11 @@
-import { Inject, Injectable } from "@nestjs/common";
+import { HttpStatus, Inject, Injectable } from "@nestjs/common";
 import { WINSTON_MODULE_PROVIDER } from "nest-winston";
 import { PrismaService } from "../common/prisma.service";
 import {
   CreateProductRequest,
   CreateProductResponseSuccess,
+  GetProductsRequest,
+  GetProductsResponseSuccess,
 } from "../model/product.model";
 import { Logger } from "winston";
 
@@ -29,9 +31,21 @@ export class ProductService {
         category: user.category,
         image: user.image,
       },
+      statusCode: HttpStatus.CREATED,
       message: "Product created successfully",
     };
   }
 
-  async getProduct() {}
+  async getProductAll() {
+    this.logger.info(`[PRODUCT_SERVICE.getProductList: `);
+    const products = await this.prismaService.product.findMany();
+    return {
+      data: {
+        products: {
+          products,
+        },
+      },
+      statusCode: HttpStatus.OK,
+    };
+  }
 }

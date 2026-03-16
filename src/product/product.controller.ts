@@ -1,4 +1,5 @@
 import {
+  Get,
   Body,
   Controller,
   HttpCode,
@@ -6,33 +7,36 @@ import {
   Post,
   UseGuards,
 } from "@nestjs/common";
-import { RTGuard } from "../common/guards/rt-token.guard";
+import { Public } from "../common/decorator/";
+import { AdminGuard } from "../common/guards/admin.guard";
 import {
   CreateProductRequest,
   CreateProductResponseSuccess,
 } from "../model/product.model";
 import { ProductService } from "./product.service";
+import { Admin } from "../common/decorator/admin.decorator";
 
 @Controller("/product")
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
-  @UseGuards(RTGuard)
+  @Admin()
+  @UseGuards(AdminGuard)
   @HttpCode(HttpStatus.CREATED)
   @Post("create")
   async createProduct(
     @Body() req: CreateProductRequest,
   ): Promise<CreateProductResponseSuccess> {
     const result = await this.productService.createProduct(req);
-    return {
-      data: {
-        id: result.data.id,
-        name: result.data.name,
-        price: result.data.price,
-        category: result.data.category,
-        image: result.data.image,
-      },
-      message: result.message,
-    };
+    return result;
+  }
+
+  @Admin()
+  @UseGuards(AdminGuard)
+  @HttpCode(HttpStatus.OK)
+  @Get("all")
+  async getProductAll() {
+    const result = await this.productService.getProductAll();
+    return result;
   }
 }
