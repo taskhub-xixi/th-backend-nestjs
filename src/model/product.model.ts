@@ -73,21 +73,11 @@ export class GetProductsRequest {
 
 export class GetProductsResponseSuccess {
   data: {
-    products: [
-      {
-        id: number;
-        name: string;
-        price: number;
-        description: string;
-        category?: string;
-        image: string;
-        createdAt: Date;
-      },
-    ];
-    total: number;
+    products: unknown;
+    total?: number;
     page?: number;
     limit?: number;
-    totalPages: number;
+    totalPages?: number;
   };
   statusCode: number;
 }
@@ -95,4 +85,9 @@ export class GetProductsResponseSuccess {
 export class GetProductsResponseError {
   message: string[];
   statusCode: number;
+}
+
+export class GetProductById {
+  @IsNumber()
+  id?: number;
 }
