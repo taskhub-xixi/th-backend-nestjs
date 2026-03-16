@@ -1,30 +1,14 @@
 {
   "compilerOptions": {
-    // "resolvePackageJsonExports": true,
-    "esModuleInterop": true,
-    "isolatedModules": true,
-    "declaration": true,
-    "removeComments": true,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "allowSyntheticDefaultImports": true,
-    "sourceMap": true,
-    "outDir": "./dist",
-    "baseUrl": "./",
-    "incremental": true,
-    "skipLibCheck": true,
-    "strictNullChecks": true,
-    "forceConsistentCasingInFileNames": true,
-    "noImplicitAny": false,
-    "strictBindCallApply": false,
-    "noFallthroughCasesInSwitch": false,
-    "lib": ["ESNext"],
-    "target": "ESNext",
+    "target": "ES2022",
     "module": "CommonJS",
-    "moduleDetection": "force",
-    "moduleResolution": "node",
-    // "allowImportingTsExtensions": true,
-    // "verbatimModuleSyntax": true,
-    "noEmit": false
-  }
+    "rootDir": "src",
+    "outDir": "dist",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "incremental": false
+  },
+  "include": ["src/**/*.ts"]
 }
