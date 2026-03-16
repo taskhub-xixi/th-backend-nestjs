@@ -1,7 +1,7 @@
-import { SetMetadata } from "@nestjs/common";
+import { applyDecorators, SetMetadata } from "@nestjs/common";
 
 export const Public = () => {
-  SetMetadata("isPublic", true);
+  return applyDecorators(SetMetadata("isPublic", true));
 };
 
 // CREATE ROLES BASED DECORATOR BISA MENGGUNAKAN METODE BAWAAH "setMetadata" ATAUA MENGGUNAKAN REFLECTOR: --->

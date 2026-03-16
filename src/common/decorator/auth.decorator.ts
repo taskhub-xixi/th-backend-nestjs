@@ -5,7 +5,7 @@ import {
 } from "@nestjs/common";
 
 export const Auth = createParamDecorator(
-  (data: unknown, context: ExecutionContext) => {
+  (_data: unknown, context: ExecutionContext) => {
     console.log(`AUTH_DECORATOR: Context: ${context}`);
     const request = context.switchToHttp().getRequest();
     const user = request.user;
