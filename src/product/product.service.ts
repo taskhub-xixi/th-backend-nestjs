@@ -4,7 +4,6 @@ import { PrismaService } from "../common/prisma.service";
 import {
   CreateProductRequest,
   CreateProductResponseSuccess,
-  GetProductsRequest,
   GetProductsResponseSuccess,
 } from "../model/product.model";
 import { Logger } from "winston";
@@ -36,14 +35,27 @@ export class ProductService {
     };
   }
 
-  async getProductAll() {
-    this.logger.info(`[PRODUCT_SERVICE.getProductList: `);
+  async getProductAll(): Promise<GetProductsResponseSuccess> {
+    this.logger.info(`PRODUCT_SERVICE.getProductList: `);
     const products = await this.prismaService.product.findMany();
     return {
       data: {
-        products: {
-          products,
-        },
+        products,
+      },
+      statusCode: HttpStatus.OK,
+    };
+  }
+
+  async getProductById(req: number) {
+    this.logger.info(`PRODUCT_SERVICE.getProductById: ${req}`);
+    const products = await this.prismaService
+      .$queryRaw`SELECT * FROM products WHERE id = ${req}`;
+    this.logger.info(
+      `PRODUCT_SERVICE.getProductById: ${JSON.stringify(products)}`,
+    );
+    return {
+      data: {
+        products,
       },
       statusCode: HttpStatus.OK,
     };
