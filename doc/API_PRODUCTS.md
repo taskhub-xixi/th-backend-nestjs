@@ -158,11 +158,11 @@
 
 ### POST /api/products (Create)
 
-- [ ] 201 if valid data (admin only)
-- [ ] 400 if name empty
-- [ ] 400 if price <= 0
-- [ ] 400 if category empty
-- [ ] 401 if not authenticated
+- [~] 201 if valid data (admin only)
+- [~] 400 if name empty
+- [~] 400 if price <= 0
+- [~] 400 if category empty
+- [~] 401 if not authenticated
 - [ ] 403 if not admin
 
 ### GET /api/products (List)
