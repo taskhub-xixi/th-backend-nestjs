@@ -1,10 +1,12 @@
-import { HttpStatus, Inject, Injectable } from "@nestjs/common";
+import { HttpException, HttpStatus, Inject, Injectable } from "@nestjs/common";
 import { WINSTON_MODULE_PROVIDER } from "nest-winston";
 import { PrismaService } from "../common/prisma.service";
 import {
   CreateProductRequest,
   CreateProductResponseSuccess,
+  GetProductsRequest,
   GetProductsResponseSuccess,
+  UpdateProductRequest,
 } from "../model/product.model";
 import { Logger } from "winston";
 
@@ -35,9 +37,23 @@ export class ProductService {
     };
   }
 
-  async getProductAll(): Promise<GetProductsResponseSuccess> {
-    this.logger.info(`PRODUCT_SERVICE.getProductList: `);
-    const products = await this.prismaService.product.findMany();
+  async getProductAll(
+    req: GetProductsRequest,
+  ): Promise<GetProductsResponseSuccess> {
+    this.logger.info(`PRODUCT_SERVICE.getProductList: ${req.page}`);
+    // if (!page) {
+    //   page = 0;
+    // }
+    // if (!limit) {
+    //   limit = 10;
+    // }
+    // if (!minPrice) {
+    //   minPrice = 0;
+    // }
+
+    // PAGE
+    const products = await this.prismaService
+      .$queryRaw`SELECT * FROM products LIMIT 10 OFFSET ${req.page}`;
     return {
       data: {
         products,
@@ -47,12 +63,40 @@ export class ProductService {
   }
 
   async getProductById(req: number) {
-    this.logger.info(`PRODUCT_SERVICE.getProductById: ${req}`);
-    const products = await this.prismaService
+    const products: object[] = await this.prismaService
       .$queryRaw`SELECT * FROM products WHERE id = ${req}`;
+
+    if (!products || products.length === 0) {
+      throw new HttpException("Data Not Found", 404);
+    }
+
     this.logger.info(
       `PRODUCT_SERVICE.getProductById: ${JSON.stringify(products)}`,
     );
+    return {
+      data: {
+        products,
+      },
+      statusCode: HttpStatus.OK,
+    };
+  }
+
+  async updateProductById(id: number, req: UpdateProductRequest) {
+    const isExist = await this.prismaService.product.findUnique({
+      where: { id },
+    });
+    if (!isExist) {
+      throw new HttpException("Product not found", 404);
+    }
+    const data = Object.fromEntries(
+      Object.entries(req).filter(([_, v]) => v !== undefined),
+    );
+
+    const products = await this.prismaService.product.update({
+      where: { id: id },
+      data,
+    });
+
     return {
       data: {
         products,
