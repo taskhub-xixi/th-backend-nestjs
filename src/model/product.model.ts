@@ -6,6 +6,7 @@ import {
   IsString,
   Min,
 } from "class-validator";
+import { Type } from "class-transformer";
 
 export class CreateProductRequest {
   @IsString()
@@ -48,10 +49,12 @@ export class GetProductsRequest {
   @IsNumber()
   @IsOptional()
   @Min(1)
+  @Type(() => Number)
   page?: number;
 
   @IsNumber()
   @IsOptional()
+  @Type(() => Number)
   limit?: number = 10;
 
   @IsString()
@@ -60,10 +63,12 @@ export class GetProductsRequest {
 
   @IsNumber()
   @IsOptional()
+  @Type(() => Number)
   minPrice?: number;
 
   @IsNumber()
   @IsOptional()
+  @Type(() => Number)
   maxPrice?: number;
 
   @IsString()
@@ -90,4 +95,26 @@ export class GetProductsResponseError {
 export class GetProductById {
   @IsNumber()
   id?: number;
+}
+
+export class UpdateProductRequest {
+  @IsString()
+  @IsOptional()
+  name: string;
+
+  @IsNumber()
+  @Min(1)
+  @IsOptional()
+  price: Decimal;
+
+  @IsString()
+  @IsOptional()
+  description: string;
+
+  @IsString()
+  @IsOptional()
+  category: string;
+
+  @IsOptional()
+  image: string;
 }
