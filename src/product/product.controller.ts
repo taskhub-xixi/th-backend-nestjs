@@ -4,19 +4,20 @@ import {
   Get,
   HttpCode,
   HttpStatus,
-  ParseIntPipe,
-  Req,
   Param,
   Post,
   UseGuards,
+  Query,
+  Patch,
 } from "@nestjs/common";
 import { Admin } from "../common/decorator/admin.decorator";
 import { AdminGuard } from "../common/guards/admin.guard";
 import {
   CreateProductRequest,
   CreateProductResponseSuccess,
-  GetProductById,
+  GetProductsRequest,
   GetProductsResponseSuccess,
+  UpdateProductRequest,
 } from "../model/product.model";
 import { ProductService } from "./product.service";
 
@@ -39,8 +40,10 @@ export class ProductController {
   @UseGuards(AdminGuard)
   @HttpCode(HttpStatus.OK)
   @Get("all")
-  async getProductAll(): Promise<GetProductsResponseSuccess> {
-    const result = await this.productService.getProductAll();
+  async getProductAll(
+    @Query() req: GetProductsRequest,
+  ): Promise<GetProductsResponseSuccess> {
+    const result = await this.productService.getProductAll(req);
     return result;
   }
 
@@ -48,8 +51,22 @@ export class ProductController {
   @UseGuards(AdminGuard)
   @HttpCode(HttpStatus.OK)
   @Get("single/:id")
-  async getProductById(@Param("id") id: number) {
+  async getProductById(
+    @Param("id") id: number,
+  ): Promise<GetProductsResponseSuccess> {
     const result = await this.productService.getProductById(id);
+    return result;
+  }
+
+  @Admin()
+  @UseGuards(AdminGuard)
+  @HttpCode(HttpStatus.OK)
+  @Patch("single/:id")
+  async updateProductById(
+    @Param("id") id: number,
+    @Body() req: UpdateProductRequest,
+  ) {
+    const result = await this.productService.updateProductById(id, req);
     return result;
   }
 }
