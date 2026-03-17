@@ -7,6 +7,7 @@ import {
   GetProductsRequest,
   GetProductsResponseSuccess,
   UpdateProductRequest,
+  UploadPhotoRequest,
 } from "../model/product.model";
 import { Logger } from "winston";
 
@@ -104,4 +105,28 @@ export class ProductService {
       statusCode: HttpStatus.OK,
     };
   }
+
+  async deleteProductById(id: number) {
+    const isExist = await this.prismaService.product.findUnique({
+      where: { id: id },
+    });
+
+    if (!isExist) {
+      throw new HttpException("Product not found", 404);
+    }
+
+    const result = await this.prismaService
+      .$executeRaw`DELETE FROM products WHERE id = ${id}`;
+
+    return {
+      data: {
+        result,
+      },
+      statusCode: HttpStatus.OK,
+    };
+  }
+
+  // async uploadPhoto(req: UploadPhotoRequest){
+  //
+  // }
 }
