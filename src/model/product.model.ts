@@ -1,12 +1,13 @@
 import { Decimal } from "@prisma/client/runtime/client";
+import { Type } from "class-transformer";
 import {
   IsNotEmpty,
   IsNumber,
   IsOptional,
   IsString,
+  Max,
   Min,
 } from "class-validator";
-import { Type } from "class-transformer";
 
 export class CreateProductRequest {
   @IsString()
@@ -103,7 +104,7 @@ export class UpdateProductRequest {
   name: string;
 
   @IsNumber()
-  @Min(1)
+  @Min(0)
   @IsOptional()
   price: Decimal;
 
@@ -117,4 +118,29 @@ export class UpdateProductRequest {
 
   @IsOptional()
   image: string;
+}
+
+export class UploadPhotoRequest {
+  @IsString()
+  filename: string;
+
+  // @IsString()
+  // originalName: string;
+  //
+  // @IsNumber()
+  // @Max(5120) // equal to = 5MB
+  // size: number;
+
+  // @IsString()
+  // mimetype: string;
+}
+
+export class UploadPhotoResponseSuccess {
+  data: {
+    filename: string;
+    originalName: string;
+    size: number;
+    // mimetype: string;
+  };
+  statusCode: number;
 }
