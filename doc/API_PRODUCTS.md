@@ -175,8 +175,8 @@
 
 ### GET /api/products/:id (Get One)
 
-- [ ] 200 + product data
-- [ ] 404 if product not found
+- [~] 200 + product data
+- [~] 404 if product not found
 
 ### PATCH /api/products/:id (Update)
 
