@@ -167,11 +167,11 @@
 
 ### GET /api/products (List)
 
-- [ ] 200 + paginated products
-- [ ] Filter by category works
-- [ ] Filter by price range works
-- [ ] Search by name/description works
-- [ ] Return correct total & totalPages
+- [~] 200 + paginated products
+- [~] Filter by category works
+- [~] Filter by price range works
+- [~] Search by name/description works
+- [~] Return correct total & totalPages
 
 ### GET /api/products/:id (Get One)
 
@@ -180,14 +180,14 @@
 
 ### PATCH /api/products/:id (Update)
 
-- [ ] 200 if valid data (admin only)
-- [ ] 404 if product not found
-- [ ] 400 if price <= 0
+- [~] 200 if valid data (admin only)
+- [~] 404 if product not found
+- [~] 400 if price <= 0
 
 ### DELETE /api/products/:id (Delete)
 
-- [ ] 200 if success (admin only)
-- [ ] 404 if product not found
+- [~] 200 if success (admin only)
+- [~] 404 if product not found
 
 ### POST /api/products/upload
 
