@@ -1,5 +1,6 @@
 import { HttpException, HttpStatus, Inject, Injectable } from "@nestjs/common";
 import { WINSTON_MODULE_PROVIDER } from "nest-winston";
+import { Logger } from "winston";
 import { PrismaService } from "../common/prisma.service";
 import {
   CreateProductRequest,
@@ -7,9 +8,8 @@ import {
   GetProductsRequest,
   GetProductsResponseSuccess,
   UpdateProductRequest,
-  UploadPhotoRequest,
 } from "../model/product.model";
-import { Logger } from "winston";
+import { Decimal } from "@prisma/client/runtime/client";
 
 @Injectable()
 export class ProductService {
@@ -23,8 +23,6 @@ export class ProductService {
     const user = await this.prismaService.product.create({
       data: req,
     });
-    // await this.prismaService.$executeRaw`
-    //   INSERT into products (name, price, description, category, image) VALUES (${req.name}, ${req.price}, ${req.description}, ${req.category}, ${req.image})`;
     return {
       data: {
         id: user.id,
@@ -41,20 +39,12 @@ export class ProductService {
   async getProductAll(
     req: GetProductsRequest,
   ): Promise<GetProductsResponseSuccess> {
-    this.logger.info(`PRODUCT_SERVICE.getProductList: ${req.page}`);
-    // if (!page) {
-    //   page = 0;
-    // }
-    // if (!limit) {
-    //   limit = 10;
-    // }
-    // if (!minPrice) {
-    //   minPrice = 0;
-    // }
+    this.logger.info(
+      `PRODUCT_SERVICE.getProductList: ${JSON.stringify(req.search)}`,
+    );
 
-    // PAGE
-    const products = await this.prismaService
-      .$queryRaw`SELECT * FROM products LIMIT 10 OFFSET ${req.page}`;
+    const where = this.queryQondition(req);
+    const products = await this.prismaService.product.findMany({ where });
     return {
       data: {
         products,
@@ -64,6 +54,7 @@ export class ProductService {
   }
 
   async getProductById(req: number) {
+    this.logger.info(`PRODUCT_SERVICE.getProductById: ${req}`);
     const products: object[] = await this.prismaService
       .$queryRaw`SELECT * FROM products WHERE id = ${req}`;
 
@@ -126,7 +117,30 @@ export class ProductService {
     };
   }
 
-  // async uploadPhoto(req: UploadPhotoRequest){
-  //
-  // }
+  queryQondition(req: GetProductsRequest) {
+    interface whereOptions {
+      name?: string;
+      category?: string;
+      page?: number;
+    }
+    const where: whereOptions = {};
+
+    if (req.search !== undefined) {
+      where.name = req.search;
+    }
+
+    if (req.category !== undefined) {
+      where.category = req.category;
+    }
+
+    if (req.page !== undefined) {
+      where.page = req.page;
+    }
+
+    // if (req.limit !== undefined) {
+    //   where.limit = req.limit;
+    // }
+
+    return where;
+  }
 }
