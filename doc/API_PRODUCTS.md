@@ -191,9 +191,9 @@
 
 ### POST /api/products/upload
 
-- [ ] 200 + filename for valid image
-- [ ] 400 if file too large
-- [ ] 400 if invalid file type
+- [~] 200 + filename for valid image
+- [~] 400 if file too large
+- [~] 400 if invalid file type
 
 ---
 
