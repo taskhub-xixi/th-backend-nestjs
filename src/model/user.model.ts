@@ -5,10 +5,6 @@ export class UpdateUserRequest {
   @IsOptional()
   email?: string;
 
-  @IsEmail()
-  @IsOptional()
-  emailUpdate?: string;
-
   @IsString()
   @IsOptional()
   username?: string;
@@ -16,6 +12,22 @@ export class UpdateUserRequest {
   @IsString()
   @IsOptional()
   password?: string;
+}
+
+export class UpdateUserResponse {
+  data: {
+    id?: number;
+    username: string;
+    email: string;
+  };
+}
+
+export class GetUserResponse {
+  data: {
+    id?: number;
+    username: string;
+    email: string;
+  };
 }
 
 export class GetUserById {
