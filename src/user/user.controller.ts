@@ -8,64 +8,46 @@ import {
   Req,
   UseGuards,
 } from "@nestjs/common";
-import { Auth } from "../common/decorator/auth.decorator";
-import { JwtAuthGuard } from "../common/guards/index";
-import { GetUserById, UpdateUserRequest } from "../model/user.model";
-import { UserEntity } from "./user.entity";
+import {
+  GetUserById,
+  GetUserResponse,
+  UpdateUserRequest,
+  UpdateUserResponse,
+} from "../model/user.model";
 import { UserService } from "./user.service";
+import { IUserRepository } from "./interfaces/user.interface";
 
 @Controller("/api/users")
-export class UserController {
+export class UserController implements IUserRepository {
   constructor(private readonly userService: UserService) {}
 
-  @UseGuards(JwtAuthGuard)
-  @Patch("/update/email")
   @HttpCode(HttpStatus.OK)
-  async changeEmail(@Body() request: UpdateUserRequest) {
-    const result = await this.userService.changeEmail(
-      request.email as string,
-      request.emailUpdate as string,
-    );
-    return {
-      data: result,
-    };
+  async changeEmail(
+    @Body() request: UpdateUserRequest,
+  ): Promise<UpdateUserResponse> {
+    const result = await this.userService.changeEmail(request);
+    return result;
   }
-
-  @UseGuards(JwtAuthGuard)
   @Patch("/update/username")
   @HttpCode(HttpStatus.OK)
-  async changeUsername(@Body() request: UpdateUserRequest) {
+  async changeUsername(
+    @Body() request: UpdateUserRequest,
+  ): Promise<UpdateUserResponse> {
     const result = await this.userService.changeUsername(request);
-    return { data: result };
+    return result;
   }
 
-  @UseGuards(JwtAuthGuard)
   @Get("/all")
   @HttpCode(HttpStatus.OK)
-  async all() {
+  async getAllUser() {
     const result = await this.userService.getAllUser();
-    return {
-      data: result,
-    };
+    return result;
   }
 
-  @UseGuards(JwtAuthGuard)
-  @Get("user")
-  @HttpCode(HttpStatus.OK)
-  async get(@Auth() user: UserEntity) {
-    const result = await this.userService.get(user);
-    return {
-      data: result,
-    };
-  }
-
-  @UseGuards(JwtAuthGuard)
   @Get("/:id")
-  @HttpCode(200)
-  async getUser(@Req() request: GetUserById) {
+  @HttpCode(HttpStatus.OK)
+  async getUserById(@Req() request: GetUserById): Promise<GetUserResponse> {
     const result = await this.userService.getUserById(request.id as number);
-    return {
-      data: result,
-    };
+    return result;
   }
 }
