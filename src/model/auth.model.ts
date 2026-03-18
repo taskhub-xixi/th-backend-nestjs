@@ -79,6 +79,11 @@ export class DeleteDTO {
   confPassword: string;
 }
 
+export class LogoutDTO {
+  @IsEmail()
+  email: string;
+}
+
 export class CookiePayload {
   @IsString()
   @IsEmpty()
@@ -91,10 +96,48 @@ export class CookiePayload {
 
 export class UserResponse {
   username?: string;
+  email?: string;
+}
+
+export class JWTResponse {
   access_token?: string;
   refresh_token?: string;
-  email?: string;
   exp?: Date;
+}
+
+export class RegisterResponse {
+  data: {
+    username: string;
+    email: string;
+  };
+}
+
+export class LoginResponse {
+  data: {
+    email: string;
+    refresh_token: string;
+    access_token: string;
+  };
+}
+
+export class UpdateResponse {
+  data: {
+    email: string;
+  };
+  message: string;
+  statusCode: number;
+}
+
+export class LogoutResponse {
+  data: {
+    message: string;
+  };
+  statusCode: number;
+}
+
+export class RefreshTokenResponse {
+  refresh_token: string;
+  access_token: string;
 }
 
 // REGISTER DTO --> logic code
