@@ -10,24 +10,25 @@ import {
   Put,
   Req,
   Res,
-  UnauthorizedException,
   UseGuards,
 } from "@nestjs/common";
 import { Request, Response } from "express";
+import { CheckUserGuard } from "../common/guards/check-user.guard";
+import { JwtAuthGuard } from "../common/guards/jwt-auth.guard";
+import { RTGuard } from "../common/guards/rt-token.guard";
 import {
   CookiePayload,
   DeleteDTO,
   LoginDTO,
+  LoginResponse,
+  RefreshTokenResponse,
   RegisterDTO,
+  RegisterResponse,
   UpdateDTO,
   UserResponse,
 } from "../model/auth.model";
 import { WebResponse } from "../model/web.mode";
 import { AuthService } from "./auth.service";
-import { CheckUserGuard } from "../common/guards/check-user.guard";
-import { JwtAuthGuard } from "../common/guards/jwt-auth.guard";
-import { RTGuard } from "../common/guards/rt-token.guard";
-import { Public } from "../common/decorator";
 
 @Controller("/api/auth")
 export class AuthController {
@@ -35,13 +36,9 @@ export class AuthController {
 
   @Post("register")
   @HttpCode(HttpStatus.CREATED)
-  async register(
-    @Body() registerDTO: RegisterDTO,
-  ): Promise<WebResponse<UserResponse>> {
+  async register(@Body() registerDTO: RegisterDTO): Promise<RegisterResponse> {
     const result = await this.authService.create(registerDTO);
-    return {
-      data: result,
-    };
+    return result;
   }
 
   @UseGuards(CheckUserGuard)
@@ -49,13 +46,11 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   async login(
     @Body() loginDTO: LoginDTO,
-    @Res({ passthrough: true }) response: Response,
-  ): Promise<WebResponse<UserResponse>> {
-    const result = await this.authService.login(loginDTO, response);
+    @Res({ passthrough: true }) res: Response,
+  ): Promise<LoginResponse> {
+    const result = await this.authService.login(loginDTO, res);
 
-    return {
-      data: result,
-    };
+    return result;
   }
 
   @UseGuards(RTGuard)
@@ -64,7 +59,7 @@ export class AuthController {
   async refresh(
     @Req() req: Request,
     @Res({ passthrough: true }) res: Response,
-  ): Promise<WebResponse<UserResponse>> {
+  ): Promise<WebResponse<RefreshTokenResponse>> {
     const refreshToken = (req.cookies as CookiePayload)["refresh_token"];
 
     if (!refreshToken) {
@@ -94,17 +89,17 @@ export class AuthController {
       throw new HttpException((err as Error).message, 401);
     }
   }
-
-  @UseGuards(CheckUserGuard)
-  @UseGuards(JwtAuthGuard)
-  @Put("delete")
-  @HttpCode(HttpStatus.OK)
-  async delete(
-    @Body() deleteDTO: DeleteDTO,
-    @Res({ passthrough: true }) response: Response,
-  ): Promise<void> {
-    await this.authService.deleteSQL(deleteDTO.email, response);
-  }
+  //
+  // @UseGuards(CheckUserGuard)
+  // @UseGuards(JwtAuthGuard)
+  // @Put("delete")
+  // @HttpCode(HttpStatus.OK)
+  // async delete(
+  //   @Body() deleteDTO: DeleteDTO,
+  //   @Res({ passthrough: true }) response: Response,
+  // ): Promise<void> {
+  //   await this.authService.deleteSQL(deleteDTO.email, response);
+  // }
 
   @UseGuards(CheckUserGuard)
   @UseGuards(JwtAuthGuard)
@@ -123,9 +118,9 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   async logout(
     @Body() deleteDTO: DeleteDTO,
-    @Res({ passthrough: true }) response: Response,
+    @Res({ passthrough: true }) res: Response,
   ): Promise<{ message: string }> {
-    await this.authService.logout(deleteDTO.email, response);
+    await this.authService.logout(deleteDTO, res);
     return {
       message: "clear Cookie",
     };
