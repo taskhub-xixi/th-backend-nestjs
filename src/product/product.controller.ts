@@ -2,10 +2,12 @@ import {
   Body,
   Controller,
   Delete,
+  FileTypeValidator,
   Get,
   HttpCode,
   HttpStatus,
   Param,
+  ParseFilePipe,
   Patch,
   Post,
   Query,
@@ -93,7 +95,14 @@ export class ProductController {
       },
     }),
   )
-  uploadFile(@UploadedFile() file: Express.Multer.File) {
+  uploadFile(
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [new FileTypeValidator({ fileType: "image/jpg" })],
+      }),
+    )
+    file: Express.Multer.File,
+  ) {
     return {
       fileName: file.filename,
     };
