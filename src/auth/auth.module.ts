@@ -11,6 +11,8 @@ import { JwtStrategy } from "../common/strategies/jwt.strategy";
 import { RtStrategy } from "../common/strategies/rt.strategy";
 import { AtStrategy } from "../common/strategies/at.strategy";
 import { AuthRepositorySQL } from "./repository_query/auth.repository";
+import { TokenService } from "./services/token.service";
+import { Repository } from "typeorm";
 
 @Module({
   imports: [
@@ -28,7 +30,14 @@ import { AuthRepositorySQL } from "./repository_query/auth.repository";
     RtStrategy,
     AtStrategy,
     AuthRepositorySQL,
+    TokenService,
   ],
-  exports: [AuthService, LocalStrategy, PassportModule, JwtStrategy],
+  exports: [
+    AuthService,
+    LocalStrategy,
+    PassportModule,
+    JwtStrategy,
+    TokenService,
+  ],
 })
 export class AuthModule {}
