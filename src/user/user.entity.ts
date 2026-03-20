@@ -16,6 +16,12 @@ export class UserEntity {
   @Column({ length: 100 })
   password: string;
 
+  @Column({ length: 50, default: "user" })
+  role: string;
+
+  @Column({})
+  createdAt?: Date;
+
   @Column({ type: "text", nullable: true })
   hashedRefreshToken?: string;
 
