@@ -7,7 +7,6 @@ import {
   HttpStatus,
   Patch,
   Post,
-  Put,
   Req,
   Res,
   UseGuards,
@@ -25,7 +24,6 @@ import {
   RegisterDTO,
   RegisterResponse,
   UpdateDTO,
-  UserResponse,
 } from "../model/auth.model";
 import { WebResponse } from "../model/web.mode";
 import { AuthService } from "./auth.service";
@@ -81,13 +79,9 @@ export class AuthController {
   @Patch("reset")
   @HttpCode(HttpStatus.OK)
   async resetPassword(@Body() resetDTO: UpdateDTO): Promise<void> {
-    try {
-      if (!resetDTO.email) throw new HttpException("Something Wrong", 404);
-      if (!resetDTO.password) throw new HttpException("Something Wrong", 404);
-      await this.authService.resetPassword(resetDTO.email, resetDTO.password);
-    } catch (err: unknown) {
-      throw new HttpException((err as Error).message, 401);
-    }
+    if (!resetDTO.email) throw new HttpException("Something Wrong", 404);
+    if (!resetDTO.password) throw new HttpException("Something Wrong", 404);
+    await this.authService.resetPassword(resetDTO);
   }
   //
   // @UseGuards(CheckUserGuard)

@@ -20,6 +20,7 @@ import {
   LogoutDTO,
   LogoutResponse,
   RefreshTokenResponse,
+  UpdateDTO,
 } from "../model/auth.model";
 import { UserEntity } from "../user/user.entity";
 import { AuthRepositorySQL } from "./repository_query/auth.repository";
@@ -50,17 +51,25 @@ export class AuthService implements IAuthService {
     }
 
     const hashPassword = await this.tokenService.hash(request.password);
+    const createdAt = new Date();
     await this.authRepository.query(this.repositoryQuery.insertUser(), [
       request.email,
       request.username,
       hashPassword,
+      createdAt,
     ]);
+    const data = await this.authRepository.findOne({
+      where: { email: request.email },
+    });
 
     return {
       data: {
-        username: request.username,
-        email: request.email,
+        username: data.username,
+        email: data.email,
+        role: data.role,
+        createdAt: data.createdAt,
       },
+      statusCode: HttpStatus.CREATED,
     };
   }
 
@@ -91,10 +100,11 @@ export class AuthService implements IAuthService {
 
     return {
       data: {
-        email: request.email,
         refresh_token: token.refresh_token,
         access_token: token.access_token,
+        expiresIn: token.exp,
       },
+      statusCode: HttpStatus.OK,
     };
   }
 
@@ -117,15 +127,17 @@ export class AuthService implements IAuthService {
     }
   }
 
-  async resetPassword(email: string, password: string): Promise<void> {
-    const data = await this.authRepository.findOne({ where: { email } });
+  async resetPassword(req: UpdateDTO): Promise<void> {
+    const data = await this.authRepository.findOne({
+      where: { email: req.email },
+    });
     if (!data) {
       throw new HttpException("Account is missing", 404);
     }
-    const hashPassword = await this.tokenService.hash(password);
+    const hashPassword = await this.tokenService.hash(req.password);
     await this.authRepository.query(
       "UPDATE users SET password = ? WHERE email = ?",
-      [hashPassword, email],
+      [hashPassword, req.email],
     );
   }
 
@@ -162,6 +174,14 @@ export class AuthService implements IAuthService {
       "AUTH_SERVICE.validateUser: Unauthorized Exception",
       400,
     );
+  }
+
+  async getUserByEmail(email: string) {
+    const user = await this.authRepository.findOne({
+      where: { email },
+    });
+
+    return user;
   }
   // =============== VALIDATE FUNCTION =====================
 }

@@ -109,15 +109,19 @@ export class RegisterResponse {
   data: {
     username: string;
     email: string;
+    role: string;
+    createdAt: Date;
   };
+  statusCode: number;
 }
 
 export class LoginResponse {
   data: {
-    email: string;
     refresh_token: string;
     access_token: string;
+    expiresIn: Date;
   };
+  statusCode: number;
 }
 
 export class UpdateResponse {
