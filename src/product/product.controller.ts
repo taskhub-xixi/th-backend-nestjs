@@ -17,6 +17,7 @@ import {
 } from "@nestjs/common";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { Admin } from "../common/decorator/admin.decorator";
+import { CheckUserGuard } from "../common/guards";
 import { AdminGuard } from "../common/guards/admin.guard";
 import {
   CreateProductRequest,
@@ -26,14 +27,12 @@ import {
   UpdateProductRequest,
 } from "../model/product.model";
 import { ProductService } from "./product.service";
-import { FileFilterImage } from "./file.filter";
 
 @Controller("/product")
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
-  @Admin()
-  @UseGuards(AdminGuard)
+  @UseGuards(CheckUserGuard)
   @HttpCode(HttpStatus.CREATED)
   @Post("create")
   async createProduct(

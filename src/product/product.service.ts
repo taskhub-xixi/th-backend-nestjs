@@ -9,7 +9,6 @@ import {
   GetProductsResponseSuccess,
   UpdateProductRequest,
 } from "../model/product.model";
-import { Decimal } from "@prisma/client/runtime/client";
 
 @Injectable()
 export class ProductService {
@@ -20,16 +19,16 @@ export class ProductService {
     req: CreateProductRequest,
   ): Promise<CreateProductResponseSuccess> {
     this.logger.info(`PRODUCT_SERVICE.createProduct: ${JSON.stringify(req)}`);
-    const user = await this.prismaService.product.create({
+    const product = await this.prismaService.product.create({
       data: req,
     });
     return {
       data: {
-        id: user.id,
-        name: user.name,
-        price: user.price,
-        category: user.category,
-        image: user.image,
+        id: product.id,
+        name: product.name,
+        price: product.price,
+        category: product.category,
+        image: product.image,
       },
       statusCode: HttpStatus.CREATED,
       message: "Product created successfully",
