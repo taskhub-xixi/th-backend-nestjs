@@ -1,12 +1,15 @@
-import { HttpException, Inject, Injectable } from "@nestjs/common";
+import { HttpException, HttpStatus, Inject, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { WINSTON_MODULE_PROVIDER } from "nest-winston";
 import type { Repository } from "typeorm";
 import { Logger } from "winston";
 import {
   GetUserResponse,
+  ListQuery,
   UpdateUserRequest,
   UpdateUserResponse,
+  User,
+  UserResponse,
 } from "../model/user.model";
 import { UserEntity } from "./user.entity";
 import { IUserService } from "./interfaces/user.service.interface";
@@ -90,17 +93,47 @@ export class UserService implements IUserService {
     };
   }
 
-  async getAllUser() {
+  async getAllUser(req: ListQuery) {
     this.logger.debug(`UserService.getAllUser)`);
-    const data = await this.userRepository.find({
-      select: ["email", "username"],
-      order: { id: "ASC" },
+    const raw = await this.userRepository
+      .createQueryBuilder("user")
+      .orderBy("id", "ASC")
+      .take(req.limit)
+      .limit(req.limit)
+      .offset(req.page)
+      .getMany();
+    this.logger.debug(raw);
+    return {
+      data: [raw],
+      pagination: {
+        page: req.page,
+        limit: req.limit,
+      },
+      statusCode: HttpStatus.OK,
+    };
+    // const limit = Number(req.limit);
+    // const page = Number(req.page);
+    // const order = req.order === "ASC" ? "ASC" : "DESC";
+    // const data = await this.userRepository.query(
+    //   "SELECT * FROM users ORDER BY id ? LIMIT ? OFFSET ?",
+    //   [order, limit, page],
+    // );
+  }
+
+  async me(email: string): Promise<UserResponse> {
+    const data = await this.userRepository.findOne({
+      where: { email: email },
     });
 
-    if (data.length <= 0) {
-      throw new HttpException("Data not found", 404);
-    }
-
-    return { data };
+    return {
+      data: {
+        id: data.id,
+        username: data.username,
+        email: data.email,
+        role: data.role,
+        createdAt: data.createdAt,
+      },
+      statusCode: HttpStatus.OK,
+    };
   }
 }
