@@ -9,6 +9,7 @@ import { AuthGuard } from "@nestjs/passport";
 import { WINSTON_MODULE_PROVIDER } from "nest-winston";
 import { Observable } from "rxjs";
 import { Logger } from "winston";
+import { AuthService } from "../../auth/auth.service";
 
 @Injectable()
 export class PublicGuard extends AuthGuard() {

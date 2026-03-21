@@ -43,7 +43,7 @@ export class TokenService {
     const [at, rt] = await Promise.all([
       this.jwtService.signAsync(jwtPayload, {
         secret: jwtConstants.secrets,
-        expiresIn: "15m",
+        expiresIn: "1h",
       }),
       this.jwtService.signAsync(jwtPayload, {
         secret: jwtConstants.secrets,

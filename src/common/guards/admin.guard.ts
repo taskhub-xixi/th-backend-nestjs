@@ -1,21 +1,25 @@
 import { ExecutionContext, HttpException, Injectable } from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
 import { AuthGuard } from "@nestjs/passport";
-import { Observable } from "rxjs";
+import { AuthService } from "../../auth/auth.service";
 
 @Injectable()
 export class AdminGuard extends AuthGuard("admin") {
-  constructor(private reflector: Reflector) {
+  constructor(
+    private reflector: Reflector,
+    private authService: AuthService,
+  ) {
     super();
   }
 
-  canActivate(
-    context: ExecutionContext,
-  ): boolean | Promise<boolean> | Observable<boolean> {
+  async canActivate(context: ExecutionContext): Promise<boolean> {
     const metadata = this.reflector.get("isAdmin", context.getHandler());
+    console.log(`ADMIN_STRATEGY_validate: LOG: ${metadata}`);
     if (!metadata) {
       throw new HttpException("Forbbiden Resources", 403);
     }
+    const req = context.switchToHttp().getRequest();
+    await this.authService.checkRole(req?.body?.email);
     return true;
   }
 }

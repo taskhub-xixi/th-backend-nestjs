@@ -25,7 +25,6 @@ export class UserStrategy extends PassportStrategy(Strategy, "CheckUser") {
     }
 
     const user = await this.authService.getUserByEmail(payload.email);
-    console.log(user);
     if (!user) {
       throw new HttpException("Unauthorized", 401);
     }

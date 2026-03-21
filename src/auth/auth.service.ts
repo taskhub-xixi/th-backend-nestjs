@@ -183,5 +183,13 @@ export class AuthService implements IAuthService {
 
     return user;
   }
+
+  async checkRole(email: string) {
+    const data = await this.authRepository.findOne({ where: { email } });
+    if (data.role !== "admin") {
+      throw new HttpException("Forbidden resources", 403);
+    }
+    return data;
+  }
   // =============== VALIDATE FUNCTION =====================
 }

@@ -1,5 +1,5 @@
 import { Module } from "@nestjs/common";
-import { JwtModule } from "@nestjs/jwt";
+import { JwtModule, JwtService } from "@nestjs/jwt";
 import { PassportModule } from "@nestjs/passport";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { UserEntity } from "../user/user.entity";
@@ -30,13 +30,18 @@ import { TokenService } from "./services/token.service";
     AtStrategy,
     AuthRepositorySQL,
     TokenService,
+    JwtService,
   ],
   exports: [
     AuthService,
     UserStrategy,
-    PassportModule,
     JwtStrategy,
+    RtStrategy,
+    AtStrategy,
+    AuthRepositorySQL,
     TokenService,
+    JwtService,
+    TypeOrmModule,
   ],
 })
 export class AuthModule {}
