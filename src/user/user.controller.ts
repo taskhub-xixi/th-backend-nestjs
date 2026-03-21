@@ -5,21 +5,33 @@ import {
   HttpCode,
   HttpStatus,
   Patch,
+  Query,
   Req,
   UseGuards,
 } from "@nestjs/common";
+import { JwtAuthGuard } from "../common/guards";
 import {
   GetUserById,
   GetUserResponse,
+  ListQuery,
   UpdateUserRequest,
   UpdateUserResponse,
+  User,
 } from "../model/user.model";
-import { UserService } from "./user.service";
 import { IUserRepository } from "./interfaces/user.interface";
+import { UserService } from "./user.service";
 
 @Controller("/api/users")
 export class UserController implements IUserRepository {
   constructor(private readonly userService: UserService) {}
+
+  @UseGuards(JwtAuthGuard)
+  @HttpCode(HttpStatus.OK)
+  @Get("me")
+  async me(@Req() req: User) {
+    const data = await this.userService.me(req.user.email);
+    return data;
+  }
 
   @HttpCode(HttpStatus.OK)
   async changeEmail(
@@ -28,8 +40,9 @@ export class UserController implements IUserRepository {
     const result = await this.userService.changeEmail(request);
     return result;
   }
-  @Patch("/update/username")
+
   @HttpCode(HttpStatus.OK)
+  @Patch("/update/username")
   async changeUsername(
     @Body() request: UpdateUserRequest,
   ): Promise<UpdateUserResponse> {
@@ -37,10 +50,12 @@ export class UserController implements IUserRepository {
     return result;
   }
 
-  @Get("/all")
+  @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.OK)
-  async getAllUser() {
-    const result = await this.userService.getAllUser();
+  @Get("/all")
+  async getAllUser(@Query() query: ListQuery, @Req() req) {
+    console.log(req.query);
+    const result = await this.userService.getAllUser(req.query);
     return result;
   }
 
