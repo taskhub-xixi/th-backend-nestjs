@@ -20,6 +20,7 @@ import {
   DeleteDTO,
   LoginDTO,
   LoginResponse,
+  LogoutDTO,
   RefreshTokenResponse,
   RegisterDTO,
   RegisterResponse,
@@ -39,7 +40,6 @@ export class AuthController {
     return result;
   }
 
-  @UseGuards(CheckUserGuard)
   @Post("login")
   @HttpCode(HttpStatus.OK)
   async login(
@@ -111,7 +111,7 @@ export class AuthController {
   @Patch("logout")
   @HttpCode(HttpStatus.OK)
   async logout(
-    @Body() deleteDTO: DeleteDTO,
+    @Body() deleteDTO: LogoutDTO,
     @Res({ passthrough: true }) res: Response,
   ): Promise<{ message: string }> {
     await this.authService.logout(deleteDTO, res);
