@@ -10,14 +10,16 @@ import { JwtPayload } from "../../auth/dto/payload-interface";
 export class UserStrategy extends PassportStrategy(Strategy, "CheckUser") {
   constructor(private authService: AuthService) {
     super({
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      jwtFromRequest: ExtractJwt.fromExtractors([
+        (req) => req?.cookies?.access_token,
+      ]),
       ignoreExpiration: false,
       secretOrKey: jwtConstants.secrets,
-      passReqToCallback: true,
+      passReqToCallback: false,
     });
   }
 
-  async validate(_req: Request, payload: JwtPayload) {
+  async validate(payload: JwtPayload) {
     if (!payload.email) {
       throw new HttpException("Unauthorized", 401);
     }

@@ -3,19 +3,23 @@ import { PassportStrategy } from "@nestjs/passport";
 import { ExtractJwt, Strategy } from "passport-jwt";
 import { jwtConstants } from "../../auth/constants";
 import { JwtPayload } from "../../auth/dto/payload-interface";
+import { Request } from "express";
 
 @Injectable()
-export class JwtStrategy extends PassportStrategy(Strategy, "JWT_STRATEGY") {
+export class JwtStrategy extends PassportStrategy(Strategy, "jwt-strategy") {
   constructor() {
     super({
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      jwtFromRequest: ExtractJwt.fromExtractors([
+        (req) => req?.cookies?.access_token,
+      ]),
       ignoreExpiration: false,
       secretOrKey: jwtConstants.secrets,
       passReqToCallback: true,
     });
   }
-  validate(payload: JwtPayload) {
-    console.log(`JWTS_GUARD: ${JSON.stringify(payload)}`);
+  validate(req, payload: JwtPayload) {
+    console.log(req.query);
     return { sub: payload.sub, email: payload.email };
   }
+  // return to REQ controller
 }

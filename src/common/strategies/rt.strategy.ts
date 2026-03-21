@@ -1,6 +1,5 @@
-import { Injectable, UnauthorizedException } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import { PassportStrategy } from "@nestjs/passport";
-import { Request } from "express";
 import { ExtractJwt, Strategy } from "passport-jwt";
 import { jwtConstants } from "../../auth/constants";
 import { JwtPayload } from "../../auth/dto/payload-interface";
@@ -9,24 +8,20 @@ import { JwtPayload } from "../../auth/dto/payload-interface";
 export class RtStrategy extends PassportStrategy(Strategy, "jwt-refresh") {
   constructor() {
     super({
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      ignoreExpiration: false,
+      jwtFromRequest: ExtractJwt.fromExtractors([
+        (req) => req?.cookies?.access_token,
+      ]),
+      // REFRESH TOKEN , AWLAYAS EXPIRED TOKEN
+      ignoreExpiration: true,
       secretOrKey: jwtConstants.secrets,
-      passReqToCallback: true,
+      passReqToCallback: false,
     });
   }
 
   // GET RFERSH TOKEN
-  validate(req: Request, payload: JwtPayload) {
-    const refreshToken = req.get("authorization")?.replace("Bearer", "").trim();
-
-    if (!refreshToken) {
-      throw new UnauthorizedException("Refresh Token malformed");
-    }
-
+  validate(payload: JwtPayload) {
     return {
       ...payload,
-      refreshToken,
     };
   }
 }
