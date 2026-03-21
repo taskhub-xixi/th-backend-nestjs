@@ -7,19 +7,23 @@ import { UserController } from "./user.controller";
 import { UserEntity } from "./user.entity";
 import { UserService } from "./user.service";
 import { IUserService } from "./interfaces/user.service.interface";
+import { JwtStrategy } from "../common/strategies";
+import { PassportModule } from "@nestjs/passport";
+import { jwtConstants } from "../auth/constants";
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([UserEntity]),
+    PassportModule,
     JwtModule.register({
-      secret: "saken",
-      signOptions: { expiresIn: "1h" },
+      secret: jwtConstants.secrets,
     }),
     AuthModule,
   ],
   controllers: [UserController],
   providers: [
     UserService,
+    JwtStrategy,
     {
       provide: IUserRepository,
       useClass: UserController,
