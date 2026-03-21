@@ -12,8 +12,10 @@ import {
 
 @Injectable()
 export class ProductService {
-  @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger;
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(
+    private readonly prismaService: PrismaService,
+    @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
+  ) {}
 
   async createProduct(
     req: CreateProductRequest,
