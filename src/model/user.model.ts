@@ -34,3 +34,46 @@ export class GetUserById {
   @IsNumber()
   id?: number;
 }
+
+export class User {
+  user: {
+    sub: number;
+    email: string;
+  };
+}
+
+export class UserResponse {
+  data: {
+    id: number;
+    username: string;
+    email: string;
+    role: string;
+    createdAt: Date;
+  };
+  statusCode?: number;
+}
+
+export class ListQuery {
+  page?: number;
+  limit?: number;
+  order?: string;
+}
+
+export class GetAllUser {
+  data: [
+    {
+      id: number;
+      email: string;
+      username: string;
+      role: string;
+      createdAt: Date;
+    },
+  ];
+  pagination: {
+    page: number;
+    limit: number;
+    total: number;
+    totalPages: number;
+  };
+  statusCode: number;
+}
