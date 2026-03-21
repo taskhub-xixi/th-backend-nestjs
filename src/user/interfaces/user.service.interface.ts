@@ -1,6 +1,7 @@
 import {
+  GetAllUserResponse,
   GetUserResponse,
-  ListQuery,
+  ListQueryRequest,
   UpdateUserRequest,
   UpdateUserResponse,
 } from "../../model/user.model";
@@ -11,5 +12,5 @@ export abstract class IUserService {
 
   abstract changeEmail(request: UpdateUserRequest): Promise<UpdateUserResponse>;
   abstract getUserById(id: number): Promise<GetUserResponse>;
-  abstract getAllUser(req: ListQuery);
+  abstract getAllUser(req: ListQueryRequest);
 }

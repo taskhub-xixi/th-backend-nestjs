@@ -9,22 +9,28 @@ import {
   Req,
   UseGuards,
 } from "@nestjs/common";
-import { JwtAuthGuard } from "../common/guards";
+import { AdminGuard, JwtAuthGuard } from "../common/guards";
 import {
   GetUserById,
   GetUserResponse,
-  ListQuery,
+  ListQueryRequest,
   UpdateUserRequest,
   UpdateUserResponse,
   User,
 } from "../model/user.model";
 import { IUserRepository } from "./interfaces/user.interface";
 import { UserService } from "./user.service";
+import { Public, Admin } from "../common/decorator";
+import { PublicGuard } from "../common/guards/public.guards";
 
 @Controller("/api/users")
 export class UserController implements IUserRepository {
   constructor(private readonly userService: UserService) {}
 
+  @Admin()
+  @Public()
+  @UseGuards(AdminGuard)
+  @UseGuards(PublicGuard)
   @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.OK)
   @Get("me")
@@ -53,8 +59,7 @@ export class UserController implements IUserRepository {
   @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.OK)
   @Get("/all")
-  async getAllUser(@Query() query: ListQuery, @Req() req) {
-    console.log(req.query);
+  async getAllUser(@Query() query: ListQueryRequest, @Req() req) {
     const result = await this.userService.getAllUser(req.query);
     return result;
   }

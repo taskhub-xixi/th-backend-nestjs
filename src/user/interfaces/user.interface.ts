@@ -1,6 +1,6 @@
 import {
   GetUserResponse,
-  ListQuery,
+  ListQueryRequest,
   UpdateUserRequest,
   UpdateUserResponse,
   User,
@@ -11,6 +11,6 @@ export abstract class IUserRepository {
   abstract changeUsername(
     request: UpdateUserRequest,
   ): Promise<UpdateUserResponse>;
-  abstract getAllUser(query: ListQuery, req?: User);
+  abstract getAllUser(query: ListQueryRequest, req?: User);
   abstract getUserById(request): Promise<GetUserResponse>;
 }

@@ -53,13 +53,14 @@ export class UserResponse {
   statusCode?: number;
 }
 
-export class ListQuery {
+export class ListQueryRequest {
   page?: number;
   limit?: number;
   order?: string;
+  sort?: string;
 }
 
-export class GetAllUser {
+export class GetAllUserResponse {
   data: [
     {
       id: number;

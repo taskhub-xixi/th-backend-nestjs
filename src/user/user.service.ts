@@ -5,10 +5,9 @@ import type { Repository } from "typeorm";
 import { Logger } from "winston";
 import {
   GetUserResponse,
-  ListQuery,
+  ListQueryRequest,
   UpdateUserRequest,
   UpdateUserResponse,
-  User,
   UserResponse,
 } from "../model/user.model";
 import { UserEntity } from "./user.entity";
@@ -93,31 +92,34 @@ export class UserService implements IUserService {
     };
   }
 
-  async getAllUser(req: ListQuery) {
-    this.logger.debug(`UserService.getAllUser)`);
-    const raw = await this.userRepository
-      .createQueryBuilder("user")
-      .orderBy("id", "ASC")
-      .take(req.limit)
-      .limit(req.limit)
-      .offset(req.page)
-      .getMany();
-    this.logger.debug(raw);
+  async getAllUser(req: ListQueryRequest) {
+    this.logger.debug(`UserService.getAllUser ${JSON.stringify(req)})`);
+    const result = await this.userRepository.find({
+      select: {
+        id: true,
+        email: true,
+        username: true,
+        role: true,
+        createdAt: true,
+      },
+      order: { email: req.order === "DESC" ? "DESC" : "ASC" },
+      skip: req.page,
+      take: req.limit,
+    });
+    const limit = req.limit;
+    const total = await this.userRepository.count();
+    const pages = total % limit;
+
     return {
-      data: [raw],
+      data: result,
       pagination: {
-        page: req.page,
-        limit: req.limit,
+        page: Number(req.page),
+        limit: Number(req.limit),
+        total: total,
+        totalPages: pages,
       },
       statusCode: HttpStatus.OK,
     };
-    // const limit = Number(req.limit);
-    // const page = Number(req.page);
-    // const order = req.order === "ASC" ? "ASC" : "DESC";
-    // const data = await this.userRepository.query(
-    //   "SELECT * FROM users ORDER BY id ? LIMIT ? OFFSET ?",
-    //   [order, limit, page],
-    // );
   }
 
   async me(email: string): Promise<UserResponse> {
