@@ -1,13 +1,12 @@
 import { HttpException, Injectable } from "@nestjs/common";
 import { PassportStrategy } from "@nestjs/passport";
-import { Request } from "express";
 import { ExtractJwt, Strategy } from "passport-jwt";
 import { AuthService } from "../../auth/auth.service";
 import { jwtConstants } from "../../auth/constants";
 import { JwtPayload } from "../../auth/dto/payload-interface";
 
 @Injectable()
-export class UserStrategy extends PassportStrategy(Strategy, "CheckUser") {
+export class UserStrategy extends PassportStrategy(Strategy, "admin") {
   constructor(private authService: AuthService) {
     super({
       jwtFromRequest: ExtractJwt.fromExtractors([
