@@ -54,22 +54,35 @@ export class UserResponse {
 }
 
 export class ListQueryRequest {
+  @IsNumber()
+  @Min(1)
   page?: number;
+
+  @IsNumber()
   limit?: number;
+
+  @IsString()
   order?: string;
+
+  @IsString()
   sort?: string;
 }
 
-export class GetAllUserResponse {
-  data: [
-    {
-      id: number;
-      email: string;
-      username: string;
-      role: string;
-      createdAt: Date;
-    },
-  ];
+export class RequestQuery {
+  query: unknown;
+}
+
+export class UserResponseAll {
+  user?: unknown;
+  id?: number;
+  username?: string;
+  email?: string;
+  role?: string;
+  createdAt?: Date;
+}
+
+export class GetAllUserResponse<T> {
+  data: T;
   pagination: {
     page: number;
     limit: number;
