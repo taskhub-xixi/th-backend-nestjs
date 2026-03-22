@@ -1,15 +1,15 @@
 import { Module } from "@nestjs/common";
 import { JwtModule } from "@nestjs/jwt";
+import { PassportModule } from "@nestjs/passport";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { AuthModule } from "../auth/auth.module";
+import { jwtConstants } from "../auth/constants";
+import { JwtStrategy } from "../common/strategies";
 import { IUserRepository } from "./interfaces/user.interface";
+import { IUserService } from "./interfaces/user.service.interface";
 import { UserController } from "./user.controller";
 import { UserEntity } from "./user.entity";
 import { UserService } from "./user.service";
-import { IUserService } from "./interfaces/user.service.interface";
-import { JwtStrategy } from "../common/strategies";
-import { PassportModule } from "@nestjs/passport";
-import { jwtConstants } from "../auth/constants";
 
 @Module({
   imports: [
