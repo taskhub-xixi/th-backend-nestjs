@@ -4,11 +4,13 @@ import { WINSTON_MODULE_PROVIDER } from "nest-winston";
 import type { Repository } from "typeorm";
 import { Logger } from "winston";
 import {
+  GetAllUserResponse,
   GetUserResponse,
   ListQueryRequest,
   UpdateUserRequest,
   UpdateUserResponse,
   UserResponse,
+  UserResponseAll,
 } from "../model/user.model";
 import { UserEntity } from "./user.entity";
 import { IUserService } from "./interfaces/user.service.interface";
@@ -22,35 +24,12 @@ export class UserService implements IUserService {
     private logger: Logger,
   ) {}
 
-  async changeUsername(
+  async updateUser(
+    me,
     request: UpdateUserRequest,
   ): Promise<UpdateUserResponse> {
-    this.logger.debug(`UserService.changeUsername(${JSON.stringify(request)})`);
-
-    const isExist = await this.userRepository.findOne({
-      where: { email: request.email },
-    });
-
-    if (!isExist) {
-      throw new HttpException("User not found", 404);
-    }
-
-    await this.userRepository.query(
-      "UPDATE users SET username = ? WHERE id = ? ",
-      [request.username, isExist.id],
-    );
-
-    return {
-      data: {
-        id: isExist.id,
-        username: isExist.username,
-        email: isExist.email,
-      },
-    };
-  }
-
-  async changeEmail(request: UpdateUserRequest): Promise<UpdateUserResponse> {
     this.logger.debug(`UserService.changeEmail(${JSON.stringify(request)})`);
+
     const isExist = await this.userRepository.findOne({
       where: { email: request.email },
     });
@@ -92,8 +71,20 @@ export class UserService implements IUserService {
     };
   }
 
-  async getAllUser(req: ListQueryRequest) {
+  async getAllUser(
+    req: ListQueryRequest,
+  ): Promise<GetAllUserResponse<UserResponseAll>> {
     this.logger.debug(`UserService.getAllUser ${JSON.stringify(req)})`);
+    // conversion
+    const limit = Number(req.limit);
+    const page = Number(req.page);
+    const total = await this.userRepository.count();
+    const pages = Math.ceil(total / limit);
+    // validate
+    if (page > pages) {
+      throw new HttpException(`Page not found, Latest page is ${pages}`, 403);
+    }
+    const skipPage = page * 10;
     const result = await this.userRepository.find({
       select: {
         id: true,
@@ -102,18 +93,15 @@ export class UserService implements IUserService {
         role: true,
         createdAt: true,
       },
-      order: { email: req.order === "DESC" ? "DESC" : "ASC" },
-      skip: req.page,
-      take: req.limit,
+      order: { id: req.order === "DESC" ? "DESC" : "ASC" },
+      take: limit <= 0 ? 1 : limit,
+      skip: skipPage === 10 ? 0 : skipPage,
     });
-    const limit = req.limit;
-    const total = await this.userRepository.count();
-    const pages = total % limit;
 
     return {
-      data: result,
+      data: { user: result },
       pagination: {
-        page: Number(req.page),
+        page: page === 0 ? 1 : page && page >= pages ? pages : page,
         limit: Number(req.limit),
         total: total,
         totalPages: pages,
@@ -123,17 +111,18 @@ export class UserService implements IUserService {
   }
 
   async me(email: string): Promise<UserResponse> {
-    const data = await this.userRepository.findOne({
+    const result = await this.userRepository.findOne({
       where: { email: email },
     });
+    this.logger.info(result);
 
     return {
       data: {
-        id: data.id,
-        username: data.username,
-        email: data.email,
-        role: data.role,
-        createdAt: data.createdAt,
+        id: result.id,
+        username: result.username,
+        email: result.email,
+        role: result.role,
+        createdAt: result.createdAt,
       },
       statusCode: HttpStatus.OK,
     };

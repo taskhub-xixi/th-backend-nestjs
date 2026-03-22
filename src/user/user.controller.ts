@@ -5,23 +5,24 @@ import {
   HttpCode,
   HttpStatus,
   Patch,
-  Query,
   Req,
   UseGuards,
 } from "@nestjs/common";
+import { Admin, Public } from "../common/decorator";
 import { AdminGuard, JwtAuthGuard } from "../common/guards";
+import { PublicGuard } from "../common/guards/public.guards";
 import {
   GetUserById,
   GetUserResponse,
-  ListQueryRequest,
   UpdateUserRequest,
   UpdateUserResponse,
+  RequestQuery,
   User,
+  GetAllUserResponse,
 } from "../model/user.model";
 import { IUserRepository } from "./interfaces/user.interface";
 import { UserService } from "./user.service";
-import { Public, Admin } from "../common/decorator";
-import { PublicGuard } from "../common/guards/public.guards";
+import { UserResponse } from "../model/auth.model";
 
 @Controller("/api/users")
 export class UserController implements IUserRepository {
@@ -39,35 +40,44 @@ export class UserController implements IUserRepository {
     return data;
   }
 
+  @Admin()
+  @Public()
+  @UseGuards(AdminGuard)
+  @UseGuards(PublicGuard)
+  @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.OK)
-  async changeEmail(
+  @Patch("me")
+  async updateUser(
+    @Req() me,
     @Body() request: UpdateUserRequest,
   ): Promise<UpdateUserResponse> {
-    const result = await this.userService.changeEmail(request);
+    const result = await this.userService.updateUser(request, me.user.email);
     return result;
   }
 
-  @HttpCode(HttpStatus.OK)
-  @Patch("/update/username")
-  async changeUsername(
-    @Body() request: UpdateUserRequest,
-  ): Promise<UpdateUserResponse> {
-    const result = await this.userService.changeUsername(request);
-    return result;
-  }
-
+  @Admin()
+  @Public()
+  @UseGuards(AdminGuard)
+  @UseGuards(PublicGuard)
   @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.OK)
   @Get("/all")
-  async getAllUser(@Query() query: ListQueryRequest, @Req() req) {
+  async getAllUser(
+    @Req() req: RequestQuery,
+  ): Promise<GetAllUserResponse<UserResponse>> {
     const result = await this.userService.getAllUser(req.query);
     return result;
   }
 
+  @Admin()
+  @Public()
+  @UseGuards(AdminGuard)
+  @UseGuards(PublicGuard)
+  @UseGuards(JwtAuthGuard)
   @Get("/:id")
   @HttpCode(HttpStatus.OK)
   async getUserById(@Req() request: GetUserById): Promise<GetUserResponse> {
-    const result = await this.userService.getUserById(request.id as number);
+    const result = await this.userService.getUserById(request.id);
     return result;
   }
 }
