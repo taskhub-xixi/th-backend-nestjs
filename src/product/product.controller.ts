@@ -11,14 +11,17 @@ import {
   Patch,
   Post,
   Query,
+  Req,
   UploadedFile,
   UseGuards,
   UseInterceptors,
 } from "@nestjs/common";
 import { FileInterceptor } from "@nestjs/platform-express";
+import { Public } from "../common/decorator";
 import { Admin } from "../common/decorator/admin.decorator";
-import { CheckUserGuard } from "../common/guards";
+import { CheckUserGuard, JwtAuthGuard } from "../common/guards";
 import { AdminGuard } from "../common/guards/admin.guard";
+import { PublicGuard } from "../common/guards/public.guards";
 import {
   CreateProductRequest,
   CreateProductResponseSuccess,
@@ -32,6 +35,10 @@ import { ProductService } from "./product.service";
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
+  @Admin()
+  @Public()
+  @UseGuards(PublicGuard)
+  @UseGuards(AdminGuard)
   @UseGuards(CheckUserGuard)
   @HttpCode(HttpStatus.CREATED)
   @Post("create")
@@ -43,6 +50,8 @@ export class ProductController {
   }
 
   @Admin()
+  @Public()
+  @UseGuards(PublicGuard)
   @UseGuards(AdminGuard)
   @HttpCode(HttpStatus.OK)
   @Get("all")
@@ -54,6 +63,8 @@ export class ProductController {
   }
 
   @Admin()
+  @Public()
+  @UseGuards(PublicGuard)
   @UseGuards(AdminGuard)
   @HttpCode(HttpStatus.OK)
   @Get("single/:id")
@@ -65,6 +76,8 @@ export class ProductController {
   }
 
   @Admin()
+  @Public()
+  @UseGuards(PublicGuard)
   @UseGuards(AdminGuard)
   @HttpCode(HttpStatus.OK)
   @Patch("single/update/:id")
@@ -77,6 +90,8 @@ export class ProductController {
   }
 
   @Admin()
+  @Public()
+  @UseGuards(PublicGuard)
   @UseGuards(AdminGuard)
   @HttpCode(HttpStatus.OK)
   @Delete("single/delete/:id")
@@ -85,6 +100,10 @@ export class ProductController {
     return result;
   }
 
+  @Admin()
+  @Public()
+  @UseGuards(PublicGuard)
+  @UseGuards(AdminGuard)
   @Post("upload")
   @UseInterceptors(
     FileInterceptor("file", {
@@ -105,5 +124,22 @@ export class ProductController {
     return {
       fileName: file.filename,
     };
+  }
+  //
+  // @Admin()
+  // @Public()
+  // @UseGuards(AdminGuard)
+  // @UseGuards(PublicGuard)
+  // @UseGuards(JwtAuthGuard)
+  @Get("category")
+  async getProductByCategory(@Req() req) {
+    const data = await this.productService.getProductByCategory();
+    return data;
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Post("order")
+  async order() {
+    await this.productService.createProduct();
   }
 }

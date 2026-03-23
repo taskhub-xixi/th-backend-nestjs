@@ -5,10 +5,12 @@ import { PrismaService } from "../common/prisma.service";
 import {
   CreateProductRequest,
   CreateProductResponseSuccess,
+  GetProductByCategoryResponse,
   GetProductsRequest,
   GetProductsResponseSuccess,
   UpdateProductRequest,
 } from "../model/product.model";
+import { Product } from "@prisma/client";
 
 @Injectable()
 export class ProductService {
@@ -143,5 +145,28 @@ export class ProductService {
     // }
 
     return where;
+  }
+
+  async getProductByCategory(): Promise<GetProductByCategoryResponse> {
+    this.logger.info("PRODUCT_SERVICE.getProductByCategory: Executed");
+    const resultRaw = await this.prismaService.$queryRaw<
+      Product[]
+    >`SELECT * FROM products WHERE category LIKE "bio-hacking" ORDER BY id ASC LIMIT 10`;
+    const count = await this.prismaService.product.count({
+      where: { category: "bio-hacking" },
+    });
+    const result = resultRaw.map((item) => ({
+      id: item.id,
+      name: item.name,
+      price: item.price,
+      description: item.description,
+      category: item.category,
+      image: item.image,
+    }));
+    return {
+      data: result,
+      productCount: count,
+      statusCode: HttpStatus.OK,
+    };
   }
 }
