@@ -55,7 +55,7 @@ export class GetProductsRequest {
   @IsNumber()
   @IsOptional()
   @Type(() => Number)
-  limit?: number = 10;
+  limit?: number = 20;
 
   @IsString()
   @IsOptional()
@@ -141,5 +141,18 @@ export class UploadPhotoResponseSuccess {
     size: number;
     // mimetype: string;
   };
+  statusCode: number;
+}
+
+export class GetProductByCategoryResponse {
+  data: {
+    id: number;
+    name: string;
+    price: Decimal;
+    description: string;
+    category: string;
+    image: string;
+  }[];
+  productCount?: number;
   statusCode: number;
 }
