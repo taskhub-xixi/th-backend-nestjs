@@ -17,7 +17,6 @@ import { JwtAuthGuard } from "../common/guards/jwt-auth.guard";
 import { RTGuard } from "../common/guards/rt-token.guard";
 import {
   CookiePayload,
-  DeleteDTO,
   LoginDTO,
   LoginResponse,
   LogoutDTO,
