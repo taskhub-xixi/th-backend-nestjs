@@ -152,10 +152,12 @@ export class ProductService {
     return where;
   }
 
-  async getProductByCategory(req): Promise<GetProductByCategoryResponse> {
+  async getProductByCategory(
+    req: string,
+  ): Promise<GetProductByCategoryResponse> {
     this.logger.info("PRODUCT_SERVICE.getProductByCategory: Executed");
-    const category = req.category;
-    if (!req.category) {
+    const category = req;
+    if (!category) {
       throw new HttpException("Product not found", 404);
     }
     const rawCategory = await this.prismaService.$queryRaw<
@@ -177,6 +179,30 @@ export class ProductService {
     return {
       data: result,
       productCount: count,
+      statusCode: HttpStatus.OK,
+    };
+  }
+
+  async search(req: string): Promise<GetProductByCategoryResponse> {
+    this.logger.info(`PRODUCT_SERVICE:search  ${req}`);
+    const flex = req.concat("%");
+    const resultRaw = await this.prismaService.$queryRaw<
+      Product[]
+    >`SELECT * FROM products WHERE name LIKE ${flex}`;
+    const result = resultRaw.map(({ ...rest }) => ({
+      id: rest.id,
+      name: rest.name,
+      price: rest.price,
+      description: rest.description,
+      category: rest.category,
+      image: rest.image,
+    }));
+    const counting = await this.prismaService.product.count({
+      where: { name: { startsWith: flex } },
+    });
+    return {
+      data: result,
+      productCount: counting,
       statusCode: HttpStatus.OK,
     };
   }
