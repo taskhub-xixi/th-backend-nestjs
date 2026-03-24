@@ -49,29 +49,34 @@ export class ProductService {
     const where = this.queryQondition(req);
     const products = await this.prismaService.product.findMany({ where });
     return {
-      data: {
-        products,
-      },
+      data: products,
       statusCode: HttpStatus.OK,
     };
   }
 
   async getProductById(req: number) {
     this.logger.info(`PRODUCT_SERVICE.getProductById: ${req}`);
-    const products: object[] = await this.prismaService
-      .$queryRaw`SELECT * FROM products WHERE id = ${req}`;
+    const products = await this.prismaService.$queryRaw<
+      Product[]
+    >`SELECT * FROM products WHERE id = ${req}`;
 
-    if (!products || products.length === 0) {
+    if (!products) {
       throw new HttpException("Data Not Found", 404);
     }
+    const result = products.map(({ createdAt, ...rest }) => ({
+      id: rest.id,
+      name: rest.name,
+      price: rest.price,
+      description: rest.description,
+      category: rest.category,
+      image: rest.image,
+    }));
 
     this.logger.info(
       `PRODUCT_SERVICE.getProductById: ${JSON.stringify(products)}`,
     );
     return {
-      data: {
-        products,
-      },
+      data: result,
       statusCode: HttpStatus.OK,
     };
   }
@@ -147,22 +152,28 @@ export class ProductService {
     return where;
   }
 
-  async getProductByCategory(): Promise<GetProductByCategoryResponse> {
+  async getProductByCategory(req): Promise<GetProductByCategoryResponse> {
     this.logger.info("PRODUCT_SERVICE.getProductByCategory: Executed");
-    const resultRaw = await this.prismaService.$queryRaw<
+    const category = req.category;
+    if (!req.category) {
+      throw new HttpException("Product not found", 404);
+    }
+    const rawCategory = await this.prismaService.$queryRaw<
       Product[]
-    >`SELECT * FROM products WHERE category LIKE "bio-hacking" ORDER BY id ASC LIMIT 10`;
+    >`SELECT * FROM products WHERE category = ${category} ORDER BY id ASC LIMIT 10`;
     const count = await this.prismaService.product.count({
-      where: { category: "bio-hacking" },
+      where: { category: category },
     });
-    const result = resultRaw.map((item) => ({
-      id: item.id,
-      name: item.name,
-      price: item.price,
-      description: item.description,
-      category: item.category,
-      image: item.image,
+
+    const result = rawCategory.map(({ createdAt, updatedAt, ...rest }) => ({
+      id: rest.id,
+      name: rest.name,
+      price: rest.price,
+      description: rest.description,
+      category: rest.category,
+      image: rest.image,
     }));
+
     return {
       data: result,
       productCount: count,
