@@ -78,12 +78,17 @@ export class GetProductsRequest {
 
 export class GetProductsResponseSuccess {
   data: {
-    products: unknown;
-    total?: number;
-    page?: number;
-    limit?: number;
-    totalPages?: number;
-  };
+    id: number;
+    name: string;
+    price: Decimal;
+    description: string;
+    category: string;
+    image: string;
+  }[];
+  total?: number;
+  page?: number;
+  limit?: number;
+  totalPages?: number;
   statusCode: number;
 }
 
