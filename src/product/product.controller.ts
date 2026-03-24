@@ -27,6 +27,7 @@ import {
   CreateProductResponseSuccess,
   GetProductsRequest,
   GetProductsResponseSuccess,
+  GetProductByCategoryResponse,
   UpdateProductRequest,
 } from "../model/product.model";
 import { ProductService } from "./product.service";
@@ -64,40 +65,26 @@ export class ProductController {
 
   @Admin()
   @Public()
-  @UseGuards(PublicGuard)
   @UseGuards(AdminGuard)
-  @HttpCode(HttpStatus.OK)
-  @Get(":id")
-  async getProductById(
-    @Param("id") id: number,
-  ): Promise<GetProductsResponseSuccess> {
-    const result = await this.productService.getProductById(id);
-    return result;
+  @UseGuards(PublicGuard)
+  @UseGuards(JwtAuthGuard)
+  @Get("category")
+  async getProductByCategory(
+    @Req() req,
+  ): Promise<GetProductByCategoryResponse> {
+    console.log(req.query);
+    const data = await this.productService.getProductByCategory(
+      req.query.category,
+    );
+    return data;
   }
 
-  @Admin()
-  @Public()
-  @UseGuards(PublicGuard)
-  @UseGuards(AdminGuard)
-  @HttpCode(HttpStatus.OK)
-  @Patch("single/update/:id")
-  async updateProductById(
-    @Param("id") id: number,
-    @Body() req: UpdateProductRequest,
-  ) {
-    const result = await this.productService.updateProductById(id, req);
-    return result;
-  }
-
-  @Admin()
-  @Public()
-  @UseGuards(PublicGuard)
-  @UseGuards(AdminGuard)
-  @HttpCode(HttpStatus.OK)
-  @Delete("single/delete/:id")
-  async deleteProductById(@Param("id") id: number) {
-    const result = await this.productService.deleteProductById(id);
-    return result;
+  @UseGuards(JwtAuthGuard)
+  @Get("search")
+  async searchProductName(@Req() req): Promise<GetProductByCategoryResponse> {
+    console.log(typeof req);
+    const data = await this.productService.search(req.query.name);
+    return data;
   }
 
   @Admin()
@@ -128,18 +115,39 @@ export class ProductController {
 
   @Admin()
   @Public()
-  @UseGuards(AdminGuard)
   @UseGuards(PublicGuard)
-  @UseGuards(JwtAuthGuard)
-  @Get("category")
-  async getProductByCategory(@Req() req) {
-    const data = await this.productService.getProductByCategory(req.query);
-    return data;
+  @UseGuards(AdminGuard)
+  @HttpCode(HttpStatus.OK)
+  @Get("/single/:id")
+  async getProductById(
+    @Param("id") id: number,
+  ): Promise<GetProductsResponseSuccess> {
+    const result = await this.productService.getProductById(id);
+    return result;
   }
 
-  // @HttpCode(HttpStatus.OK)
-  // @Post("order")
-  // async order() {
-  //   await this.productService.createProduct();
-  // }
+  @Admin()
+  @Public()
+  @UseGuards(PublicGuard)
+  @UseGuards(AdminGuard)
+  @HttpCode(HttpStatus.OK)
+  @Patch("/update/:id")
+  async updateProductById(
+    @Param("id") id: number,
+    @Body() req: UpdateProductRequest,
+  ) {
+    const result = await this.productService.updateProductById(id, req);
+    return result;
+  }
+
+  @Admin()
+  @Public()
+  @UseGuards(PublicGuard)
+  @UseGuards(AdminGuard)
+  @HttpCode(HttpStatus.OK)
+  @Delete("/delete/:id")
+  async deleteProductById(@Param("id") id: number) {
+    const result = await this.productService.deleteProductById(id);
+    return result;
+  }
 }
