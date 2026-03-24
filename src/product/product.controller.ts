@@ -67,7 +67,7 @@ export class ProductController {
   @UseGuards(PublicGuard)
   @UseGuards(AdminGuard)
   @HttpCode(HttpStatus.OK)
-  @Get("single/:id")
+  @Get(":id")
   async getProductById(
     @Param("id") id: number,
   ): Promise<GetProductsResponseSuccess> {
@@ -125,21 +125,21 @@ export class ProductController {
       fileName: file.filename,
     };
   }
-  //
-  // @Admin()
-  // @Public()
-  // @UseGuards(AdminGuard)
-  // @UseGuards(PublicGuard)
-  // @UseGuards(JwtAuthGuard)
+
+  @Admin()
+  @Public()
+  @UseGuards(AdminGuard)
+  @UseGuards(PublicGuard)
+  @UseGuards(JwtAuthGuard)
   @Get("category")
   async getProductByCategory(@Req() req) {
-    const data = await this.productService.getProductByCategory();
+    const data = await this.productService.getProductByCategory(req.query);
     return data;
   }
 
-  @HttpCode(HttpStatus.OK)
-  @Post("order")
-  async order() {
-    await this.productService.createProduct();
-  }
+  // @HttpCode(HttpStatus.OK)
+  // @Post("order")
+  // async order() {
+  //   await this.productService.createProduct();
+  // }
 }
