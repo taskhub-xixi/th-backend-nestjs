@@ -13,6 +13,12 @@ export class CreateProductRequest {
   @IsNotEmpty()
   name: string;
 
+  @IsString()
+  slug: string;
+
+  @IsString()
+  sku: string;
+
   @IsNumber()
   @Min(1)
   price: Decimal;
@@ -21,23 +27,34 @@ export class CreateProductRequest {
   description: string;
 
   @IsString()
-  @IsNotEmpty()
-  category: string;
+  brandId: string;
 
-  @IsOptional()
-  image: string;
+  @IsString()
+  @IsNotEmpty()
+  categoryId: string;
 }
 
 export class CreateProductResponseSuccess {
-  data: {
-    id?: number;
-    name: string;
-    price: Decimal;
-    category: string;
-    image: string;
-  };
-  statusCode: number;
-  message?: string;
+  id?: string;
+  name: string;
+  price: Decimal;
+  slug: string;
+  sku: string;
+  description: string;
+  originalPrice?: Decimal;
+  categoryId: string;
+  brandId: string;
+  stock: number;
+  lowStockThreshold: number;
+  ratingAverage: Decimal;
+  ratingCount: number;
+  reviewCount: number;
+  isActive: boolean;
+  metadata: {};
+  createdAt?: Date;
+  updatedAt?: Date;
+  shortDescription?: string;
+  deletedAt?: Date;
 }
 
 export class CreateProductResponseError {
@@ -59,7 +76,7 @@ export class GetProductsRequest {
 
   @IsString()
   @IsOptional()
-  category?: string;
+  categoryId?: string;
 
   @IsNumber()
   @IsOptional()
@@ -77,21 +94,32 @@ export class GetProductsRequest {
 }
 
 export class GetProductsResponseSuccess {
-  data: {
-    id: number;
-    name: string;
-    price: Decimal;
-    description: string;
-    category: string;
-    image: string;
-  }[];
-  total?: number;
-  page?: number;
-  limit?: number;
-  totalPages?: number;
-  statusCode: number;
+  id?: string;
+  name: string;
+  price: Decimal;
+  slug: string;
+  sku: string;
+  description: string;
+  originalPrice?: Decimal;
+  categoryId: string;
+  brandId: string;
+  stock: number;
+  lowStockThreshold: number;
+  ratingAverage: Decimal;
+  ratingCount: number;
+  reviewCount: number;
+  isActive: boolean;
+  metadata: {};
+  createdAt?: Date;
+  updatedAt?: Date;
+  shortDescription?: string;
+  deletedAt?: Date;
+  // total?: number;
+  // page?: number;
+  // limit?: number;
+  // totalPages?: number;
+  // statusCode: number;
 }
-
 export class GetProductsResponseError {
   message: string[];
   statusCode: number;
@@ -127,37 +155,39 @@ export class UpdateProductRequest {
 export class UploadPhotoRequest {
   @IsString()
   filename: string;
-
-  // @IsString()
-  // originalName: string;
-  //
-  // @IsNumber()
-  // @Max(5120) // equal to = 5MB
-  // size: number;
-
-  // @IsString()
-  // mimetype: string;
 }
 
 export class UploadPhotoResponseSuccess {
   data: {
     filename: string;
     originalName: string;
-    size: number;
-    // mimetype: string;
   };
   statusCode: number;
 }
 
 export class GetProductByCategoryResponse {
   data: {
-    id: number;
+    id?: string;
     name: string;
     price: Decimal;
+    slug: string;
+    sku: string;
     description: string;
-    category: string;
-    image: string;
+    originalPrice?: Decimal;
+    categoryId: string;
+    brandId: string;
+    stock: number;
+    lowStockThreshold: number;
+    ratingAverage: Decimal;
+    ratingCount: number;
+    reviewCount: number;
+    isActive: boolean;
+    metadata: {};
+    createdAt?: Date;
+    updatedAt?: Date;
+    shortDescription?: string;
+    deletedAt?: Date;
+    productCount?: number;
   }[];
-  productCount?: number;
-  statusCode: number;
+  total: number;
 }
