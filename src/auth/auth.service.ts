@@ -14,17 +14,17 @@ import { Repository } from "typeorm";
 import { Logger } from "winston";
 import {
   LoginDTO,
-  RegisterDTO,
-  RegisterResponse,
   LoginResponse,
   LogoutDTO,
   LogoutResponse,
   RefreshTokenResponse,
+  RegisterDTO,
+  RegisterResponse,
   UpdateDTO,
 } from "../model/auth.model";
 import { UserEntity } from "../user/user.entity";
-import { AuthRepositorySQL } from "./repository_query/auth.repository";
 import { IAuthService } from "./interface/auth.service.interface";
+import { AuthRepositorySQL } from "./repository_query/auth.repository";
 import { TokenService } from "./services/token.service";
 
 @Injectable()
@@ -187,7 +187,7 @@ export class AuthService implements IAuthService {
   async checkRole(email: string) {
     const data = await this.authRepository.findOne({ where: { email } });
     if (data.role !== "admin") {
-      throw new HttpException("Forbidden resources", 403);
+      throw new HttpException("Forbidden resources, Role must be Admin", 403);
     }
     return data;
   }

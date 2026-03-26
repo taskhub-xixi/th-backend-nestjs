@@ -12,7 +12,7 @@ import { Logger } from "winston";
 import { AuthService } from "../../auth/auth.service";
 
 @Injectable()
-export class PublicGuard extends AuthGuard() {
+export class PublicGuard extends AuthGuard("public") {
   constructor(
     private reflector: Reflector,
     @Inject(WINSTON_MODULE_PROVIDER) private logger: Logger,

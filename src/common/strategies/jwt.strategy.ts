@@ -13,12 +13,10 @@ export class JwtStrategy extends PassportStrategy(Strategy, "jwt-strategy") {
       ]),
       ignoreExpiration: false,
       secretOrKey: jwtConstants.secrets,
-      passReqToCallback: true,
+      passReqToCallback: false,
     });
   }
-  validate(req, payload: JwtPayload) {
-    console.log(req.query);
-    return { sub: payload.sub, email: payload.email };
+  validate(payload: JwtPayload) {
+    return payload;
   }
-  // return to REQ controller
 }

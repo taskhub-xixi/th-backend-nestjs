@@ -12,7 +12,6 @@ import {
   UseGuards,
 } from "@nestjs/common";
 import { Request, Response } from "express";
-import { CheckUserGuard } from "../common/guards/check-user.guard";
 import { JwtAuthGuard } from "../common/guards/jwt-auth.guard";
 import { RTGuard } from "../common/guards/rt-token.guard";
 import {
@@ -73,7 +72,6 @@ export class AuthController {
     };
   }
 
-  @UseGuards(CheckUserGuard)
   @UseGuards(JwtAuthGuard)
   @Patch("reset")
   @HttpCode(HttpStatus.OK)
@@ -94,7 +92,6 @@ export class AuthController {
   //   await this.authService.deleteSQL(deleteDTO.email, response);
   // }
 
-  @UseGuards(CheckUserGuard)
   @UseGuards(JwtAuthGuard)
   @Get("verify")
   @HttpCode(HttpStatus.OK)
@@ -105,7 +102,6 @@ export class AuthController {
     return await this.authService.verify(cookie);
   }
 
-  @UseGuards(CheckUserGuard)
   @UseGuards(JwtAuthGuard)
   @Patch("logout")
   @HttpCode(HttpStatus.OK)
