@@ -309,6 +309,8 @@ All deletable entities include:
 
 ### Auth Module - Database Schema
 
+**PostgreSQL:**
+
 ```sql
 CREATE TABLE auth_tokens (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -341,6 +343,42 @@ CREATE TABLE email_verification_tokens (
     expires_at TIMESTAMP WITH TIME ZONE NOT NULL,
     verified_at TIMESTAMP WITH TIME ZONE,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+```
+
+**MySQL/MariaDB:**
+
+```sql
+CREATE TABLE auth_tokens (
+    id CHAR(36) PRIMARY KEY DEFAULT (UUID()),
+    user_id CHAR(36) NOT NULL,
+    refresh_token_hash VARCHAR(255) NOT NULL,
+    device_info JSON,
+    ip_address VARCHAR(45),
+    expires_at DATETIME NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    revoked_at DATETIME,
+    deleted_at DATETIME,
+    INDEX idx_auth_tokens_user_id (user_id),
+    INDEX idx_auth_tokens_expires_at (expires_at)
+);
+
+CREATE TABLE password_reset_tokens (
+    id CHAR(36) PRIMARY KEY DEFAULT (UUID()),
+    user_id CHAR(36) NOT NULL,
+    token_hash VARCHAR(255) NOT NULL,
+    expires_at DATETIME NOT NULL,
+    used_at DATETIME,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE email_verification_tokens (
+    id CHAR(36) PRIMARY KEY DEFAULT (UUID()),
+    user_id CHAR(36) NOT NULL,
+    token_hash VARCHAR(255) NOT NULL,
+    expires_at DATETIME NOT NULL,
+    verified_at DATETIME,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 ```
 
@@ -607,6 +645,8 @@ CREATE TABLE email_verification_tokens (
 
 ### User Module - Database Schema
 
+**PostgreSQL:**
+
 ```sql
 CREATE TABLE users (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -649,6 +689,50 @@ CREATE TABLE user_addresses (
 );
 
 CREATE INDEX idx_user_addresses_user_id ON user_addresses(user_id) WHERE deleted_at IS NULL;
+```
+
+**MySQL/MariaDB:**
+
+```sql
+CREATE TABLE users (
+    id CHAR(36) PRIMARY KEY DEFAULT (UUID()),
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password_hash VARCHAR(255) NOT NULL,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
+    phone VARCHAR(20),
+    avatar_url VARCHAR(500),
+    role VARCHAR(20) NOT NULL DEFAULT 'user',
+    email_verified TINYINT(1) NOT NULL DEFAULT 0,
+    is_active TINYINT(1) NOT NULL DEFAULT 1,
+    date_of_birth DATE,
+    metadata JSON DEFAULT '{}',
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    deleted_at DATETIME,
+    INDEX idx_users_email (email),
+    INDEX idx_users_role (role),
+    INDEX idx_users_created_at (created_at DESC)
+);
+
+CREATE TABLE user_addresses (
+    id CHAR(36) PRIMARY KEY DEFAULT (UUID()),
+    user_id CHAR(36) NOT NULL,
+    label VARCHAR(50) NOT NULL,
+    recipient_name VARCHAR(100) NOT NULL,
+    phone VARCHAR(20) NOT NULL,
+    address_line_1 VARCHAR(200) NOT NULL,
+    address_line_2 VARCHAR(200),
+    city VARCHAR(100) NOT NULL,
+    province VARCHAR(100) NOT NULL,
+    postal_code VARCHAR(10) NOT NULL,
+    country VARCHAR(100) NOT NULL,
+    is_default TINYINT(1) NOT NULL DEFAULT 0,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    deleted_at DATETIME,
+    INDEX idx_user_addresses_user_id (user_id)
+);
 ```
 
 ### User Module - Test Cases
@@ -1029,6 +1113,8 @@ CREATE INDEX idx_user_addresses_user_id ON user_addresses(user_id) WHERE deleted
 
 ### Product Module - Database Schema
 
+**PostgreSQL:**
+
 ```sql
 CREATE TABLE categories (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -1156,6 +1242,131 @@ CREATE TABLE product_reviews (
 
 CREATE INDEX idx_product_reviews_product ON product_reviews(product_id) WHERE deleted_at IS NULL;
 CREATE INDEX idx_product_reviews_rating ON product_reviews(rating);
+```
+
+**MySQL/MariaDB:**
+
+```sql
+CREATE TABLE categories (
+    id CHAR(36) PRIMARY KEY DEFAULT (UUID()),
+    name VARCHAR(100) NOT NULL,
+    slug VARCHAR(100) NOT NULL UNIQUE,
+    description TEXT,
+    icon_url VARCHAR(500),
+    image_url VARCHAR(500),
+    parent_id CHAR(36),
+    sort_order INT DEFAULT 0,
+    is_active TINYINT(1) NOT NULL DEFAULT 1,
+    metadata JSON DEFAULT '{}',
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    deleted_at DATETIME,
+    INDEX idx_categories_slug (slug),
+    INDEX idx_categories_parent (parent_id)
+);
+
+CREATE TABLE brands (
+    id CHAR(36) PRIMARY KEY DEFAULT (UUID()),
+    name VARCHAR(100) NOT NULL,
+    slug VARCHAR(100) NOT NULL UNIQUE,
+    logo_url VARCHAR(500),
+    description TEXT,
+    website_url VARCHAR(500),
+    is_active TINYINT(1) NOT NULL DEFAULT 1,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    deleted_at DATETIME
+);
+
+CREATE TABLE products (
+    id CHAR(36) PRIMARY KEY DEFAULT (UUID()),
+    name VARCHAR(200) NOT NULL,
+    slug VARCHAR(200) NOT NULL UNIQUE,
+    sku VARCHAR(50) NOT NULL UNIQUE,
+    description TEXT NOT NULL,
+    short_description VARCHAR(500),
+    price DECIMAL(15,2) NOT NULL,
+    original_price DECIMAL(15,2),
+    category_id CHAR(36) NOT NULL,
+    brand_id CHAR(36),
+    stock INT NOT NULL DEFAULT 0,
+    low_stock_threshold INT DEFAULT 10,
+    rating_average DECIMAL(3,2) DEFAULT 0,
+    rating_count INT DEFAULT 0,
+    review_count INT DEFAULT 0,
+    is_active TINYINT(1) NOT NULL DEFAULT 1,
+    metadata JSON DEFAULT '{}',
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    deleted_at DATETIME,
+    INDEX idx_products_slug (slug),
+    INDEX idx_products_sku (sku),
+    INDEX idx_products_category (category_id),
+    INDEX idx_products_price (price),
+    INDEX idx_products_stock (stock),
+    INDEX idx_products_rating (rating_average DESC)
+);
+
+CREATE TABLE product_images (
+    id CHAR(36) PRIMARY KEY DEFAULT (UUID()),
+    product_id CHAR(36) NOT NULL,
+    url VARCHAR(500) NOT NULL,
+    alt_text VARCHAR(200),
+    sort_order INT DEFAULT 0,
+    is_primary TINYINT(1) DEFAULT 0,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_product_images_product (product_id)
+);
+
+CREATE TABLE product_attributes (
+    id CHAR(36) PRIMARY KEY DEFAULT (UUID()),
+    product_id CHAR(36) NOT NULL,
+    attribute_name VARCHAR(100) NOT NULL,
+    attribute_value TEXT NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_product_attributes_product (product_id)
+);
+
+CREATE TABLE product_tags (
+    id CHAR(36) PRIMARY KEY DEFAULT (UUID()),
+    product_id CHAR(36) NOT NULL,
+    tag VARCHAR(50) NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE KEY uk_product_tag (product_id, tag)
+);
+
+CREATE TABLE product_variants (
+    id CHAR(36) PRIMARY KEY DEFAULT (UUID()),
+    product_id CHAR(36) NOT NULL,
+    sku VARCHAR(50) NOT NULL UNIQUE,
+    name VARCHAR(100) NOT NULL,
+    price_adjustment DECIMAL(15,2) DEFAULT 0,
+    stock INT DEFAULT 0,
+    attributes JSON NOT NULL DEFAULT '{}',
+    is_active TINYINT(1) DEFAULT 1,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX idx_product_variants_sku (sku),
+    INDEX idx_product_variants_product (product_id)
+);
+
+CREATE TABLE product_reviews (
+    id CHAR(36) PRIMARY KEY DEFAULT (UUID()),
+    product_id CHAR(36) NOT NULL,
+    user_id CHAR(36) NOT NULL,
+    rating INT NOT NULL,
+    title VARCHAR(100) NOT NULL,
+    content TEXT NOT NULL,
+    is_verified_purchase TINYINT(1) DEFAULT 0,
+    is_approved TINYINT(1) DEFAULT 0,
+    helpful_count INT DEFAULT 0,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    deleted_at DATETIME,
+    UNIQUE KEY uk_product_user_review (product_id, user_id),
+    INDEX idx_product_reviews_product (product_id),
+    INDEX idx_product_reviews_rating (rating)
+);
 ```
 
 ### Product Module - Test Cases
@@ -1478,6 +1689,8 @@ cancelled  cancelled    cancelled
 
 ### Order Module - Database Schema
 
+**PostgreSQL:**
+
 ```sql
 CREATE TABLE orders (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -1556,6 +1769,85 @@ CREATE TABLE coupon_usage (
     discount_amount DECIMAL(15,2) NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     UNIQUE(coupon_id, user_id, order_id)
+);
+```
+
+**MySQL/MariaDB:**
+
+```sql
+CREATE TABLE orders (
+    id CHAR(36) PRIMARY KEY DEFAULT (UUID()),
+    order_number VARCHAR(50) NOT NULL UNIQUE,
+    user_id CHAR(36) NOT NULL,
+    status VARCHAR(20) NOT NULL DEFAULT 'pending',
+    subtotal DECIMAL(15,2) NOT NULL,
+    shipping_cost DECIMAL(15,2) NOT NULL DEFAULT 0,
+    discount DECIMAL(15,2) NOT NULL DEFAULT 0,
+    tax DECIMAL(15,2) NOT NULL DEFAULT 0,
+    total DECIMAL(15,2) NOT NULL,
+    shipping_method VARCHAR(20),
+    shipping_address JSON NOT NULL,
+    billing_address JSON,
+    tracking_number VARCHAR(100),
+    notes TEXT,
+    coupon_id CHAR(36),
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    deleted_at DATETIME,
+    INDEX idx_orders_number (order_number),
+    INDEX idx_orders_user (user_id),
+    INDEX idx_orders_status (status),
+    INDEX idx_orders_created_at (created_at DESC)
+);
+
+CREATE TABLE order_items (
+    id CHAR(36) PRIMARY KEY DEFAULT (UUID()),
+    order_id CHAR(36) NOT NULL,
+    product_id CHAR(36) NOT NULL,
+    variant_id CHAR(36),
+    quantity INT NOT NULL,
+    price DECIMAL(15,2) NOT NULL,
+    subtotal DECIMAL(15,2) NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_order_items_order (order_id)
+);
+
+CREATE TABLE order_status_history (
+    id CHAR(36) PRIMARY KEY DEFAULT (UUID()),
+    order_id CHAR(36) NOT NULL,
+    status VARCHAR(20) NOT NULL,
+    note TEXT,
+    changed_by CHAR(36),
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_order_status_history_order (order_id)
+);
+
+CREATE TABLE coupons (
+    id CHAR(36) PRIMARY KEY DEFAULT (UUID()),
+    code VARCHAR(50) NOT NULL UNIQUE,
+    type VARCHAR(20) NOT NULL,
+    value DECIMAL(15,2) NOT NULL,
+    min_order_amount DECIMAL(15,2) DEFAULT 0,
+    max_discount DECIMAL(15,2),
+    max_uses INT,
+    used_count INT DEFAULT 0,
+    valid_from DATETIME NOT NULL,
+    valid_until DATETIME NOT NULL,
+    is_active TINYINT(1) DEFAULT 1,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    deleted_at DATETIME,
+    INDEX idx_coupons_code (code)
+);
+
+CREATE TABLE coupon_usage (
+    id CHAR(36) PRIMARY KEY DEFAULT (UUID()),
+    coupon_id CHAR(36) NOT NULL,
+    user_id CHAR(36) NOT NULL,
+    order_id CHAR(36) NOT NULL,
+    discount_amount DECIMAL(15,2) NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE KEY uk_coupon_usage (coupon_id, user_id, order_id)
 );
 ```
 
@@ -1774,6 +2066,8 @@ completed
 
 ### Payment Module - Database Schema
 
+**PostgreSQL:**
+
 ```sql
 CREATE TABLE payments (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -1824,6 +2118,59 @@ CREATE TABLE payment_providers (
     config JSONB NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+```
+
+**MySQL/MariaDB:**
+
+```sql
+CREATE TABLE payments (
+    id CHAR(36) PRIMARY KEY DEFAULT (UUID()),
+    order_id CHAR(36) NOT NULL,
+    provider VARCHAR(20) NOT NULL,
+    provider_transaction_id VARCHAR(100),
+    amount DECIMAL(15,2) NOT NULL,
+    fee DECIMAL(15,2) DEFAULT 0,
+    net_amount DECIMAL(15,2),
+    currency VARCHAR(3) DEFAULT 'IDR',
+    method VARCHAR(50),
+    status VARCHAR(20) NOT NULL DEFAULT 'pending',
+    payment_url TEXT,
+    deadline DATETIME NOT NULL,
+    metadata JSON DEFAULT '{}',
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    paid_at DATETIME,
+    expired_at DATETIME,
+    INDEX idx_payments_order (order_id),
+    INDEX idx_payments_provider_tx (provider, provider_transaction_id),
+    INDEX idx_payments_status (status)
+);
+
+CREATE TABLE refunds (
+    id CHAR(36) PRIMARY KEY DEFAULT (UUID()),
+    payment_id CHAR(36) NOT NULL,
+    order_id CHAR(36) NOT NULL,
+    amount DECIMAL(15,2) NOT NULL,
+    type VARCHAR(20) NOT NULL,
+    reason TEXT,
+    provider_refund_id VARCHAR(100),
+    status VARCHAR(20) NOT NULL DEFAULT 'pending',
+    processed_at DATETIME,
+    completed_at DATETIME,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    metadata JSON DEFAULT '{}',
+    INDEX idx_refunds_payment (payment_id),
+    INDEX idx_refunds_status (status)
+);
+
+CREATE TABLE payment_providers (
+    id VARCHAR(20) PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,
+    is_enabled TINYINT(1) DEFAULT 1,
+    config JSON NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 ```
 
@@ -2019,6 +2366,8 @@ CREATE TABLE payment_providers (
 
 ### Inventory Module - Database Schema
 
+**PostgreSQL:**
+
 ```sql
 CREATE TABLE inventory (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -2068,6 +2417,56 @@ CREATE TABLE stock_reservations (
 CREATE INDEX idx_stock_reservations_order ON stock_reservations(order_id);
 CREATE INDEX idx_stock_reservations_status ON stock_reservations(status);
 CREATE INDEX idx_stock_reservations_expires ON stock_reservations(expires_at) WHERE status = 'active';
+```
+
+**MySQL/MariaDB:**
+
+```sql
+CREATE TABLE inventory (
+    id CHAR(36) PRIMARY KEY DEFAULT (UUID()),
+    product_id CHAR(36) NOT NULL,
+    variant_id CHAR(36),
+    available_stock INT NOT NULL DEFAULT 0,
+    reserved_stock INT NOT NULL DEFAULT 0,
+    low_stock_threshold INT DEFAULT 10,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    UNIQUE KEY uk_inventory_product_variant (product_id, variant_id),
+    INDEX idx_inventory_product (product_id)
+);
+
+CREATE TABLE inventory_transactions (
+    id CHAR(36) PRIMARY KEY DEFAULT (UUID()),
+    product_id CHAR(36) NOT NULL,
+    variant_id CHAR(36),
+    order_id CHAR(36),
+    type VARCHAR(20) NOT NULL,
+    quantity INT NOT NULL,
+    balance_after INT NOT NULL,
+    reason VARCHAR(50),
+    note TEXT,
+    created_by CHAR(36),
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_inventory_transactions_product (product_id),
+    INDEX idx_inventory_transactions_order (order_id),
+    INDEX idx_inventory_transactions_type (type),
+    INDEX idx_inventory_transactions_created (created_at DESC)
+);
+
+CREATE TABLE stock_reservations (
+    id CHAR(36) PRIMARY KEY DEFAULT (UUID()),
+    order_id CHAR(36) NOT NULL,
+    product_id CHAR(36) NOT NULL,
+    variant_id CHAR(36),
+    quantity INT NOT NULL,
+    status VARCHAR(20) NOT NULL DEFAULT 'active',
+    expires_at DATETIME,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    released_at DATETIME,
+    INDEX idx_stock_reservations_order (order_id),
+    INDEX idx_stock_reservations_status (status),
+    INDEX idx_stock_reservations_expires (expires_at)
+);
 ```
 
 ### Inventory Module - Test Cases
@@ -2246,6 +2645,8 @@ CREATE INDEX idx_stock_reservations_expires ON stock_reservations(expires_at) WH
 
 ### Notification Module - Database Schema
 
+**PostgreSQL:**
+
 ```sql
 CREATE TABLE notification_templates (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -2301,6 +2702,64 @@ CREATE TABLE user_notification_preferences (
     marketing_enabled BOOLEAN DEFAULT FALSE,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     UNIQUE(user_id)
+);
+```
+
+**MySQL/MariaDB:**
+
+```sql
+CREATE TABLE notification_templates (
+    id CHAR(36) PRIMARY KEY DEFAULT (UUID()),
+    name VARCHAR(100) NOT NULL UNIQUE,
+    channels JSON NOT NULL,
+    email_subject VARCHAR(200),
+    email_body TEXT,
+    sms_body VARCHAR(500),
+    push_title VARCHAR(100),
+    push_body VARCHAR(200),
+    in_app_title VARCHAR(100),
+    in_app_body TEXT,
+    variables JSON,
+    is_active TINYINT(1) DEFAULT 1,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE notifications (
+    id CHAR(36) PRIMARY KEY DEFAULT (UUID()),
+    user_id CHAR(36) NOT NULL,
+    type VARCHAR(20) NOT NULL,
+    channel VARCHAR(20) NOT NULL,
+    title VARCHAR(200) NOT NULL,
+    message TEXT NOT NULL,
+    data JSON,
+    is_read TINYINT(1) DEFAULT 0,
+    read_at DATETIME,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_notifications_user (user_id),
+    INDEX idx_notifications_read (user_id, is_read)
+);
+
+CREATE TABLE notification_logs (
+    id CHAR(36) PRIMARY KEY DEFAULT (UUID()),
+    notification_id CHAR(36),
+    channel VARCHAR(20) NOT NULL,
+    status VARCHAR(20) NOT NULL,
+    provider_message_id VARCHAR(100),
+    error_message TEXT,
+    sent_at DATETIME,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE user_notification_preferences (
+    id CHAR(36) PRIMARY KEY DEFAULT (UUID()),
+    user_id CHAR(36) NOT NULL UNIQUE,
+    email_enabled TINYINT(1) DEFAULT 1,
+    sms_enabled TINYINT(1) DEFAULT 1,
+    push_enabled TINYINT(1) DEFAULT 1,
+    in_app_enabled TINYINT(1) DEFAULT 1,
+    marketing_enabled TINYINT(1) DEFAULT 0,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 ```
 
@@ -2543,6 +3002,8 @@ CREATE TABLE user_notification_preferences (
 
 ### File Upload Module - Database Schema
 
+**PostgreSQL:**
+
 ```sql
 CREATE TABLE files (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -2584,6 +3045,49 @@ CREATE TABLE file_processing_jobs (
 
 CREATE INDEX idx_file_processing_file ON file_processing_jobs(file_id);
 CREATE INDEX idx_file_processing_status ON file_processing_jobs(status);
+```
+
+**MySQL/MariaDB:**
+
+```sql
+CREATE TABLE files (
+    id CHAR(36) PRIMARY KEY DEFAULT (UUID()),
+    filename VARCHAR(255) NOT NULL,
+    original_name VARCHAR(255) NOT NULL,
+    mime_type VARCHAR(100) NOT NULL,
+    size BIGINT NOT NULL,
+    width INT,
+    height INT,
+    type VARCHAR(20) NOT NULL,
+    folder VARCHAR(255),
+    storage_path VARCHAR(500) NOT NULL,
+    cdn_url VARCHAR(500) NOT NULL,
+    thumbnail_url VARCHAR(500),
+    uploaded_by CHAR(36),
+    download_count INT DEFAULT 0,
+    is_active TINYINT(1) DEFAULT 1,
+    metadata JSON DEFAULT '{}',
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    deleted_at DATETIME,
+    INDEX idx_files_uploader (uploaded_by),
+    INDEX idx_files_type (type),
+    INDEX idx_files_folder (folder)
+);
+
+CREATE TABLE file_processing_jobs (
+    id CHAR(36) PRIMARY KEY DEFAULT (UUID()),
+    file_id CHAR(36) NOT NULL,
+    status VARCHAR(20) NOT NULL DEFAULT 'pending',
+    operations JSON NOT NULL,
+    result JSON,
+    error_message TEXT,
+    started_at DATETIME,
+    completed_at DATETIME,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_file_processing_file (file_id),
+    INDEX idx_file_processing_status (status)
+);
 ```
 
 ### File Upload Module - Test Cases
@@ -2858,6 +3362,8 @@ CREATE INDEX idx_file_processing_status ON file_processing_jobs(status);
 
 ### Analytics Module - Database Schema
 
+**PostgreSQL:**
+
 ```sql
 CREATE TABLE analytics_events (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -2906,6 +3412,55 @@ CREATE TABLE report_jobs (
 );
 
 CREATE INDEX idx_report_jobs_status ON report_jobs(status);
+```
+
+**MySQL/MariaDB:**
+
+```sql
+CREATE TABLE analytics_events (
+    id CHAR(36) PRIMARY KEY DEFAULT (UUID()),
+    event_type VARCHAR(50) NOT NULL,
+    user_id CHAR(36),
+    session_id VARCHAR(100),
+    entity_type VARCHAR(50),
+    entity_id CHAR(36),
+    properties JSON DEFAULT '{}',
+    revenue DECIMAL(15,2),
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_analytics_events_type (event_type),
+    INDEX idx_analytics_events_entity (entity_type, entity_id),
+    INDEX idx_analytics_events_created (created_at DESC),
+    INDEX idx_analytics_events_user (user_id)
+);
+
+CREATE TABLE daily_aggregations (
+    id CHAR(36) PRIMARY KEY DEFAULT (UUID()),
+    date DATE NOT NULL,
+    metric_type VARCHAR(50) NOT NULL,
+    dimension_type VARCHAR(50),
+    dimension_value VARCHAR(100),
+    value DECIMAL(15,2) NOT NULL,
+    count INT DEFAULT 0,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE KEY uk_daily_agg (date, metric_type, dimension_type, dimension_value),
+    INDEX idx_daily_aggregations_date (date),
+    INDEX idx_daily_aggregations_metric (metric_type)
+);
+
+CREATE TABLE report_jobs (
+    id CHAR(36) PRIMARY KEY DEFAULT (UUID()),
+    report_type VARCHAR(50) NOT NULL,
+    format VARCHAR(10) NOT NULL,
+    parameters JSON,
+    status VARCHAR(20) NOT NULL DEFAULT 'pending',
+    file_url VARCHAR(500),
+    error_message TEXT,
+    started_at DATETIME,
+    completed_at DATETIME,
+    created_by CHAR(36) NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_report_jobs_status (status)
+);
 ```
 
 ### Analytics Module - Test Cases
