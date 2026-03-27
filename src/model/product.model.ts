@@ -67,7 +67,7 @@ export class GetProductsRequest {
   @IsOptional()
   @Min(1)
   @Type(() => Number)
-  page?: number;
+  page?: number = 1;
 
   @IsNumber()
   @IsOptional()
@@ -76,7 +76,7 @@ export class GetProductsRequest {
 
   @IsString()
   @IsOptional()
-  categoryId?: string;
+  category?: string;
 
   @IsNumber()
   @IsOptional()
@@ -94,31 +94,32 @@ export class GetProductsRequest {
 }
 
 export class GetProductsResponseSuccess {
-  id?: string;
-  name: string;
-  price: Decimal;
-  slug: string;
-  sku: string;
-  description: string;
-  originalPrice?: Decimal;
-  categoryId: string;
-  brandId: string;
-  stock: number;
-  lowStockThreshold: number;
-  ratingAverage: Decimal;
-  ratingCount: number;
-  reviewCount: number;
-  isActive: boolean;
-  metadata: {};
-  createdAt?: Date;
-  updatedAt?: Date;
-  shortDescription?: string;
-  deletedAt?: Date;
-  // total?: number;
-  // page?: number;
-  // limit?: number;
-  // totalPages?: number;
-  // statusCode: number;
+  products: {
+    id?: string;
+    name: string;
+    price: Decimal;
+    slug: string;
+    sku: string;
+    description: string;
+    originalPrice?: Decimal;
+    categoryId: string;
+    brandId: string;
+    stock: number;
+    lowStockThreshold: number;
+    ratingAverage: Decimal;
+    ratingCount: number;
+    reviewCount: number;
+    isActive: boolean;
+    metadata: {};
+    createdAt?: Date;
+    updatedAt?: Date;
+    shortDescription?: string;
+    deletedAt?: Date;
+  }[];
+  total?: number;
+  page?: number;
+  limit?: number;
+  totalPages?: number;
 }
 export class GetProductsResponseError {
   message: string[];
@@ -166,7 +167,7 @@ export class UploadPhotoResponseSuccess {
 }
 
 export class GetProductByCategoryResponse {
-  data: {
+  products: {
     id?: string;
     name: string;
     price: Decimal;
@@ -187,7 +188,9 @@ export class GetProductByCategoryResponse {
     updatedAt?: Date;
     shortDescription?: string;
     deletedAt?: Date;
-    productCount?: number;
   }[];
-  total: number;
+  total?: number;
+  page?: number;
+  limit?: number;
+  totalPages?: number;
 }
