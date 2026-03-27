@@ -30,7 +30,6 @@ export class AdminGuard implements CanActivate {
 
     const req = context.switchToHttp().getRequest();
     const token = req?.cookies?.access_token;
-    console.log(req);
 
     if (token === undefined) {
       throw new HttpException("AdminGuard: token not found", 401);
