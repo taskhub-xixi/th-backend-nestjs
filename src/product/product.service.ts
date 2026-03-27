@@ -8,6 +8,7 @@ import {
   GetProductByCategoryResponse,
   GetProductsRequest,
   GetProductsResponseSuccess,
+  SearchRequest,
   UpdateProductRequest,
 } from "../model/product.model";
 import { Product } from "@prisma/client";
@@ -218,7 +219,7 @@ GROUP BY
   }
 
   async search(req: string): Promise<GetProductByCategoryResponse> {
-    this.logger.info(`PRODUCT_SERVICE:search  ${req}`);
+    this.logger.info(`PRODUCT_SERVICE:search ${req}`);
     const flex = req.concat("%");
 
     const resultRaw = await this.prismaService.$queryRaw<
@@ -238,8 +239,4 @@ GROUP BY
       total: counting,
     };
   }
-
-  // async createOrder() {
-  //   return null;
-  // }
 }
