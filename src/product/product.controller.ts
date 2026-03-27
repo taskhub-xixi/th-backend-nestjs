@@ -28,6 +28,7 @@ import {
   GetProductByCategoryResponse,
   GetProductsRequest,
   GetProductsResponseSuccess,
+  SearchRequest,
   UpdateProductRequest,
 } from "../model/product.model";
 import { ProductService } from "./product.service";
@@ -78,22 +79,27 @@ export class ProductController {
   @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.OK)
   @Get("category")
-  async getProductByCategory(@Query() req: GetProductsRequest) {
-    const data = await this.productService.getProductByCategory(req);
+  async getProductByCategory(
+    @Query() req: GetProductsRequest,
+  ): Promise<WebResponse<GetProductByCategoryResponse>> {
+    const result = await this.productService.getProductByCategory(req);
+    return {
+      data: result,
+      statusCode: HttpStatus.OK,
+    };
+  }
+
+  @Admin()
+  @Public()
+  @UseGuards(AdminGuard)
+  @UseGuards(PublicGuard)
+  @UseGuards(JwtAuthGuard)
+  @Get("search")
+  async searchProductName(@Query() req: SearchRequest) {
+    console.log(typeof req);
+    const data = await this.productService.search(req.name);
     return data;
   }
-  //
-  // @Admin()
-  // @Public()
-  // @UseGuards(AdminGuard)
-  // @UseGuards(PublicGuard)
-  // @UseGuards(JwtAuthGuard)
-  // @Get("search")
-  // async searchProductName(@Req() req) {
-  //   console.log(typeof req);
-  //   const data = await this.productService.search(req.query.name);
-  //   return data;
-  // }
   //
   // @Admin()
   // @Public()
