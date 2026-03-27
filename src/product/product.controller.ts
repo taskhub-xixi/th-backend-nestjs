@@ -63,7 +63,7 @@ export class ProductController {
   @Get()
   async getProductAll(
     @Query() req: GetProductsRequest,
-  ): Promise<WebResponse<GetProductsResponseSuccess[]>> {
+  ): Promise<WebResponse<GetProductsResponseSuccess>> {
     const result = await this.productService.getProductAll(req);
     return {
       data: result,
@@ -76,11 +76,10 @@ export class ProductController {
   @UseGuards(AdminGuard)
   @UseGuards(PublicGuard)
   @UseGuards(JwtAuthGuard)
+  @HttpCode(HttpStatus.OK)
   @Get("category")
-  async getProductByCategory(@Req() req) {
-    const data = await this.productService.getProductByCategory(
-      req.query.category,
-    );
+  async getProductByCategory(@Query() req: GetProductsRequest) {
+    const data = await this.productService.getProductByCategory(req);
     return data;
   }
   //
