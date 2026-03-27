@@ -60,45 +60,38 @@ export class ProductService {
 
   async getProductAll(
     req: GetProductsRequest,
-  ): Promise<GetProductsResponseSuccess[]> {
+  ): Promise<GetProductsResponseSuccess> {
     this.logger.info(
       `PRODUCT_SERVICE.getProductList: ${JSON.stringify(req.search)}`,
     );
 
     // const where = this.queryQondition(reqresult);
+    const limit = Number(req.limit);
+    const total = await this.prismaService.product.count();
+    let totalPages: number;
+    if (limit === 20) {
+      totalPages = Math.ceil(total / 20);
+    } else {
+      totalPages = Math.ceil(total / limit);
+    }
+    const page = Number(req.page);
+    const countPage = limit * page - 20;
+
     const productRaw = await this.prismaService.product.findMany({
       where: {
-        categoryId: req.categoryId !== undefined ? req.categoryId : undefined,
+        categoryId: req.category !== undefined ? req.category : undefined,
       },
-      take: req.limit !== undefined ? req.limit : null,
-      skip: req.page !== undefined ? req.page : 0,
+      take: limit,
+      skip: page === 1 ? 0 : countPage,
     });
 
-    const response: GetProductsResponseSuccess[] = productRaw.map((p) => ({
-      id: p.id,
-      name: p.name,
-      price: p.price,
-      slug: p.slug,
-      sku: p.sku,
-      description: p.description,
-      originalPrice: p.originalPrice,
-      categoryId: p.categoryId,
-      brandId: p.brandId,
-      stock: p.stock,
-      lowStockThreshold: p.lowStockThreshold,
-      ratingAverage: p.ratingAverage,
-      ratingCount: p.ratingCount,
-      reviewCount: p.reviewCount,
-      isActive: p.isActive,
-      metadata: p.metadata,
-      createdAt: p.createdAt,
-      updatedAt: p.updatedAt,
-      shortDescription: p.shortDescription,
-      deletedAt: p.deletedAt,
-    }));
-
-    console.log(typeof response);
-    return response;
+    return {
+      products: productRaw,
+      total: total,
+      limit: limit,
+      page: page,
+      totalPages: totalPages,
+    };
   }
 
   // async getProductById(req: number) {
@@ -172,100 +165,79 @@ export class ProductService {
   //   };
   // }
 
-  queryQondition(req: GetProductsRequest) {
-    interface whereOptions {
-      name?: string;
-      categoryId?: string;
-      page?: number;
-      limit?: number;
-    }
-    const where: whereOptions = {};
-
-    if (req.search !== undefined) {
-      where.name = req.search;
-    }
-
-    if (req.categoryId !== undefined) {
-      where.categoryId = req.categoryId;
-    }
-
-    if (req.page !== undefined) {
-      where.page = req.page;
-    }
-
-    if (req.limit !== undefined) {
-      where.limit = req.limit;
-    }
-
-    return where;
-  }
-
   async getProductByCategory(
-    req: string,
-  ): Promise<GetProductByCategoryResponse[]> {
-    this.logger.info("PRODUCT_SERVICE.getProductByCategory: Executed");
-    const category = req;
+    req: GetProductsRequest,
+  ): Promise<GetProductByCategoryResponse> {
+    this.logger.info(
+      `PRODUCT_SERVICE.getProductByCategory: ${JSON.stringify(req)}`,
+    );
+    const category = req.category;
+    const limit = Number(req.limit);
+
+    let skip: number;
+    let page = Number(req.page);
+
+    if (page === 1) {
+      page = 0;
+    } else {
+      skip = limit * page - 20;
+    }
+
     if (!category) {
       throw new HttpException("Product not found", 404);
     }
-    const rawCategory = await this.prismaService.$queryRaw<
-      GetProductByCategoryResponse[]
-    >`SELECT * , c.name as Category FROM products AS p JOIN categories AS c ON p.category_id = c.id
-WHERE c.name = ${category} LIMIT 10`;
 
-    const countRaw = await this.prismaService
+    const rawCategory = await this.prismaService.$queryRaw<
+      Product[]
+    >`SELECT p.*, c.name as category_name
+FROM products AS p
+    JOIN categories as c ON p.category_id = c.id
+WHERE
+    c.name LIKE ${category} 
+LIMIT ${limit}
+OFFSET
+    ${skip}`;
+
+    const total = await this.prismaService
       .$queryRaw`SELECT COUNT(*) as perCategory, c.name
 FROM products as p
     JOIN categories as c ON p.category_id = c.id
 WHERE c.name = ${category}
 GROUP BY
     category_id, c.name;`;
-    const count = Number(countRaw[0].perCategory);
-    // const result = rawCategory.map(({ createdAt, updatedAt, ...rest }) => ({
-    //   id: rest.id,
-    //   name: rest.name,
-    //   price: rest.price,
-    //   description: rest.description,
-    //   categoryId: rest.categoryId,
-    // }));
+    // console.log(total);
+
+    const totalCategory = Number(total[0].perCategory);
+
+    // console.log(count);
 
     return {
-      data: rawCategory,
-      total: count,
+      products: rawCategory,
+      total: totalCategory,
     };
   }
 
-  // async search(req: string): Promise<GetProductByCategoryResponse> {
-  //   this.logger.info(`PRODUCT_SERVICE:search  ${req}`);
-  //   const flex = req.concat("%");
-  //
-  //   const resultRaw = await this.prismaService.$queryRaw<
-  //     Product[]
-  //   >`SELECT * FROM products WHERE name LIKE ${flex}`;
-  //
-  //   if (!resultRaw) {
-  //     throw new HttpException("Product not found", 404);
-  //   }
-  //
-  //   const result = resultRaw.map(({ ...rest }) => ({
-  //     id: rest.id,
-  //     name: rest.name,
-  //     price: rest.price,
-  //     description: rest.description,
-  //     category: rest.category,
-  //     image: rest.image,
-  //   }));
-  //
-  //   const counting = await this.prismaService.product.count({
-  //     where: { name: { startsWith: flex } },
-  //   });
-  //
-  //   return {
-  //     data: result,
-  //     productCount: counting,
-  //     statusCode: HttpStatus.OK,
-  //   };
-  // }
+  async search(req: string): Promise<GetProductByCategoryResponse> {
+    this.logger.info(`PRODUCT_SERVICE:search  ${req}`);
+    const flex = req.concat("%");
+
+    const resultRaw = await this.prismaService.$queryRaw<
+      Product[]
+    >`SELECT * FROM products WHERE name LIKE ${flex}`;
+
+    if (!resultRaw) {
+      throw new HttpException("Product not found", 404);
+    }
+
+    const counting = await this.prismaService.product.count({
+      where: { name: { startsWith: flex } },
+    });
+
+    return {
+      products: resultRaw,
+      total: counting,
+    };
+  }
 
   // async createOrder() {
   //   return null;
