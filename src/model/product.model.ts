@@ -194,3 +194,9 @@ export class GetProductByCategoryResponse {
   limit?: number;
   totalPages?: number;
 }
+
+export class SearchRequest {
+  @IsString()
+  @IsNotEmpty()
+  name: string;
+}
