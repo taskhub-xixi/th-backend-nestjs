@@ -5,11 +5,13 @@ import { PrismaService } from "../common/prisma.service";
 import {
   CreateProductRequest,
   CreateProductResponseSuccess,
+  DeleteProductResponse,
   GetProductByCategoryResponse,
   GetProductsRequest,
   GetProductsResponseSuccess,
   SearchRequest,
   UpdateProductRequest,
+  UpdateProductResponse,
 } from "../model/product.model";
 import { Product } from "@prisma/client";
 
@@ -95,76 +97,70 @@ export class ProductService {
     };
   }
 
-  // async getProductById(req: number) {
-  //   this.logger.info(`PRODUCT_SERVICE.getProductById: ${req}`);
-  //   const products = await this.prismaService.$queryRaw<
-  //     Product[]
-  //   >`SELECT * FROM products WHERE id = ${req}`;
-  //
-  //   if (!products) {
-  //     throw new HttpException("Data Not Found", 404);
-  //   }
-  //   const result = products.map(({ createdAt, ...rest }) => ({
-  //     id: rest.id,
-  //     name: rest.name,
-  //     price: rest.price,
-  //     description: rest.description,
-  //     category: rest.category,
-  //     image: rest.image,
-  //   }));
-  //
-  //   this.logger.info(
-  //     `PRODUCT_SERVICE.getProductById: ${JSON.stringify(products)}`,
-  //   );
-  //   return {
-  //     data: result,
-  //     statusCode: HttpStatus.OK,
-  //   };
-  // }
-  //
-  // async updateProductById(id: number, req: UpdateProductRequest) {
-  //   const isExist = await this.prismaService.product.findUnique({
-  //     where: { id },
-  //   });
-  //   if (!isExist) {
-  //     throw new HttpException("Product not found", 404);
-  //   }
-  //   const data = Object.fromEntries(
-  //     Object.entries(req).filter(([_, v]) => v !== undefined),
-  //   );
-  //
-  //   const products = await this.prismaService.product.update({
-  //     where: { id: id },
-  //     data,
-  //   });
-  //
-  //   return {
-  //     data: {
-  //       products,
-  //     },
-  //     statusCode: HttpStatus.OK,
-  //   };
-  // }
+  async getProductById(id: string): Promise<GetProductsResponseSuccess> {
+    this.logger.info(`PRODUCT_SERVICE.getProductById: ${id}`);
+    const data = await this.prismaService.$queryRaw<
+      Product[]
+    >`SELECT * FROM products WHERE id = ${id} LIMIT 5`;
 
-  // async deleteProductById(id: number) {
-  //   const isExist = await this.prismaService.product.findUnique({
-  //     where: { id: id },
-  //   });
-  //
-  //   if (!isExist) {
-  //     throw new HttpException("Product not found", 404);
-  //   }
-  //
-  //   const result = await this.prismaService
-  //     .$executeRaw`DELETE FROM products WHERE id = ${id}`;
-  //
-  //   return {
-  //     data: {
-  //       result,
-  //     },
-  //     statusCode: HttpStatus.OK,
-  //   };
-  // }
+    if (data.length === 0) {
+      throw new HttpException("Data Not Found", 404);
+    }
+
+    this.logger.info(`PRODUCT_SERVICE.getProductById: ${JSON.stringify(data)}`);
+
+    return {
+      products: data,
+    };
+  }
+
+  async updateProductById(
+    id: string,
+    req: UpdateProductRequest,
+  ): Promise<UpdateProductResponse> {
+    const isExist = await this.prismaService.product.findUnique({
+      where: { id },
+    });
+    if (!isExist) {
+      throw new HttpException("Product not found", 404);
+    }
+
+    const product = await this.prismaService.product.update({
+      where: { id: id },
+      data: req,
+    });
+
+    return {
+      products: product,
+    };
+  }
+
+  async deleteProductById(id: string): Promise<DeleteProductResponse> {
+    const isExist = await this.prismaService.product.findUnique({
+      where: { id },
+    });
+
+    if (!isExist) {
+      throw new HttpException("Product not found", 404);
+    }
+
+    await this.prismaService.$executeRaw`DELETE FROM products WHERE id = ${id}`;
+
+    const product = await this.prismaService
+      .$queryRaw`SELECT * FROM products WHERE id = ${id}`;
+
+    let dtd: boolean = false;
+
+    if (product) {
+      throw new HttpException("Product not deleted", 404);
+    }
+
+    dtd = true;
+
+    return {
+      deleted: dtd,
+    };
+  }
 
   async getProductByCategory(
     req: GetProductsRequest,
@@ -206,11 +202,8 @@ FROM products as p
 WHERE c.name = ${category}
 GROUP BY
     category_id, c.name;`;
-    // console.log(total);
 
     const totalCategory = Number(total[0].perCategory);
-
-    // console.log(count);
 
     return {
       products: rawCategory,
@@ -218,15 +211,15 @@ GROUP BY
     };
   }
 
-  async search(req: string): Promise<GetProductByCategoryResponse> {
-    this.logger.info(`PRODUCT_SERVICE:search ${req}`);
-    const flex = req.concat("%");
+  async search(name: string): Promise<GetProductByCategoryResponse> {
+    this.logger.info(`PRODUCT_SERVICE:search ${name}`);
+    const flex = name.concat("%");
 
     const resultRaw = await this.prismaService.$queryRaw<
       Product[]
     >`SELECT * FROM products WHERE name LIKE ${flex}`;
 
-    if (!resultRaw) {
+    if (!resultRaw || resultRaw.length === 0) {
       throw new HttpException("Product not found", 404);
     }
 
