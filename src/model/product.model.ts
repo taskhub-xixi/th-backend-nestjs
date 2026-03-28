@@ -1,8 +1,11 @@
 import { Decimal } from "@prisma/client/runtime/client";
 import { Type } from "class-transformer";
 import {
+  IsBoolean,
+  IsDecimal,
   IsNotEmpty,
   IsNumber,
+  IsObject,
   IsOptional,
   IsString,
   Min,
@@ -131,12 +134,37 @@ export class GetProductById {
   id?: number;
 }
 
+export class UpdateProductResponse {
+  products: {
+    id?: string;
+    name: string;
+    price: Decimal;
+    slug: string;
+    sku: string;
+    description: string;
+    originalPrice?: Decimal;
+    categoryId: string;
+    brandId: string;
+    stock: number;
+    lowStockThreshold: number;
+    ratingAverage: Decimal;
+    ratingCount: number;
+    reviewCount: number;
+    isActive: boolean;
+    metadata: {};
+    createdAt?: Date;
+    updatedAt?: Date;
+    shortDescription?: string;
+    deletedAt?: Date;
+  };
+}
+
 export class UpdateProductRequest {
   @IsString()
   @IsOptional()
   name: string;
 
-  @IsNumber()
+  @IsDecimal()
   @Min(0)
   @IsOptional()
   price: Decimal;
@@ -145,12 +173,49 @@ export class UpdateProductRequest {
   @IsOptional()
   description: string;
 
+  @IsDecimal()
+  @IsOptional()
+  originalPrice?: Decimal;
+
   @IsString()
   @IsOptional()
-  category: string;
+  slug: string;
 
+  @IsString()
   @IsOptional()
-  image: string;
+  sku: string;
+
+  @IsString()
+  @IsOptional()
+  brandId: string;
+
+  @IsNumber()
+  @IsOptional()
+  stock: number;
+
+  @IsNumber()
+  @IsOptional()
+  lowStockThreshold: number;
+
+  @IsNumber()
+  @IsOptional()
+  ratingAverage: Decimal;
+
+  @IsNumber()
+  @IsOptional()
+  ratingCount: number;
+
+  @IsNumber()
+  @IsOptional()
+  reviewCount: number;
+
+  @IsBoolean()
+  @IsOptional()
+  isActive: boolean;
+
+  @IsObject()
+  @IsOptional()
+  metadata: {};
 }
 
 export class UploadPhotoRequest {
@@ -199,4 +264,9 @@ export class SearchRequest {
   @IsString()
   @IsNotEmpty()
   name: string;
+}
+
+export class DeleteProductResponse {
+  @IsBoolean()
+  deleted: boolean;
 }
