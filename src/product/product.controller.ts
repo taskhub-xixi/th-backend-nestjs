@@ -25,16 +25,18 @@ import { PublicGuard } from "../common/guards/public.guards";
 import {
   CreateProductRequest,
   CreateProductResponseSuccess,
+  DeleteProductResponse,
   GetProductByCategoryResponse,
   GetProductsRequest,
   GetProductsResponseSuccess,
   SearchRequest,
   UpdateProductRequest,
+  UpdateProductResponse,
 } from "../model/product.model";
 import { ProductService } from "./product.service";
 import { WebResponse } from "../model/web.mode";
 
-@Controller("/products")
+@Controller("/api/products")
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
@@ -94,7 +96,8 @@ export class ProductController {
   @UseGuards(AdminGuard)
   @UseGuards(PublicGuard)
   @UseGuards(JwtAuthGuard)
-  @Get("search")
+  @HttpCode(HttpStatus.OK)
+  @Get("/:name")
   async searchProductName(@Query() req: SearchRequest) {
     console.log(typeof req);
     const data = await this.productService.search(req.name);
@@ -126,40 +129,57 @@ export class ProductController {
   //     fileName: file.filename,
   //   };
   // }
-  //
-  // @Admin()
-  // @Public()
-  // @UseGuards(PublicGuard)
-  // @UseGuards(AdminGuard)
-  // @HttpCode(HttpStatus.OK)
-  // @Get("/single/:id")
-  // async getProductById(@Param("id") id: number) {
-  //   const result = await this.productService.getProductById(id);
-  //   return result;
-  // }
-  //
-  // @Admin()
-  // @Public()
-  // @UseGuards(PublicGuard)
-  // @UseGuards(AdminGuard)
-  // @HttpCode(HttpStatus.OK)
-  // @Patch("/update/:id")
-  // async updateProductById(
-  //   @Param("id") id: number,
-  //   @Body() req: UpdateProductRequest,
-  // ) {
-  //   const result = await this.productService.updateProductById(id, req);
-  //   return result;
-  // }
-  //
-  // @Admin()
-  // @Public()
-  // @UseGuards(PublicGuard)
-  // @UseGuards(AdminGuard)
-  // @HttpCode(HttpStatus.OK)
-  // @Delete("/delete/:id")
-  // async deleteProductById(@Param("id") id: number) {
-  //   const result = await this.productService.deleteProductById(id);
-  //   return result;
-  // }
+
+  @Admin()
+  @Public()
+  @UseGuards(PublicGuard)
+  @UseGuards(AdminGuard)
+  @UseGuards(JwtAuthGuard)
+  @HttpCode(HttpStatus.OK)
+  @Get("/:id")
+  async getProductById(
+    @Param("id") id: string,
+  ): Promise<WebResponse<GetProductsResponseSuccess>> {
+    const result = await this.productService.getProductById(id);
+    return {
+      data: result,
+      statusCode: HttpStatus.OK,
+    };
+  }
+
+  @Admin()
+  @Public()
+  @UseGuards(PublicGuard)
+  @UseGuards(AdminGuard)
+  @UseGuards(JwtAuthGuard)
+  @HttpCode(HttpStatus.OK)
+  @Patch("/:id")
+  async updateProductById(
+    @Param("id") id: string,
+    @Body() req: UpdateProductRequest,
+  ): Promise<WebResponse<UpdateProductResponse>> {
+    const result = await this.productService.updateProductById(id, req);
+    return {
+      data: result,
+      statusCode: HttpStatus.OK,
+    };
+  }
+
+  @Admin()
+  @Public()
+  @UseGuards(PublicGuard)
+  @UseGuards(AdminGuard)
+  @UseGuards(JwtAuthGuard)
+  @HttpCode(HttpStatus.OK)
+  @Delete("/:id")
+  async deleteProductById(
+    @Param("id") id: string,
+  ): Promise<WebResponse<DeleteProductResponse>> {
+    const result = await this.productService.deleteProductById(id);
+    return {
+      data: result,
+      message: "Product Deleted",
+      statusCode: HttpStatus.OK,
+    };
+  }
 }
