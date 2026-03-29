@@ -1798,6 +1798,8 @@ CREATE TABLE orders (
     INDEX idx_orders_user (user_id),
     INDEX idx_orders_status (status),
     INDEX idx_orders_created_at (created_at DESC)
+    CONSTRAINT fk_orders_coupon
+    FOREIGN KEY (coupon_id) REFERENCES coupons(id)
 );
 
 CREATE TABLE order_items (
