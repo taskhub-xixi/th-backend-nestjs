@@ -6,9 +6,10 @@ import { PrismaClient } from "@prisma/client";
 export class PrismaService extends PrismaClient {
   constructor() {
     const adapter = new PrismaMariaDb({
-      host: process.env.HOST,
-      user: process.env.USERNAME, // your database username
-      database: process.env.DATABASE, // optional, your database name
+      host: process.env.DATABASE_HOST,
+      user: process.env.DATABASE_USER, // your database username
+      database: process.env.DATABASE_NAME, // optional, your database name
+      connectionLimit: 5,
     });
     super({ adapter });
   }
