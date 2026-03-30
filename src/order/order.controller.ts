@@ -7,7 +7,7 @@ export class OrderController {
 
   @HttpCode(HttpStatus.CREATED)
   @Post()
-  async createOrder() {
-    await this.orderService.createOrder();
+  createOrder() {
+    return null;
   }
 }

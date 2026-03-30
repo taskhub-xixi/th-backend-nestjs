@@ -9,7 +9,7 @@ import {
   GetProductByCategoryResponse,
   GetProductsRequest,
   GetProductsResponseSuccess,
-  SearchRequest,
+  TotalResultCategories,
   UpdateProductRequest,
   UpdateProductResponse,
 } from "../model/product.model";
@@ -37,6 +37,7 @@ export class ProductService {
         brandId: req.brandId,
       },
     });
+
     return {
       id: product.id,
       name: product.name,
@@ -168,6 +169,7 @@ export class ProductService {
     this.logger.info(
       `PRODUCT_SERVICE.getProductByCategory: ${JSON.stringify(req)}`,
     );
+
     const category = req.category;
     const limit = Number(req.limit);
 
@@ -176,6 +178,7 @@ export class ProductService {
 
     if (page === 1) {
       page = 0;
+      skip = 0;
     } else {
       skip = limit * page - 20;
     }
@@ -195,8 +198,9 @@ LIMIT ${limit}
 OFFSET
     ${skip}`;
 
-    const total = await this.prismaService
-      .$queryRaw`SELECT COUNT(*) as perCategory, c.name
+    const total = await this.prismaService.$queryRaw<
+      TotalResultCategories[]
+    >`SELECT COUNT(*) as perCategory, c.name
 FROM products as p
     JOIN categories as c ON p.category_id = c.id
 WHERE c.name = ${category}

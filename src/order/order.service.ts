@@ -10,9 +10,17 @@ export class OrderService {
     @Inject(WINSTON_MODULE_PROVIDER)
     private readonly logger: Logger,
   ) {}
+  //
+  // async createOrder() {
+  //   this.logger.info(`ORDER_SERVICE.createOrder: ...`);
+  //   // await this.prismaService.order.create({
+  //   //   data: {
+  //   //     orderNumber,
+  //   //   },
+  //   // });
+  // }
 
-  async createOrder() {
-    this.logger.info(`ORDER_SERVICE.createOrder: ...`);
-    await this.prismaService.$executeRaw``;
-  }
+  // generateNumber() {
+  //   const date = Date;
+  // }
 }
