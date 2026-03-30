@@ -7,10 +7,7 @@ import {
   UserResponseAll,
 } from "../../model/user.model";
 export abstract class IUserService {
-  abstract updateUser(
-    me: string,
-    request: UpdateUserRequest,
-  ): Promise<UpdateUserResponse>;
+  abstract updateUser(request: UpdateUserRequest): Promise<UpdateUserResponse>;
   abstract getUserById(id: string): Promise<GetUserResponse>;
   abstract getAllUser(
     req: ListQueryRequest,
