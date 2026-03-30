@@ -149,6 +149,9 @@ WHERE
     createAt?: Date,
     exp?: Date,
   ) {
+    this.logger.info(
+      `TOKEN_SERVICE.updateRtHashDatabase: ${id}, ${rt}, ${exp}, ${createAt}`,
+    );
     // GET EXPIRES DATE AND SET DATE
     const expiresAt = new Date();
     expiresAt.setDate(expiresAt.getDate() + 7);
@@ -159,21 +162,24 @@ WHERE
 
     if (!exp) {
       this.logger.debug(`TOKEN_SERVICE.updateRtHash.access_token: ${rt}`);
-      return await this.prismaService.$executeRaw`
-        UPDATE auth_tokens SET 
-        user_id = ${id}, 
-        refresh_token_hash = ${hash}, 
-        expires_at = ${exp}, 
-        created_at = ${createAt} 
-        WHERE user_id = ${id}
+      const res = await this.prismaService.$executeRaw`
+INSERT INTO auth_tokens (user_id, refresh_token_hash, expires_at, created_at)
+VALUES (${id}, ${hash}, ${createAt})
+ON DUPLICATE KEY UPDATE
+  refresh_token_hash = ${hash},
+  created_at = ${createAt}
       `;
+      this.logger.info(res);
+      return res;
     } else {
       this.logger.debug(`AUTH_SERVICE.updateRtHash.refresh_token: ${rt}`);
       return await this.prismaService.$executeRaw`
-        UPDATE auth_tokens SET 
-        user_id = ${id}, 
-        refresh_token_hash = ${rt}, 
-        WHERE user_id = ${id}
+INSERT INTO auth_tokens (user_id, refresh_token_hash, expires_at, created_at)
+VALUES (${id}, ${hash}, ${exp}, ${createAt})
+ON DUPLICATE KEY UPDATE
+  refresh_token_hash = ${hash},
+  expires_at = ${exp},
+  created_at = ${createAt}
       `;
     }
   }
