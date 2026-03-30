@@ -15,18 +15,15 @@ import { WINSTON_MODULE_PROVIDER } from "nest-winston";
 import { Logger } from "winston";
 import { JwtService } from "@nestjs/jwt";
 import { jwtConstants } from "../constants";
-import { UserEntity } from "../../user/user.entity";
-import { Repository } from "typeorm";
 import * as bcrypt from "bcrypt";
-import { InjectRepository } from "@nestjs/typeorm";
+import { PrismaService } from "../../common/prisma.service";
 
 @Injectable()
 export class TokenService {
   constructor(
     @Inject(WINSTON_MODULE_PROVIDER) private logger: Logger,
     private readonly jwtService: JwtService,
-    @InjectRepository(UserEntity)
-    private readonly authRepository: Repository<UserEntity>,
+    private prismaService: PrismaService,
   ) {}
 
   async UpdateToken(payload: JwtPayload, res: Response): Promise<JWTResponse> {
@@ -37,6 +34,7 @@ export class TokenService {
     const jwtPayload: JwtPayload = {
       sub: payload.sub,
       email: payload.email,
+      role: payload.role,
     };
 
     // GENERATE TOKEN
@@ -61,6 +59,7 @@ export class TokenService {
       sameSite: "lax",
     });
     // GET EXPIRES DATE AND SET DATE
+    const createdAt = new Date();
     const expiresAt = new Date();
     expiresAt.setDate(expiresAt.getDate() + 7);
     this.logger.info(`AUTH_SERVICE.UpdateToken.END: `);
@@ -70,6 +69,7 @@ export class TokenService {
       access_token: at,
       refresh_token: rt,
       exp: expiresAt,
+      createdAt: createdAt,
     };
   }
 
@@ -90,28 +90,38 @@ export class TokenService {
 
     this.logger.debug(`payload: ${JSON.stringify(payload)}`);
     // find id
-    const user = await this.authRepository.findOne({
-      where: { id: payload.sub },
-    });
-    this.logger.debug(JSON.stringify(`user: ${user?.hashedRefreshToken}`));
+    const [row] = await this.prismaService
+      .$queryRaw<any>`SELECT u.id, u.email, at.refresh_token_hash
+from users as u
+    LEFT JOIN auth_tokens AS at ON u.id = at.user_id
+WHERE
+    u.id = ${payload.sub} ;`;
+
+    const user = {
+      id: row.id,
+      email: row.email,
+      refresh_token_hash: row.refresh_token_hash,
+    };
+
+    this.logger.debug(JSON.stringify(`user: ${user.email}`));
 
     // validate
     if (!user) {
       throw new UnauthorizedException();
     }
-    if (!user.hashedRefreshToken) {
+    if (!user.refresh_token_hash) {
       throw new UnauthorizedException();
     }
-    if (!user.refreshTokenExpAt) {
+    if (!user.refresh_token_hash) {
       throw new UnauthorizedException("Missing refresh token");
     }
 
-    if (new Date() > user.refreshTokenExpAt) {
+    if (new Date() > user.refresh_token_hash) {
       throw new UnauthorizedException("Refresh token expired");
     }
     const isMatch = await bcrypt.compare(
       oldRefreshToken,
-      user?.hashedRefreshToken,
+      user?.refresh_token_hash,
     );
     if (!isMatch) {
       throw new HttpException("Token Invalid", 401);
@@ -120,6 +130,9 @@ export class TokenService {
     // create token
     const token = await this.UpdateToken(payload, res);
     if (!token.refresh_token) {
+      throw new HttpException("Token not generated", 400);
+    }
+    if (!token.access_token) {
       throw new HttpException("Token not generated", 400);
     }
     await this.updateRtHashDatabase(user.id, token.refresh_token);
@@ -131,10 +144,11 @@ export class TokenService {
   }
 
   async updateRtHashDatabase(
-    id: number,
+    id: string,
     rt: string,
+    createAt?: Date,
     exp?: Date,
-  ): Promise<{ hash: string; id: number; exp?: Date }> {
+  ) {
     // GET EXPIRES DATE AND SET DATE
     const expiresAt = new Date();
     expiresAt.setDate(expiresAt.getDate() + 7);
@@ -144,17 +158,23 @@ export class TokenService {
     const hash = await this.hash(rt);
 
     if (!exp) {
-      this.logger.debug(`AUTH_SERVICE.updateRtHash.access_token: ${rt}`);
-      return await this.authRepository.query(
-        "UPDATE users SET hashedRefreshToken = ? WHERE id = ?",
-        [hash, id],
-      );
+      this.logger.debug(`TOKEN_SERVICE.updateRtHash.access_token: ${rt}`);
+      return await this.prismaService.$executeRaw`
+        UPDATE auth_tokens SET 
+        user_id = ${id}, 
+        refresh_token_hash = ${hash}, 
+        expires_at = ${exp}, 
+        created_at = ${createAt} 
+        WHERE user_id = ${id}
+      `;
     } else {
       this.logger.debug(`AUTH_SERVICE.updateRtHash.refresh_token: ${rt}`);
-      return await this.authRepository.query(
-        "UPDATE users SET hashedRefreshToken = ?, refreshTokenExpAt = ? WHERE id = ?",
-        [hash, exp, id],
-      );
+      return await this.prismaService.$executeRaw`
+        UPDATE auth_tokens SET 
+        user_id = ${id}, 
+        refresh_token_hash = ${rt}, 
+        WHERE user_id = ${id}
+      `;
     }
   }
 

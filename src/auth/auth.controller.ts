@@ -56,7 +56,7 @@ export class AuthController {
     @Req() req: Request,
     @Res({ passthrough: true }) res: Response,
   ): Promise<WebResponse<RefreshTokenResponse>> {
-    const refreshToken = (req.cookies as CookiePayload)["refresh_token"];
+    const refreshToken = req.cookies["refresh_token"];
 
     if (!refreshToken) {
       throw new HttpException(`AUTH_CONTROLLER.refresh: ${refreshToken}`, 401);

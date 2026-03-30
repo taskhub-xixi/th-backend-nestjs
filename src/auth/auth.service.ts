@@ -22,17 +22,15 @@ import {
   RegisterResponse,
   UpdateDTO,
 } from "../model/auth.model";
-import { UserEntity } from "../user/user.entity";
 import { IAuthService } from "./interface/auth.service.interface";
 import { AuthRepositorySQL } from "./repository_query/auth.repository";
 import { TokenService } from "./services/token.service";
+import { PrismaService } from "../common/prisma.service";
 
 @Injectable()
 export class AuthService implements IAuthService {
   constructor(
-    @InjectRepository(UserEntity)
-    private readonly authRepository: Repository<UserEntity>,
-    private readonly repositoryQuery: AuthRepositorySQL,
+    private prismaService: PrismaService,
     @Inject(WINSTON_MODULE_PROVIDER)
     private logger: Logger,
     private readonly jwtService: JwtService,
@@ -42,7 +40,7 @@ export class AuthService implements IAuthService {
   async create(request: RegisterDTO): Promise<RegisterResponse> {
     this.logger.info(`AUTH_SERVICE.create: ${JSON.stringify(request)}`);
 
-    const userRegistered = await this.authRepository.findOne({
+    const userRegistered = await this.prismaService.users.findUnique({
       where: { email: request.email },
     });
 
@@ -51,50 +49,67 @@ export class AuthService implements IAuthService {
     }
 
     const hashPassword = await this.tokenService.hash(request.password);
-    const createdAt = new Date();
-    await this.authRepository.query(this.repositoryQuery.insertUser(), [
-      request.email,
-      request.username,
-      hashPassword,
-      createdAt,
-    ]);
-    const data = await this.authRepository.findOne({
+    await this.prismaService.$executeRaw`INSERT INTO users (email,
+        password_hash,
+        first_name,
+        last_name,
+        role,
+        email_verified,
+        is_active
+    ) VALUES (${request.email}, ${hashPassword}, ${request.firstname}, ${request.lastname}, "public", ${request.email}, true) `;
+
+    const data = await this.prismaService.users.findUnique({
       where: { email: request.email },
     });
 
+    if (!data) {
+      throw new HttpException("Data not created", 404);
+    }
+
     return {
       data: {
-        username: data.username,
         email: data.email,
+        firstname: data.first_name,
+        lastname: data.last_name,
         role: data.role,
-        createdAt: data.createdAt,
       },
-      statusCode: HttpStatus.CREATED,
     };
   }
 
   async login(request: LoginDTO, res: Response): Promise<LoginResponse> {
     this.logger.info(`AUTH_SERVICE.login: ${JSON.stringify(request)}`);
-    const data = await this.authRepository.findOne({
+
+    const data = await this.prismaService.users.findUnique({
       where: { email: request.email },
     });
+
     if (!data) {
       throw new HttpException("Email or password is invalid", 400);
     }
 
-    const match = await bcrypt.compare(request.password, data.password);
+    const match = await bcrypt.compare(request.password, data.password_hash);
+
     if (!match) {
-      throw new UnauthorizedException("wrong password");
+      throw new HttpException("Email or password is invalid", 400);
     }
 
-    const payload = { sub: data.id, email: data.email };
+    const payload = { sub: data.id, email: data.email, role: data.role };
     const token = await this.tokenService.UpdateToken(payload, res);
+
     if (!token.refresh_token) {
       throw new HttpException("Token Is not generated", 400);
     }
+    if (!token.access_token) {
+      throw new HttpException("Token Is not generated", 400);
+    }
+    if (!token.exp) {
+      throw new HttpException("Token Is not generated", 400);
+    }
+
     await this.tokenService.updateRtHashDatabase(
       payload.sub,
       token.refresh_token,
+      token.createdAt,
       token.exp,
     );
 
@@ -104,7 +119,6 @@ export class AuthService implements IAuthService {
         access_token: token.access_token,
         expiresIn: token.exp,
       },
-      statusCode: HttpStatus.OK,
     };
   }
 
@@ -128,46 +142,50 @@ export class AuthService implements IAuthService {
   }
 
   async resetPassword(req: UpdateDTO): Promise<void> {
-    const data = await this.authRepository.findOne({
+    if (!req.password) {
+      throw new HttpException("Account is missing", 404);
+    }
+    const data = await this.prismaService.users.findUnique({
       where: { email: req.email },
     });
-    if (!data) {
+    if (data === null) {
+      throw new HttpException("Account is missing", 404);
+    }
+    if (data?.email === null) {
       throw new HttpException("Account is missing", 404);
     }
     const hashPassword = await this.tokenService.hash(req.password);
-    await this.authRepository.query(
-      "UPDATE users SET password = ? WHERE email = ?",
-      [hashPassword, req.email],
-    );
+    await this.prismaService.$executeRaw`
+      UPDATE users SET password_hash = ${hashPassword} WHERE email = ${data.email}`;
   }
 
   // logout
   async logout(logoutDTO: LogoutDTO, res: Response): Promise<LogoutResponse> {
-    const data = await this.authRepository.findOne({
+    const data = await this.prismaService.users.findUnique({
       where: { email: logoutDTO.email },
     });
     if (!data) {
       throw new HttpException("Account is missing", 404);
     }
-    const token = "";
-    await this.authRepository.query(
-      "UPDATE users SET hashedRefreshToken = ? WHERE email = ?",
-      [token, logoutDTO.email],
-    );
+
+    await this.prismaService.$executeRaw`
+      DELETE FROM auth_token WHERE user_id = ${data.id}`;
+
     this.tokenService.deleteCookieToken(res);
     return {
       data: {
         message: "Logout Suuccesfully",
       },
-      statusCode: HttpStatus.OK,
     };
   }
 
   // validate Guard --> logic function
   async validateUser(email: string, pass: string) {
-    const user = await this.authRepository.findOne({ where: { email } });
-    if (user && (await bcrypt.compare(pass, user.password))) {
-      const { password, ...result } = user;
+    const user = await this.prismaService.users.findUnique({
+      where: { email },
+    });
+    if (user && (await bcrypt.compare(pass, user.password_hash))) {
+      const { password_hash, ...result } = user;
       return result;
     }
     throw new HttpException(
@@ -177,7 +195,7 @@ export class AuthService implements IAuthService {
   }
 
   async getUserByEmail(email: string) {
-    const user = await this.authRepository.findOne({
+    const user = await this.prismaService.users.findUnique({
       where: { email },
     });
 
@@ -185,7 +203,12 @@ export class AuthService implements IAuthService {
   }
 
   async checkRole(email: string) {
-    const data = await this.authRepository.findOne({ where: { email } });
+    const data = await this.prismaService.users.findUnique({
+      where: { email },
+    });
+    if (!data) {
+      throw new HttpException("Forbidden resources, Role must be Admin", 403);
+    }
     if (data.role !== "admin") {
       throw new HttpException("Forbidden resources, Role must be Admin", 403);
     }
