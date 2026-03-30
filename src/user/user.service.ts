@@ -7,6 +7,7 @@ import {
   ListQueryRequest,
   UpdateUserRequest,
   UpdateUserResponse,
+  User,
   UserResponse,
   UserResponseAll,
 } from "../model/user.model";
@@ -21,10 +22,7 @@ export class UserService implements IUserService {
     private prismaService: PrismaService,
   ) {}
 
-  async updateUser(
-    me: string,
-    request: UpdateUserRequest,
-  ): Promise<UpdateUserResponse> {
+  async updateUser(request: UpdateUserRequest): Promise<UpdateUserResponse> {
     this.logger.debug(`UserService.changeEmail(${JSON.stringify(request)})`);
 
     const isExist = await this.prismaService.users.findUnique({
