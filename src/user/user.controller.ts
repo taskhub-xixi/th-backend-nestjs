@@ -5,6 +5,7 @@ import {
   HttpCode,
   HttpStatus,
   Patch,
+  Query,
   Req,
   UseGuards,
 } from "@nestjs/common";
@@ -19,6 +20,7 @@ import {
   RequestQuery,
   User,
   GetAllUserResponse,
+  ListQueryRequest,
 } from "../model/user.model";
 import { IUserRepository } from "./interfaces/user.interface";
 import { UserService } from "./user.service";
@@ -49,10 +51,9 @@ export class UserController implements IUserRepository {
   @HttpCode(HttpStatus.OK)
   @Patch("me")
   async updateUser(
-    @Req() me: User,
     @Body() request: UpdateUserRequest,
   ): Promise<UpdateUserResponse> {
-    const result = await this.userService.updateUser(request, me.user.email);
+    const result = await this.userService.updateUser(request);
     return result;
   }
 
@@ -64,9 +65,9 @@ export class UserController implements IUserRepository {
   @HttpCode(HttpStatus.OK)
   @Get("/all")
   async getAllUser(
-    @Req() req: RequestQuery,
+    @Query() query: ListQueryRequest,
   ): Promise<GetAllUserResponse<UserResponse>> {
-    const result = await this.userService.getAllUser(req.query);
+    const result = await this.userService.getAllUser(query);
     return result;
   }
 
