@@ -104,3 +104,13 @@ export type OrderItem = Prisma.OrderItemModel
  * 
  */
 export type OrderStatusHistory = Prisma.OrderStatusHistoryModel
+/**
+ * Model user_addresses
+ * 
+ */
+export type user_addresses = Prisma.user_addressesModel
+/**
+ * Model users
+ * 
+ */
+export type users = Prisma.usersModel

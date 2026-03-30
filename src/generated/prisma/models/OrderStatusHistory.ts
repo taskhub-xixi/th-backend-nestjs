@@ -190,7 +190,6 @@ export type OrderStatusHistoryWhereInput = {
   note?: Prisma.StringNullableFilter<"OrderStatusHistory"> | string | null
   changed_by?: Prisma.StringNullableFilter<"OrderStatusHistory"> | string | null
   created_at?: Prisma.DateTimeNullableFilter<"OrderStatusHistory"> | Date | string | null
-  order?: Prisma.XOR<Prisma.OrderScalarRelationFilter, Prisma.OrderWhereInput>
 }
 
 export type OrderStatusHistoryOrderByWithRelationInput = {
@@ -200,7 +199,6 @@ export type OrderStatusHistoryOrderByWithRelationInput = {
   note?: Prisma.SortOrderInput | Prisma.SortOrder
   changed_by?: Prisma.SortOrderInput | Prisma.SortOrder
   created_at?: Prisma.SortOrderInput | Prisma.SortOrder
-  order?: Prisma.OrderOrderByWithRelationInput
   _relevance?: Prisma.OrderStatusHistoryOrderByRelevanceInput
 }
 
@@ -214,7 +212,6 @@ export type OrderStatusHistoryWhereUniqueInput = Prisma.AtLeast<{
   note?: Prisma.StringNullableFilter<"OrderStatusHistory"> | string | null
   changed_by?: Prisma.StringNullableFilter<"OrderStatusHistory"> | string | null
   created_at?: Prisma.DateTimeNullableFilter<"OrderStatusHistory"> | Date | string | null
-  order?: Prisma.XOR<Prisma.OrderScalarRelationFilter, Prisma.OrderWhereInput>
 }, "id">
 
 export type OrderStatusHistoryOrderByWithAggregationInput = {
@@ -243,11 +240,11 @@ export type OrderStatusHistoryScalarWhereWithAggregatesInput = {
 
 export type OrderStatusHistoryCreateInput = {
   id?: string
+  orderId: string
   status: string
   note?: string | null
   changed_by?: string | null
   created_at?: Date | string | null
-  order: Prisma.OrderCreateNestedOneWithoutStatusHistoryInput
 }
 
 export type OrderStatusHistoryUncheckedCreateInput = {
@@ -261,11 +258,11 @@ export type OrderStatusHistoryUncheckedCreateInput = {
 
 export type OrderStatusHistoryUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  orderId?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   changed_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  order?: Prisma.OrderUpdateOneRequiredWithoutStatusHistoryNestedInput
 }
 
 export type OrderStatusHistoryUncheckedUpdateInput = {
@@ -288,6 +285,7 @@ export type OrderStatusHistoryCreateManyInput = {
 
 export type OrderStatusHistoryUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  orderId?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   changed_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -301,16 +299,6 @@ export type OrderStatusHistoryUncheckedUpdateManyInput = {
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   changed_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-}
-
-export type OrderStatusHistoryListRelationFilter = {
-  every?: Prisma.OrderStatusHistoryWhereInput
-  some?: Prisma.OrderStatusHistoryWhereInput
-  none?: Prisma.OrderStatusHistoryWhereInput
-}
-
-export type OrderStatusHistoryOrderByRelationAggregateInput = {
-  _count?: Prisma.SortOrder
 }
 
 export type OrderStatusHistoryOrderByRelevanceInput = {
@@ -346,134 +334,6 @@ export type OrderStatusHistoryMinOrderByAggregateInput = {
   created_at?: Prisma.SortOrder
 }
 
-export type OrderStatusHistoryCreateNestedManyWithoutOrderInput = {
-  create?: Prisma.XOR<Prisma.OrderStatusHistoryCreateWithoutOrderInput, Prisma.OrderStatusHistoryUncheckedCreateWithoutOrderInput> | Prisma.OrderStatusHistoryCreateWithoutOrderInput[] | Prisma.OrderStatusHistoryUncheckedCreateWithoutOrderInput[]
-  connectOrCreate?: Prisma.OrderStatusHistoryCreateOrConnectWithoutOrderInput | Prisma.OrderStatusHistoryCreateOrConnectWithoutOrderInput[]
-  createMany?: Prisma.OrderStatusHistoryCreateManyOrderInputEnvelope
-  connect?: Prisma.OrderStatusHistoryWhereUniqueInput | Prisma.OrderStatusHistoryWhereUniqueInput[]
-}
-
-export type OrderStatusHistoryUncheckedCreateNestedManyWithoutOrderInput = {
-  create?: Prisma.XOR<Prisma.OrderStatusHistoryCreateWithoutOrderInput, Prisma.OrderStatusHistoryUncheckedCreateWithoutOrderInput> | Prisma.OrderStatusHistoryCreateWithoutOrderInput[] | Prisma.OrderStatusHistoryUncheckedCreateWithoutOrderInput[]
-  connectOrCreate?: Prisma.OrderStatusHistoryCreateOrConnectWithoutOrderInput | Prisma.OrderStatusHistoryCreateOrConnectWithoutOrderInput[]
-  createMany?: Prisma.OrderStatusHistoryCreateManyOrderInputEnvelope
-  connect?: Prisma.OrderStatusHistoryWhereUniqueInput | Prisma.OrderStatusHistoryWhereUniqueInput[]
-}
-
-export type OrderStatusHistoryUpdateManyWithoutOrderNestedInput = {
-  create?: Prisma.XOR<Prisma.OrderStatusHistoryCreateWithoutOrderInput, Prisma.OrderStatusHistoryUncheckedCreateWithoutOrderInput> | Prisma.OrderStatusHistoryCreateWithoutOrderInput[] | Prisma.OrderStatusHistoryUncheckedCreateWithoutOrderInput[]
-  connectOrCreate?: Prisma.OrderStatusHistoryCreateOrConnectWithoutOrderInput | Prisma.OrderStatusHistoryCreateOrConnectWithoutOrderInput[]
-  upsert?: Prisma.OrderStatusHistoryUpsertWithWhereUniqueWithoutOrderInput | Prisma.OrderStatusHistoryUpsertWithWhereUniqueWithoutOrderInput[]
-  createMany?: Prisma.OrderStatusHistoryCreateManyOrderInputEnvelope
-  set?: Prisma.OrderStatusHistoryWhereUniqueInput | Prisma.OrderStatusHistoryWhereUniqueInput[]
-  disconnect?: Prisma.OrderStatusHistoryWhereUniqueInput | Prisma.OrderStatusHistoryWhereUniqueInput[]
-  delete?: Prisma.OrderStatusHistoryWhereUniqueInput | Prisma.OrderStatusHistoryWhereUniqueInput[]
-  connect?: Prisma.OrderStatusHistoryWhereUniqueInput | Prisma.OrderStatusHistoryWhereUniqueInput[]
-  update?: Prisma.OrderStatusHistoryUpdateWithWhereUniqueWithoutOrderInput | Prisma.OrderStatusHistoryUpdateWithWhereUniqueWithoutOrderInput[]
-  updateMany?: Prisma.OrderStatusHistoryUpdateManyWithWhereWithoutOrderInput | Prisma.OrderStatusHistoryUpdateManyWithWhereWithoutOrderInput[]
-  deleteMany?: Prisma.OrderStatusHistoryScalarWhereInput | Prisma.OrderStatusHistoryScalarWhereInput[]
-}
-
-export type OrderStatusHistoryUncheckedUpdateManyWithoutOrderNestedInput = {
-  create?: Prisma.XOR<Prisma.OrderStatusHistoryCreateWithoutOrderInput, Prisma.OrderStatusHistoryUncheckedCreateWithoutOrderInput> | Prisma.OrderStatusHistoryCreateWithoutOrderInput[] | Prisma.OrderStatusHistoryUncheckedCreateWithoutOrderInput[]
-  connectOrCreate?: Prisma.OrderStatusHistoryCreateOrConnectWithoutOrderInput | Prisma.OrderStatusHistoryCreateOrConnectWithoutOrderInput[]
-  upsert?: Prisma.OrderStatusHistoryUpsertWithWhereUniqueWithoutOrderInput | Prisma.OrderStatusHistoryUpsertWithWhereUniqueWithoutOrderInput[]
-  createMany?: Prisma.OrderStatusHistoryCreateManyOrderInputEnvelope
-  set?: Prisma.OrderStatusHistoryWhereUniqueInput | Prisma.OrderStatusHistoryWhereUniqueInput[]
-  disconnect?: Prisma.OrderStatusHistoryWhereUniqueInput | Prisma.OrderStatusHistoryWhereUniqueInput[]
-  delete?: Prisma.OrderStatusHistoryWhereUniqueInput | Prisma.OrderStatusHistoryWhereUniqueInput[]
-  connect?: Prisma.OrderStatusHistoryWhereUniqueInput | Prisma.OrderStatusHistoryWhereUniqueInput[]
-  update?: Prisma.OrderStatusHistoryUpdateWithWhereUniqueWithoutOrderInput | Prisma.OrderStatusHistoryUpdateWithWhereUniqueWithoutOrderInput[]
-  updateMany?: Prisma.OrderStatusHistoryUpdateManyWithWhereWithoutOrderInput | Prisma.OrderStatusHistoryUpdateManyWithWhereWithoutOrderInput[]
-  deleteMany?: Prisma.OrderStatusHistoryScalarWhereInput | Prisma.OrderStatusHistoryScalarWhereInput[]
-}
-
-export type OrderStatusHistoryCreateWithoutOrderInput = {
-  id?: string
-  status: string
-  note?: string | null
-  changed_by?: string | null
-  created_at?: Date | string | null
-}
-
-export type OrderStatusHistoryUncheckedCreateWithoutOrderInput = {
-  id?: string
-  status: string
-  note?: string | null
-  changed_by?: string | null
-  created_at?: Date | string | null
-}
-
-export type OrderStatusHistoryCreateOrConnectWithoutOrderInput = {
-  where: Prisma.OrderStatusHistoryWhereUniqueInput
-  create: Prisma.XOR<Prisma.OrderStatusHistoryCreateWithoutOrderInput, Prisma.OrderStatusHistoryUncheckedCreateWithoutOrderInput>
-}
-
-export type OrderStatusHistoryCreateManyOrderInputEnvelope = {
-  data: Prisma.OrderStatusHistoryCreateManyOrderInput | Prisma.OrderStatusHistoryCreateManyOrderInput[]
-  skipDuplicates?: boolean
-}
-
-export type OrderStatusHistoryUpsertWithWhereUniqueWithoutOrderInput = {
-  where: Prisma.OrderStatusHistoryWhereUniqueInput
-  update: Prisma.XOR<Prisma.OrderStatusHistoryUpdateWithoutOrderInput, Prisma.OrderStatusHistoryUncheckedUpdateWithoutOrderInput>
-  create: Prisma.XOR<Prisma.OrderStatusHistoryCreateWithoutOrderInput, Prisma.OrderStatusHistoryUncheckedCreateWithoutOrderInput>
-}
-
-export type OrderStatusHistoryUpdateWithWhereUniqueWithoutOrderInput = {
-  where: Prisma.OrderStatusHistoryWhereUniqueInput
-  data: Prisma.XOR<Prisma.OrderStatusHistoryUpdateWithoutOrderInput, Prisma.OrderStatusHistoryUncheckedUpdateWithoutOrderInput>
-}
-
-export type OrderStatusHistoryUpdateManyWithWhereWithoutOrderInput = {
-  where: Prisma.OrderStatusHistoryScalarWhereInput
-  data: Prisma.XOR<Prisma.OrderStatusHistoryUpdateManyMutationInput, Prisma.OrderStatusHistoryUncheckedUpdateManyWithoutOrderInput>
-}
-
-export type OrderStatusHistoryScalarWhereInput = {
-  AND?: Prisma.OrderStatusHistoryScalarWhereInput | Prisma.OrderStatusHistoryScalarWhereInput[]
-  OR?: Prisma.OrderStatusHistoryScalarWhereInput[]
-  NOT?: Prisma.OrderStatusHistoryScalarWhereInput | Prisma.OrderStatusHistoryScalarWhereInput[]
-  id?: Prisma.StringFilter<"OrderStatusHistory"> | string
-  orderId?: Prisma.StringFilter<"OrderStatusHistory"> | string
-  status?: Prisma.StringFilter<"OrderStatusHistory"> | string
-  note?: Prisma.StringNullableFilter<"OrderStatusHistory"> | string | null
-  changed_by?: Prisma.StringNullableFilter<"OrderStatusHistory"> | string | null
-  created_at?: Prisma.DateTimeNullableFilter<"OrderStatusHistory"> | Date | string | null
-}
-
-export type OrderStatusHistoryCreateManyOrderInput = {
-  id?: string
-  status: string
-  note?: string | null
-  changed_by?: string | null
-  created_at?: Date | string | null
-}
-
-export type OrderStatusHistoryUpdateWithoutOrderInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.StringFieldUpdateOperationsInput | string
-  note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  changed_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-}
-
-export type OrderStatusHistoryUncheckedUpdateWithoutOrderInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.StringFieldUpdateOperationsInput | string
-  note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  changed_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-}
-
-export type OrderStatusHistoryUncheckedUpdateManyWithoutOrderInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.StringFieldUpdateOperationsInput | string
-  note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  changed_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-}
-
 
 
 export type OrderStatusHistorySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -483,7 +343,6 @@ export type OrderStatusHistorySelect<ExtArgs extends runtime.Types.Extensions.In
   note?: boolean
   changed_by?: boolean
   created_at?: boolean
-  order?: boolean | Prisma.OrderDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["orderStatusHistory"]>
 
 
@@ -498,15 +357,10 @@ export type OrderStatusHistorySelectScalar = {
 }
 
 export type OrderStatusHistoryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "orderId" | "status" | "note" | "changed_by" | "created_at", ExtArgs["result"]["orderStatusHistory"]>
-export type OrderStatusHistoryInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  order?: boolean | Prisma.OrderDefaultArgs<ExtArgs>
-}
 
 export type $OrderStatusHistoryPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "OrderStatusHistory"
-  objects: {
-    order: Prisma.$OrderPayload<ExtArgs>
-  }
+  objects: {}
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     orderId: string
@@ -854,7 +708,6 @@ readonly fields: OrderStatusHistoryFieldRefs;
  */
 export interface Prisma__OrderStatusHistoryClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  order<T extends Prisma.OrderDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OrderDefaultArgs<ExtArgs>>): Prisma.Prisma__OrderClient<runtime.Types.Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -907,10 +760,6 @@ export type OrderStatusHistoryFindUniqueArgs<ExtArgs extends runtime.Types.Exten
    */
   omit?: Prisma.OrderStatusHistoryOmit<ExtArgs> | null
   /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.OrderStatusHistoryInclude<ExtArgs> | null
-  /**
    * Filter, which OrderStatusHistory to fetch.
    */
   where: Prisma.OrderStatusHistoryWhereUniqueInput
@@ -929,10 +778,6 @@ export type OrderStatusHistoryFindUniqueOrThrowArgs<ExtArgs extends runtime.Type
    */
   omit?: Prisma.OrderStatusHistoryOmit<ExtArgs> | null
   /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.OrderStatusHistoryInclude<ExtArgs> | null
-  /**
    * Filter, which OrderStatusHistory to fetch.
    */
   where: Prisma.OrderStatusHistoryWhereUniqueInput
@@ -950,10 +795,6 @@ export type OrderStatusHistoryFindFirstArgs<ExtArgs extends runtime.Types.Extens
    * Omit specific fields from the OrderStatusHistory
    */
   omit?: Prisma.OrderStatusHistoryOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.OrderStatusHistoryInclude<ExtArgs> | null
   /**
    * Filter, which OrderStatusHistory to fetch.
    */
@@ -1003,10 +844,6 @@ export type OrderStatusHistoryFindFirstOrThrowArgs<ExtArgs extends runtime.Types
    */
   omit?: Prisma.OrderStatusHistoryOmit<ExtArgs> | null
   /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.OrderStatusHistoryInclude<ExtArgs> | null
-  /**
    * Filter, which OrderStatusHistory to fetch.
    */
   where?: Prisma.OrderStatusHistoryWhereInput
@@ -1054,10 +891,6 @@ export type OrderStatusHistoryFindManyArgs<ExtArgs extends runtime.Types.Extensi
    * Omit specific fields from the OrderStatusHistory
    */
   omit?: Prisma.OrderStatusHistoryOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.OrderStatusHistoryInclude<ExtArgs> | null
   /**
    * Filter, which OrderStatusHistories to fetch.
    */
@@ -1107,10 +940,6 @@ export type OrderStatusHistoryCreateArgs<ExtArgs extends runtime.Types.Extension
    */
   omit?: Prisma.OrderStatusHistoryOmit<ExtArgs> | null
   /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.OrderStatusHistoryInclude<ExtArgs> | null
-  /**
    * The data needed to create a OrderStatusHistory.
    */
   data: Prisma.XOR<Prisma.OrderStatusHistoryCreateInput, Prisma.OrderStatusHistoryUncheckedCreateInput>
@@ -1139,10 +968,6 @@ export type OrderStatusHistoryUpdateArgs<ExtArgs extends runtime.Types.Extension
    * Omit specific fields from the OrderStatusHistory
    */
   omit?: Prisma.OrderStatusHistoryOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.OrderStatusHistoryInclude<ExtArgs> | null
   /**
    * The data needed to update a OrderStatusHistory.
    */
@@ -1184,10 +1009,6 @@ export type OrderStatusHistoryUpsertArgs<ExtArgs extends runtime.Types.Extension
    */
   omit?: Prisma.OrderStatusHistoryOmit<ExtArgs> | null
   /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.OrderStatusHistoryInclude<ExtArgs> | null
-  /**
    * The filter to search for the OrderStatusHistory to update in case it exists.
    */
   where: Prisma.OrderStatusHistoryWhereUniqueInput
@@ -1213,10 +1034,6 @@ export type OrderStatusHistoryDeleteArgs<ExtArgs extends runtime.Types.Extension
    * Omit specific fields from the OrderStatusHistory
    */
   omit?: Prisma.OrderStatusHistoryOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.OrderStatusHistoryInclude<ExtArgs> | null
   /**
    * Filter which OrderStatusHistory to delete.
    */
@@ -1249,8 +1066,4 @@ export type OrderStatusHistoryDefaultArgs<ExtArgs extends runtime.Types.Extensio
    * Omit specific fields from the OrderStatusHistory
    */
   omit?: Prisma.OrderStatusHistoryOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.OrderStatusHistoryInclude<ExtArgs> | null
 }

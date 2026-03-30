@@ -396,7 +396,9 @@ export const ModelName = {
   CouponUsage: 'CouponUsage',
   Order: 'Order',
   OrderItem: 'OrderItem',
-  OrderStatusHistory: 'OrderStatusHistory'
+  OrderStatusHistory: 'OrderStatusHistory',
+  user_addresses: 'user_addresses',
+  users: 'users'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -412,7 +414,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "category" | "brand" | "product" | "productVariant" | "productImage" | "productReview" | "productTag" | "productAttribute" | "coupon" | "couponUsage" | "order" | "orderItem" | "orderStatusHistory"
+    modelProps: "category" | "brand" | "product" | "productVariant" | "productImage" | "productReview" | "productTag" | "productAttribute" | "coupon" | "couponUsage" | "order" | "orderItem" | "orderStatusHistory" | "user_addresses" | "users"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1274,6 +1276,138 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    user_addresses: {
+      payload: Prisma.$user_addressesPayload<ExtArgs>
+      fields: Prisma.user_addressesFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.user_addressesFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$user_addressesPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.user_addressesFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$user_addressesPayload>
+        }
+        findFirst: {
+          args: Prisma.user_addressesFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$user_addressesPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.user_addressesFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$user_addressesPayload>
+        }
+        findMany: {
+          args: Prisma.user_addressesFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$user_addressesPayload>[]
+        }
+        create: {
+          args: Prisma.user_addressesCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$user_addressesPayload>
+        }
+        createMany: {
+          args: Prisma.user_addressesCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.user_addressesDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$user_addressesPayload>
+        }
+        update: {
+          args: Prisma.user_addressesUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$user_addressesPayload>
+        }
+        deleteMany: {
+          args: Prisma.user_addressesDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.user_addressesUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.user_addressesUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$user_addressesPayload>
+        }
+        aggregate: {
+          args: Prisma.User_addressesAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateUser_addresses>
+        }
+        groupBy: {
+          args: Prisma.user_addressesGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.User_addressesGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.user_addressesCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.User_addressesCountAggregateOutputType> | number
+        }
+      }
+    }
+    users: {
+      payload: Prisma.$usersPayload<ExtArgs>
+      fields: Prisma.usersFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.usersFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$usersPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.usersFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$usersPayload>
+        }
+        findFirst: {
+          args: Prisma.usersFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$usersPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.usersFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$usersPayload>
+        }
+        findMany: {
+          args: Prisma.usersFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$usersPayload>[]
+        }
+        create: {
+          args: Prisma.usersCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$usersPayload>
+        }
+        createMany: {
+          args: Prisma.usersCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.usersDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$usersPayload>
+        }
+        update: {
+          args: Prisma.usersUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$usersPayload>
+        }
+        deleteMany: {
+          args: Prisma.usersDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.usersUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.usersUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$usersPayload>
+        }
+        aggregate: {
+          args: Prisma.UsersAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateUsers>
+        }
+        groupBy: {
+          args: Prisma.usersGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.UsersGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.usersCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.UsersCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1524,6 +1658,48 @@ export const OrderStatusHistoryScalarFieldEnum = {
 export type OrderStatusHistoryScalarFieldEnum = (typeof OrderStatusHistoryScalarFieldEnum)[keyof typeof OrderStatusHistoryScalarFieldEnum]
 
 
+export const User_addressesScalarFieldEnum = {
+  id: 'id',
+  user_id: 'user_id',
+  label: 'label',
+  recipient_name: 'recipient_name',
+  phone: 'phone',
+  address_line_1: 'address_line_1',
+  address_line_2: 'address_line_2',
+  city: 'city',
+  province: 'province',
+  postal_code: 'postal_code',
+  country: 'country',
+  is_default: 'is_default',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at'
+} as const
+
+export type User_addressesScalarFieldEnum = (typeof User_addressesScalarFieldEnum)[keyof typeof User_addressesScalarFieldEnum]
+
+
+export const UsersScalarFieldEnum = {
+  id: 'id',
+  email: 'email',
+  password_hash: 'password_hash',
+  first_name: 'first_name',
+  last_name: 'last_name',
+  phone: 'phone',
+  avatar_url: 'avatar_url',
+  role: 'role',
+  email_verified: 'email_verified',
+  is_active: 'is_active',
+  date_of_birth: 'date_of_birth',
+  metadata: 'metadata',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at'
+} as const
+
+export type UsersScalarFieldEnum = (typeof UsersScalarFieldEnum)[keyof typeof UsersScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -1688,6 +1864,38 @@ export const OrderStatusHistoryOrderByRelevanceFieldEnum = {
 export type OrderStatusHistoryOrderByRelevanceFieldEnum = (typeof OrderStatusHistoryOrderByRelevanceFieldEnum)[keyof typeof OrderStatusHistoryOrderByRelevanceFieldEnum]
 
 
+export const user_addressesOrderByRelevanceFieldEnum = {
+  id: 'id',
+  user_id: 'user_id',
+  label: 'label',
+  recipient_name: 'recipient_name',
+  phone: 'phone',
+  address_line_1: 'address_line_1',
+  address_line_2: 'address_line_2',
+  city: 'city',
+  province: 'province',
+  postal_code: 'postal_code',
+  country: 'country'
+} as const
+
+export type user_addressesOrderByRelevanceFieldEnum = (typeof user_addressesOrderByRelevanceFieldEnum)[keyof typeof user_addressesOrderByRelevanceFieldEnum]
+
+
+export const usersOrderByRelevanceFieldEnum = {
+  id: 'id',
+  email: 'email',
+  password_hash: 'password_hash',
+  first_name: 'first_name',
+  last_name: 'last_name',
+  phone: 'phone',
+  avatar_url: 'avatar_url',
+  role: 'role',
+  metadata: 'metadata'
+} as const
+
+export type usersOrderByRelevanceFieldEnum = (typeof usersOrderByRelevanceFieldEnum)[keyof typeof usersOrderByRelevanceFieldEnum]
+
+
 
 /**
  * Field references
@@ -1843,6 +2051,8 @@ export type GlobalOmitConfig = {
   order?: Prisma.OrderOmit
   orderItem?: Prisma.OrderItemOmit
   orderStatusHistory?: Prisma.OrderStatusHistoryOmit
+  user_addresses?: Prisma.user_addressesOmit
+  users?: Prisma.usersOmit
 }
 
 /* Types for Logging */

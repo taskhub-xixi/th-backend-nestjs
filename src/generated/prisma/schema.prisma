@@ -1,0 +1,323 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+model Category {
+  id          String    @id @default(dbgenerated("(uuid())")) @db.Char(36)
+  name        String    @db.VarChar(100)
+  slug        String    @unique(map: "slug") @db.VarChar(100)
+  description String?   @db.Text
+  iconUrl     String?   @map("icon_url") @db.VarChar(500)
+  imageUrl    String?   @map("image_url") @db.VarChar(500)
+  parentId    String?   @map("parent_id") @db.Char(36)
+  sortOrder   Int?      @default(0) @map("sort_order")
+  isActive    Boolean   @default(true) @map("is_active")
+  metadata    String?   @default("{}") @db.LongText
+  createdAt   DateTime? @default(now()) @map("created_at") @db.DateTime(0)
+  updatedAt   DateTime? @default(now()) @updatedAt @map("updated_at") @db.DateTime(0)
+  deletedAt   DateTime? @map("deleted_at") @db.DateTime(0)
+
+  @@index([parentId], map: "idx_categories_parent")
+  @@index([slug], map: "idx_categories_slug")
+  @@map("categories")
+}
+
+model Brand {
+  id          String    @id @default(dbgenerated("(uuid())")) @db.Char(36)
+  name        String    @db.VarChar(100)
+  slug        String    @unique(map: "slug") @db.VarChar(100)
+  logoUrl     String?   @map("logo_url") @db.VarChar(500)
+  description String?   @db.Text
+  websiteUrl  String?   @map("website_url") @db.VarChar(500)
+  isActive    Boolean   @default(true) @map("is_active")
+  createdAt   DateTime? @default(now()) @map("created_at") @db.DateTime(0)
+  updatedAt   DateTime? @default(now()) @updatedAt @map("updated_at") @db.DateTime(0)
+  deletedAt   DateTime? @map("deleted_at") @db.DateTime(0)
+
+  @@map("brands")
+}
+
+model Product {
+  id                String    @id @default(dbgenerated("(uuid())")) @db.Char(36)
+  name              String    @db.VarChar(200)
+  slug              String    @unique(map: "slug") @db.VarChar(200)
+  sku               String    @unique(map: "sku") @db.VarChar(50)
+  description       String    @db.Text
+  shortDescription  String?   @map("short_description") @db.VarChar(500)
+  price             Decimal   @db.Decimal(15, 2)
+  originalPrice     Decimal?  @map("original_price") @db.Decimal(15, 2)
+  categoryId        String    @map("category_id") @db.Char(36)
+  brandId           String?   @map("brand_id") @db.Char(36)
+  stock             Int       @default(0)
+  lowStockThreshold Int?      @default(10) @map("low_stock_threshold")
+  ratingAverage     Decimal?  @default(0.00) @map("rating_average") @db.Decimal(3, 2)
+  ratingCount       Int?      @default(0) @map("rating_count")
+  reviewCount       Int?      @default(0) @map("review_count")
+  isActive          Boolean   @default(true) @map("is_active")
+  metadata          String?   @default("{}") @db.LongText
+  createdAt         DateTime? @default(now()) @map("created_at") @db.DateTime(0)
+  updatedAt         DateTime? @default(now()) @updatedAt @map("updated_at") @db.DateTime(0)
+  deletedAt         DateTime? @map("deleted_at") @db.DateTime(0)
+
+  @@index([categoryId], map: "idx_products_category")
+  @@index([price], map: "idx_products_price")
+  @@index([ratingAverage(sort: Desc)], map: "idx_products_rating")
+  @@index([sku], map: "idx_products_sku")
+  @@index([slug], map: "idx_products_slug")
+  @@index([stock], map: "idx_products_stock")
+  @@map("products")
+}
+
+model ProductVariant {
+  id              String    @id @default(dbgenerated("(uuid())")) @db.Char(36)
+  productId       String    @map("product_id") @db.Char(36)
+  sku             String    @unique(map: "sku") @db.VarChar(50)
+  name            String    @db.VarChar(100)
+  priceAdjustment Decimal?  @default(0.00) @map("price_adjustment") @db.Decimal(15, 2)
+  stock           Int?      @default(0)
+  attributes      String    @default("{}") @db.LongText
+  isActive        Boolean?  @default(true) @map("is_active")
+  createdAt       DateTime? @default(now()) @map("created_at") @db.DateTime(0)
+  updatedAt       DateTime? @default(now()) @updatedAt @map("updated_at") @db.DateTime(0)
+
+  @@index([productId], map: "idx_product_variants_product")
+  @@index([sku], map: "idx_product_variants_sku")
+  @@map("product_variants")
+}
+
+model ProductImage {
+  id         String    @id @default(dbgenerated("(uuid())")) @db.Char(36)
+  productId  String    @map("product_id") @db.Char(36)
+  url        String    @db.VarChar(500)
+  altText    String?   @map("alt_text") @db.VarChar(200)
+  sortOrder  Int?      @default(0) @map("sort_order")
+  is_primary Boolean?  @default(false)
+  createdAt  DateTime? @default(now()) @map("created_at") @db.DateTime(0)
+
+  @@index([productId], map: "idx_product_images_product")
+  @@map("product_images")
+}
+
+model ProductReview {
+  id                   String    @id @default(dbgenerated("(uuid())")) @db.Char(36)
+  productId            String    @map("product_id") @db.Char(36)
+  userId               String    @map("user_id") @db.Char(36)
+  rating               Int
+  title                String    @db.VarChar(100)
+  content              String    @db.Text
+  is_verified_purchase Boolean?  @default(false)
+  is_approved          Boolean?  @default(false)
+  helpful_count        Int?      @default(0)
+  createdAt            DateTime? @default(now()) @map("created_at") @db.DateTime(0)
+  updatedAt            DateTime? @default(now()) @updatedAt @map("updated_at") @db.DateTime(0)
+  deleted_at           DateTime? @db.DateTime(0)
+
+  @@unique([productId, userId], map: "uk_product_user_review")
+  @@index([productId], map: "idx_product_reviews_product")
+  @@index([rating], map: "idx_product_reviews_rating")
+  @@map("product_reviews")
+}
+
+model ProductTag {
+  id        String    @id @default(dbgenerated("(uuid())")) @db.Char(36)
+  productId String    @map("product_id") @db.Char(36)
+  tag       String    @db.VarChar(50)
+  createdAt DateTime? @default(now()) @map("created_at") @db.DateTime(0)
+
+  @@unique([productId, tag], map: "uk_product_tag")
+  @@map("product_tags")
+}
+
+model ProductAttribute {
+  id              String    @id @default(dbgenerated("(uuid())")) @db.Char(36)
+  productId       String    @map("product_id") @db.Char(36)
+  attribute_name  String    @db.VarChar(100)
+  attribute_value String    @db.Text
+  createdAt       DateTime? @default(now()) @map("created_at") @db.DateTime(0)
+
+  @@index([productId], map: "idx_product_attributes_product")
+  @@map("product_attributes")
+}
+
+model Coupon {
+  id             String    @id @default(dbgenerated("(uuid())")) @db.Char(36)
+  code           String    @unique(map: "code") @db.VarChar(50)
+  type           String    @db.VarChar(20)
+  value          Decimal   @db.Decimal(15, 2)
+  minOrderAmount Decimal?  @default(0.00) @map("min_order_amount") @db.Decimal(15, 2)
+  maxDiscount    Decimal?  @map("max_discount") @db.Decimal(15, 2)
+  maxUses        Int?      @map("max_uses")
+  usedCount      Int?      @default(0) @map("used_count")
+  validFrom      DateTime  @map("valid_from") @db.DateTime(0)
+  validUntil     DateTime  @map("valid_until") @db.DateTime(0)
+  isActive       Boolean?  @default(true) @map("is_active")
+  createdAt      DateTime? @default(now()) @map("created_at") @db.DateTime(0)
+  updatedAt      DateTime? @default(now()) @updatedAt @map("updated_at") @db.DateTime(0)
+  deletedAt      DateTime? @map("deleted_at") @db.DateTime(0)
+
+  @@index([code], map: "idx_coupons_code")
+  @@map("coupons")
+}
+
+model CouponUsage {
+  id              String    @id @default(dbgenerated("(uuid())")) @db.Char(36)
+  couponId        String    @map("coupon_id") @db.Char(36)
+  userId          String    @map("user_id") @db.Char(36)
+  orderId         String    @map("order_id") @db.Char(36)
+  discount_amount Decimal   @db.Decimal(15, 2)
+  created_at      DateTime? @default(now()) @db.DateTime(0)
+
+  @@unique([couponId, userId, orderId], map: "uk_coupon_usage")
+  @@map("coupon_usage")
+}
+
+model Order {
+  id              String    @id @default(dbgenerated("(uuid())")) @db.Char(36)
+  orderNumber     String    @unique(map: "order_number") @map("order_number") @db.VarChar(50)
+  userId          String    @map("user_id") @db.Char(36)
+  status          String    @default("pending") @db.VarChar(20)
+  subtotal        Decimal   @db.Decimal(15, 2)
+  shippingCost    Decimal   @default(0.00) @map("shipping_cost") @db.Decimal(15, 2)
+  discount        Decimal   @default(0.00) @db.Decimal(15, 2)
+  tax             Decimal   @default(0.00) @db.Decimal(15, 2)
+  total           Decimal   @db.Decimal(15, 2)
+  shippingMethod  String?   @map("shipping_method") @db.VarChar(20)
+  shippingAddress String    @map("shipping_address") @db.LongText
+  billingAddress  String?   @map("billing_address") @db.LongText
+  trackingNumber  String?   @map("tracking_number") @db.VarChar(100)
+  notes           String?   @db.Text
+  couponId        String?   @map("coupon_id") @db.Char(36)
+  createdAt       DateTime? @default(now()) @map("created_at") @db.DateTime(0)
+  updatedAt       DateTime? @default(now()) @updatedAt @map("updated_at") @db.DateTime(0)
+  deletedAt       DateTime? @map("deleted_at") @db.DateTime(0)
+
+  @@index([createdAt(sort: Desc)], map: "idx_orders_created_at")
+  @@index([orderNumber], map: "idx_orders_number")
+  @@index([status], map: "idx_orders_status")
+  @@index([userId], map: "idx_orders_user")
+  @@map("orders")
+}
+
+model OrderItem {
+  id        String    @id @default(dbgenerated("(uuid())")) @db.Char(36)
+  orderId   String    @map("order_id") @db.Char(36)
+  productId String    @map("product_id") @db.Char(36)
+  variantId String?   @map("variant_id") @db.Char(36)
+  quantity  Int
+  price     Decimal   @db.Decimal(15, 2)
+  subtotal  Decimal   @db.Decimal(15, 2)
+  createdAt DateTime? @default(now()) @map("created_at") @db.DateTime(0)
+
+  @@index([orderId], map: "idx_order_items_order")
+  @@map("order_items")
+}
+
+model OrderStatusHistory {
+  id         String    @id @default(dbgenerated("(uuid())")) @db.Char(36)
+  orderId    String    @map("order_id") @db.Char(36)
+  status     String    @db.VarChar(20)
+  note       String?   @db.Text
+  changed_by String?   @db.Char(36)
+  created_at DateTime? @default(now()) @db.DateTime(0)
+
+  @@index([orderId], map: "idx_order_status_history_order")
+  @@map("order_status_history")
+}
+
+model user_addresses {
+  id             String    @id @default(dbgenerated("(uuid())")) @db.Char(36)
+  user_id        String    @db.Char(36)
+  label          String    @db.VarChar(50)
+  recipient_name String    @db.VarChar(100)
+  phone          String    @db.VarChar(20)
+  address_line_1 String    @db.VarChar(200)
+  address_line_2 String?   @db.VarChar(200)
+  city           String    @db.VarChar(100)
+  province       String    @db.VarChar(100)
+  postal_code    String    @db.VarChar(10)
+  country        String    @db.VarChar(100)
+  is_default     Boolean   @default(false)
+  created_at     DateTime? @default(now()) @db.DateTime(0)
+  updated_at     DateTime? @default(now()) @db.DateTime(0)
+  deleted_at     DateTime? @db.DateTime(0)
+
+  @@index([user_id], map: "idx_user_addresses_user_id")
+  @@map("user_addresses")
+}
+
+model auth_tokens {
+  id                 String    @id @default(dbgenerated("(uuid())")) @db.Char(36)
+  user_id            String    @db.Char(36)
+  refresh_token_hash String    @db.VarChar(255)
+  device_info        Json?
+  ip_address         String?   @db.VarChar(45)
+  expires_at         DateTime  @db.DateTime(0)
+  created_at         DateTime  @default(now()) @db.DateTime(0)
+  revoked_at         DateTime? @db.DateTime(0)
+  deleted_at         DateTime? @db.DateTime(0)
+
+  user users @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@index([user_id])
+  @@index([expires_at])
+  @@map("auth_tokens")
+}
+
+model password_reset_tokens {
+  id         String    @id @default(dbgenerated("(uuid())")) @db.Char(36)
+  user_id    String    @db.Char(36)
+  token_hash String    @db.VarChar(255)
+  expires_at DateTime  @db.DateTime(0)
+  used_at    DateTime? @db.DateTime(0)
+  created_at DateTime  @default(now()) @db.DateTime(0)
+
+  user users @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@index([user_id])
+  @@map("password_reset_tokens")
+}
+
+model email_verification_tokens {
+  id          String    @id @default(dbgenerated("(uuid())")) @db.Char(36)
+  user_id     String    @db.Char(36)
+  token_hash  String    @db.VarChar(255)
+  expires_at  DateTime  @db.DateTime(0)
+  verified_at DateTime? @db.DateTime(0)
+  created_at  DateTime  @default(now()) @db.DateTime(0)
+
+  user users @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@index([user_id])
+  @@map("email_verification_tokens")
+}
+
+model users {
+  id                      String                      @id @default(dbgenerated("(uuid())")) @db.Char(36)
+  email                   String                      @unique(map: "email") @db.VarChar(255)
+  password_hash           String                      @db.VarChar(255)
+  first_name              String                      @db.VarChar(50)
+  last_name               String                      @db.VarChar(50)
+  phone                   String?                     @db.VarChar(20)
+  avatar_url              String?                     @db.VarChar(500)
+  role                    String                      @default("user") @db.VarChar(20)
+  email_verified          Boolean                     @default(false)
+  is_active               Boolean                     @default(true)
+  date_of_birth           DateTime?                   @db.Date
+  metadata                String?                     @default("{}") @db.LongText
+  created_at              DateTime?                   @default(now()) @db.DateTime(0)
+  updated_at              DateTime?                   @default(now()) @db.DateTime(0)
+  deleted_at              DateTime?                   @db.DateTime(0)
+  authTokens              auth_tokens[]
+  passwordResetTokens     password_reset_tokens[]
+  emailVerificationTokens email_verification_tokens[]
+
+  @@index([created_at(sort: Desc)], map: "idx_users_created_at")
+  @@index([email], map: "idx_users_email")
+  @@index([role], map: "idx_users_role")
+  @@map("users")
+}

@@ -182,7 +182,6 @@ export type ProductAttributeWhereInput = {
   attribute_name?: Prisma.StringFilter<"ProductAttribute"> | string
   attribute_value?: Prisma.StringFilter<"ProductAttribute"> | string
   createdAt?: Prisma.DateTimeNullableFilter<"ProductAttribute"> | Date | string | null
-  product?: Prisma.XOR<Prisma.ProductScalarRelationFilter, Prisma.ProductWhereInput>
 }
 
 export type ProductAttributeOrderByWithRelationInput = {
@@ -191,7 +190,6 @@ export type ProductAttributeOrderByWithRelationInput = {
   attribute_name?: Prisma.SortOrder
   attribute_value?: Prisma.SortOrder
   createdAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  product?: Prisma.ProductOrderByWithRelationInput
   _relevance?: Prisma.ProductAttributeOrderByRelevanceInput
 }
 
@@ -204,7 +202,6 @@ export type ProductAttributeWhereUniqueInput = Prisma.AtLeast<{
   attribute_name?: Prisma.StringFilter<"ProductAttribute"> | string
   attribute_value?: Prisma.StringFilter<"ProductAttribute"> | string
   createdAt?: Prisma.DateTimeNullableFilter<"ProductAttribute"> | Date | string | null
-  product?: Prisma.XOR<Prisma.ProductScalarRelationFilter, Prisma.ProductWhereInput>
 }, "id">
 
 export type ProductAttributeOrderByWithAggregationInput = {
@@ -231,10 +228,10 @@ export type ProductAttributeScalarWhereWithAggregatesInput = {
 
 export type ProductAttributeCreateInput = {
   id?: string
+  productId: string
   attribute_name: string
   attribute_value: string
   createdAt?: Date | string | null
-  product: Prisma.ProductCreateNestedOneWithoutAttributesInput
 }
 
 export type ProductAttributeUncheckedCreateInput = {
@@ -247,10 +244,10 @@ export type ProductAttributeUncheckedCreateInput = {
 
 export type ProductAttributeUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  productId?: Prisma.StringFieldUpdateOperationsInput | string
   attribute_name?: Prisma.StringFieldUpdateOperationsInput | string
   attribute_value?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  product?: Prisma.ProductUpdateOneRequiredWithoutAttributesNestedInput
 }
 
 export type ProductAttributeUncheckedUpdateInput = {
@@ -271,6 +268,7 @@ export type ProductAttributeCreateManyInput = {
 
 export type ProductAttributeUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  productId?: Prisma.StringFieldUpdateOperationsInput | string
   attribute_name?: Prisma.StringFieldUpdateOperationsInput | string
   attribute_value?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -282,16 +280,6 @@ export type ProductAttributeUncheckedUpdateManyInput = {
   attribute_name?: Prisma.StringFieldUpdateOperationsInput | string
   attribute_value?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-}
-
-export type ProductAttributeListRelationFilter = {
-  every?: Prisma.ProductAttributeWhereInput
-  some?: Prisma.ProductAttributeWhereInput
-  none?: Prisma.ProductAttributeWhereInput
-}
-
-export type ProductAttributeOrderByRelationAggregateInput = {
-  _count?: Prisma.SortOrder
 }
 
 export type ProductAttributeOrderByRelevanceInput = {
@@ -324,127 +312,6 @@ export type ProductAttributeMinOrderByAggregateInput = {
   createdAt?: Prisma.SortOrder
 }
 
-export type ProductAttributeCreateNestedManyWithoutProductInput = {
-  create?: Prisma.XOR<Prisma.ProductAttributeCreateWithoutProductInput, Prisma.ProductAttributeUncheckedCreateWithoutProductInput> | Prisma.ProductAttributeCreateWithoutProductInput[] | Prisma.ProductAttributeUncheckedCreateWithoutProductInput[]
-  connectOrCreate?: Prisma.ProductAttributeCreateOrConnectWithoutProductInput | Prisma.ProductAttributeCreateOrConnectWithoutProductInput[]
-  createMany?: Prisma.ProductAttributeCreateManyProductInputEnvelope
-  connect?: Prisma.ProductAttributeWhereUniqueInput | Prisma.ProductAttributeWhereUniqueInput[]
-}
-
-export type ProductAttributeUncheckedCreateNestedManyWithoutProductInput = {
-  create?: Prisma.XOR<Prisma.ProductAttributeCreateWithoutProductInput, Prisma.ProductAttributeUncheckedCreateWithoutProductInput> | Prisma.ProductAttributeCreateWithoutProductInput[] | Prisma.ProductAttributeUncheckedCreateWithoutProductInput[]
-  connectOrCreate?: Prisma.ProductAttributeCreateOrConnectWithoutProductInput | Prisma.ProductAttributeCreateOrConnectWithoutProductInput[]
-  createMany?: Prisma.ProductAttributeCreateManyProductInputEnvelope
-  connect?: Prisma.ProductAttributeWhereUniqueInput | Prisma.ProductAttributeWhereUniqueInput[]
-}
-
-export type ProductAttributeUpdateManyWithoutProductNestedInput = {
-  create?: Prisma.XOR<Prisma.ProductAttributeCreateWithoutProductInput, Prisma.ProductAttributeUncheckedCreateWithoutProductInput> | Prisma.ProductAttributeCreateWithoutProductInput[] | Prisma.ProductAttributeUncheckedCreateWithoutProductInput[]
-  connectOrCreate?: Prisma.ProductAttributeCreateOrConnectWithoutProductInput | Prisma.ProductAttributeCreateOrConnectWithoutProductInput[]
-  upsert?: Prisma.ProductAttributeUpsertWithWhereUniqueWithoutProductInput | Prisma.ProductAttributeUpsertWithWhereUniqueWithoutProductInput[]
-  createMany?: Prisma.ProductAttributeCreateManyProductInputEnvelope
-  set?: Prisma.ProductAttributeWhereUniqueInput | Prisma.ProductAttributeWhereUniqueInput[]
-  disconnect?: Prisma.ProductAttributeWhereUniqueInput | Prisma.ProductAttributeWhereUniqueInput[]
-  delete?: Prisma.ProductAttributeWhereUniqueInput | Prisma.ProductAttributeWhereUniqueInput[]
-  connect?: Prisma.ProductAttributeWhereUniqueInput | Prisma.ProductAttributeWhereUniqueInput[]
-  update?: Prisma.ProductAttributeUpdateWithWhereUniqueWithoutProductInput | Prisma.ProductAttributeUpdateWithWhereUniqueWithoutProductInput[]
-  updateMany?: Prisma.ProductAttributeUpdateManyWithWhereWithoutProductInput | Prisma.ProductAttributeUpdateManyWithWhereWithoutProductInput[]
-  deleteMany?: Prisma.ProductAttributeScalarWhereInput | Prisma.ProductAttributeScalarWhereInput[]
-}
-
-export type ProductAttributeUncheckedUpdateManyWithoutProductNestedInput = {
-  create?: Prisma.XOR<Prisma.ProductAttributeCreateWithoutProductInput, Prisma.ProductAttributeUncheckedCreateWithoutProductInput> | Prisma.ProductAttributeCreateWithoutProductInput[] | Prisma.ProductAttributeUncheckedCreateWithoutProductInput[]
-  connectOrCreate?: Prisma.ProductAttributeCreateOrConnectWithoutProductInput | Prisma.ProductAttributeCreateOrConnectWithoutProductInput[]
-  upsert?: Prisma.ProductAttributeUpsertWithWhereUniqueWithoutProductInput | Prisma.ProductAttributeUpsertWithWhereUniqueWithoutProductInput[]
-  createMany?: Prisma.ProductAttributeCreateManyProductInputEnvelope
-  set?: Prisma.ProductAttributeWhereUniqueInput | Prisma.ProductAttributeWhereUniqueInput[]
-  disconnect?: Prisma.ProductAttributeWhereUniqueInput | Prisma.ProductAttributeWhereUniqueInput[]
-  delete?: Prisma.ProductAttributeWhereUniqueInput | Prisma.ProductAttributeWhereUniqueInput[]
-  connect?: Prisma.ProductAttributeWhereUniqueInput | Prisma.ProductAttributeWhereUniqueInput[]
-  update?: Prisma.ProductAttributeUpdateWithWhereUniqueWithoutProductInput | Prisma.ProductAttributeUpdateWithWhereUniqueWithoutProductInput[]
-  updateMany?: Prisma.ProductAttributeUpdateManyWithWhereWithoutProductInput | Prisma.ProductAttributeUpdateManyWithWhereWithoutProductInput[]
-  deleteMany?: Prisma.ProductAttributeScalarWhereInput | Prisma.ProductAttributeScalarWhereInput[]
-}
-
-export type ProductAttributeCreateWithoutProductInput = {
-  id?: string
-  attribute_name: string
-  attribute_value: string
-  createdAt?: Date | string | null
-}
-
-export type ProductAttributeUncheckedCreateWithoutProductInput = {
-  id?: string
-  attribute_name: string
-  attribute_value: string
-  createdAt?: Date | string | null
-}
-
-export type ProductAttributeCreateOrConnectWithoutProductInput = {
-  where: Prisma.ProductAttributeWhereUniqueInput
-  create: Prisma.XOR<Prisma.ProductAttributeCreateWithoutProductInput, Prisma.ProductAttributeUncheckedCreateWithoutProductInput>
-}
-
-export type ProductAttributeCreateManyProductInputEnvelope = {
-  data: Prisma.ProductAttributeCreateManyProductInput | Prisma.ProductAttributeCreateManyProductInput[]
-  skipDuplicates?: boolean
-}
-
-export type ProductAttributeUpsertWithWhereUniqueWithoutProductInput = {
-  where: Prisma.ProductAttributeWhereUniqueInput
-  update: Prisma.XOR<Prisma.ProductAttributeUpdateWithoutProductInput, Prisma.ProductAttributeUncheckedUpdateWithoutProductInput>
-  create: Prisma.XOR<Prisma.ProductAttributeCreateWithoutProductInput, Prisma.ProductAttributeUncheckedCreateWithoutProductInput>
-}
-
-export type ProductAttributeUpdateWithWhereUniqueWithoutProductInput = {
-  where: Prisma.ProductAttributeWhereUniqueInput
-  data: Prisma.XOR<Prisma.ProductAttributeUpdateWithoutProductInput, Prisma.ProductAttributeUncheckedUpdateWithoutProductInput>
-}
-
-export type ProductAttributeUpdateManyWithWhereWithoutProductInput = {
-  where: Prisma.ProductAttributeScalarWhereInput
-  data: Prisma.XOR<Prisma.ProductAttributeUpdateManyMutationInput, Prisma.ProductAttributeUncheckedUpdateManyWithoutProductInput>
-}
-
-export type ProductAttributeScalarWhereInput = {
-  AND?: Prisma.ProductAttributeScalarWhereInput | Prisma.ProductAttributeScalarWhereInput[]
-  OR?: Prisma.ProductAttributeScalarWhereInput[]
-  NOT?: Prisma.ProductAttributeScalarWhereInput | Prisma.ProductAttributeScalarWhereInput[]
-  id?: Prisma.StringFilter<"ProductAttribute"> | string
-  productId?: Prisma.StringFilter<"ProductAttribute"> | string
-  attribute_name?: Prisma.StringFilter<"ProductAttribute"> | string
-  attribute_value?: Prisma.StringFilter<"ProductAttribute"> | string
-  createdAt?: Prisma.DateTimeNullableFilter<"ProductAttribute"> | Date | string | null
-}
-
-export type ProductAttributeCreateManyProductInput = {
-  id?: string
-  attribute_name: string
-  attribute_value: string
-  createdAt?: Date | string | null
-}
-
-export type ProductAttributeUpdateWithoutProductInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  attribute_name?: Prisma.StringFieldUpdateOperationsInput | string
-  attribute_value?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-}
-
-export type ProductAttributeUncheckedUpdateWithoutProductInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  attribute_name?: Prisma.StringFieldUpdateOperationsInput | string
-  attribute_value?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-}
-
-export type ProductAttributeUncheckedUpdateManyWithoutProductInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  attribute_name?: Prisma.StringFieldUpdateOperationsInput | string
-  attribute_value?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-}
-
 
 
 export type ProductAttributeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -453,7 +320,6 @@ export type ProductAttributeSelect<ExtArgs extends runtime.Types.Extensions.Inte
   attribute_name?: boolean
   attribute_value?: boolean
   createdAt?: boolean
-  product?: boolean | Prisma.ProductDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["productAttribute"]>
 
 
@@ -467,15 +333,10 @@ export type ProductAttributeSelectScalar = {
 }
 
 export type ProductAttributeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "productId" | "attribute_name" | "attribute_value" | "createdAt", ExtArgs["result"]["productAttribute"]>
-export type ProductAttributeInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  product?: boolean | Prisma.ProductDefaultArgs<ExtArgs>
-}
 
 export type $ProductAttributePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "ProductAttribute"
-  objects: {
-    product: Prisma.$ProductPayload<ExtArgs>
-  }
+  objects: {}
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     productId: string
@@ -822,7 +683,6 @@ readonly fields: ProductAttributeFieldRefs;
  */
 export interface Prisma__ProductAttributeClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  product<T extends Prisma.ProductDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ProductDefaultArgs<ExtArgs>>): Prisma.Prisma__ProductClient<runtime.Types.Result.GetResult<Prisma.$ProductPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -874,10 +734,6 @@ export type ProductAttributeFindUniqueArgs<ExtArgs extends runtime.Types.Extensi
    */
   omit?: Prisma.ProductAttributeOmit<ExtArgs> | null
   /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ProductAttributeInclude<ExtArgs> | null
-  /**
    * Filter, which ProductAttribute to fetch.
    */
   where: Prisma.ProductAttributeWhereUniqueInput
@@ -896,10 +752,6 @@ export type ProductAttributeFindUniqueOrThrowArgs<ExtArgs extends runtime.Types.
    */
   omit?: Prisma.ProductAttributeOmit<ExtArgs> | null
   /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ProductAttributeInclude<ExtArgs> | null
-  /**
    * Filter, which ProductAttribute to fetch.
    */
   where: Prisma.ProductAttributeWhereUniqueInput
@@ -917,10 +769,6 @@ export type ProductAttributeFindFirstArgs<ExtArgs extends runtime.Types.Extensio
    * Omit specific fields from the ProductAttribute
    */
   omit?: Prisma.ProductAttributeOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ProductAttributeInclude<ExtArgs> | null
   /**
    * Filter, which ProductAttribute to fetch.
    */
@@ -970,10 +818,6 @@ export type ProductAttributeFindFirstOrThrowArgs<ExtArgs extends runtime.Types.E
    */
   omit?: Prisma.ProductAttributeOmit<ExtArgs> | null
   /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ProductAttributeInclude<ExtArgs> | null
-  /**
    * Filter, which ProductAttribute to fetch.
    */
   where?: Prisma.ProductAttributeWhereInput
@@ -1021,10 +865,6 @@ export type ProductAttributeFindManyArgs<ExtArgs extends runtime.Types.Extension
    * Omit specific fields from the ProductAttribute
    */
   omit?: Prisma.ProductAttributeOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ProductAttributeInclude<ExtArgs> | null
   /**
    * Filter, which ProductAttributes to fetch.
    */
@@ -1074,10 +914,6 @@ export type ProductAttributeCreateArgs<ExtArgs extends runtime.Types.Extensions.
    */
   omit?: Prisma.ProductAttributeOmit<ExtArgs> | null
   /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ProductAttributeInclude<ExtArgs> | null
-  /**
    * The data needed to create a ProductAttribute.
    */
   data: Prisma.XOR<Prisma.ProductAttributeCreateInput, Prisma.ProductAttributeUncheckedCreateInput>
@@ -1106,10 +942,6 @@ export type ProductAttributeUpdateArgs<ExtArgs extends runtime.Types.Extensions.
    * Omit specific fields from the ProductAttribute
    */
   omit?: Prisma.ProductAttributeOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ProductAttributeInclude<ExtArgs> | null
   /**
    * The data needed to update a ProductAttribute.
    */
@@ -1151,10 +983,6 @@ export type ProductAttributeUpsertArgs<ExtArgs extends runtime.Types.Extensions.
    */
   omit?: Prisma.ProductAttributeOmit<ExtArgs> | null
   /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ProductAttributeInclude<ExtArgs> | null
-  /**
    * The filter to search for the ProductAttribute to update in case it exists.
    */
   where: Prisma.ProductAttributeWhereUniqueInput
@@ -1180,10 +1008,6 @@ export type ProductAttributeDeleteArgs<ExtArgs extends runtime.Types.Extensions.
    * Omit specific fields from the ProductAttribute
    */
   omit?: Prisma.ProductAttributeOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ProductAttributeInclude<ExtArgs> | null
   /**
    * Filter which ProductAttribute to delete.
    */
@@ -1216,8 +1040,4 @@ export type ProductAttributeDefaultArgs<ExtArgs extends runtime.Types.Extensions
    * Omit specific fields from the ProductAttribute
    */
   omit?: Prisma.ProductAttributeOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ProductAttributeInclude<ExtArgs> | null
 }

@@ -63,7 +63,9 @@ export const ModelName = {
   CouponUsage: 'CouponUsage',
   Order: 'Order',
   OrderItem: 'OrderItem',
-  OrderStatusHistory: 'OrderStatusHistory'
+  OrderStatusHistory: 'OrderStatusHistory',
+  user_addresses: 'user_addresses',
+  users: 'users'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -293,6 +295,48 @@ export const OrderStatusHistoryScalarFieldEnum = {
 export type OrderStatusHistoryScalarFieldEnum = (typeof OrderStatusHistoryScalarFieldEnum)[keyof typeof OrderStatusHistoryScalarFieldEnum]
 
 
+export const User_addressesScalarFieldEnum = {
+  id: 'id',
+  user_id: 'user_id',
+  label: 'label',
+  recipient_name: 'recipient_name',
+  phone: 'phone',
+  address_line_1: 'address_line_1',
+  address_line_2: 'address_line_2',
+  city: 'city',
+  province: 'province',
+  postal_code: 'postal_code',
+  country: 'country',
+  is_default: 'is_default',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at'
+} as const
+
+export type User_addressesScalarFieldEnum = (typeof User_addressesScalarFieldEnum)[keyof typeof User_addressesScalarFieldEnum]
+
+
+export const UsersScalarFieldEnum = {
+  id: 'id',
+  email: 'email',
+  password_hash: 'password_hash',
+  first_name: 'first_name',
+  last_name: 'last_name',
+  phone: 'phone',
+  avatar_url: 'avatar_url',
+  role: 'role',
+  email_verified: 'email_verified',
+  is_active: 'is_active',
+  date_of_birth: 'date_of_birth',
+  metadata: 'metadata',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at'
+} as const
+
+export type UsersScalarFieldEnum = (typeof UsersScalarFieldEnum)[keyof typeof UsersScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -455,4 +499,36 @@ export const OrderStatusHistoryOrderByRelevanceFieldEnum = {
 } as const
 
 export type OrderStatusHistoryOrderByRelevanceFieldEnum = (typeof OrderStatusHistoryOrderByRelevanceFieldEnum)[keyof typeof OrderStatusHistoryOrderByRelevanceFieldEnum]
+
+
+export const user_addressesOrderByRelevanceFieldEnum = {
+  id: 'id',
+  user_id: 'user_id',
+  label: 'label',
+  recipient_name: 'recipient_name',
+  phone: 'phone',
+  address_line_1: 'address_line_1',
+  address_line_2: 'address_line_2',
+  city: 'city',
+  province: 'province',
+  postal_code: 'postal_code',
+  country: 'country'
+} as const
+
+export type user_addressesOrderByRelevanceFieldEnum = (typeof user_addressesOrderByRelevanceFieldEnum)[keyof typeof user_addressesOrderByRelevanceFieldEnum]
+
+
+export const usersOrderByRelevanceFieldEnum = {
+  id: 'id',
+  email: 'email',
+  password_hash: 'password_hash',
+  first_name: 'first_name',
+  last_name: 'last_name',
+  phone: 'phone',
+  avatar_url: 'avatar_url',
+  role: 'role',
+  metadata: 'metadata'
+} as const
+
+export type usersOrderByRelevanceFieldEnum = (typeof usersOrderByRelevanceFieldEnum)[keyof typeof usersOrderByRelevanceFieldEnum]
 

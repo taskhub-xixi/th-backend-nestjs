@@ -260,8 +260,6 @@ export type ProductVariantWhereInput = {
   isActive?: Prisma.BoolNullableFilter<"ProductVariant"> | boolean | null
   createdAt?: Prisma.DateTimeNullableFilter<"ProductVariant"> | Date | string | null
   updatedAt?: Prisma.DateTimeNullableFilter<"ProductVariant"> | Date | string | null
-  product?: Prisma.XOR<Prisma.ProductScalarRelationFilter, Prisma.ProductWhereInput>
-  orderItems?: Prisma.OrderItemListRelationFilter
 }
 
 export type ProductVariantOrderByWithRelationInput = {
@@ -275,8 +273,6 @@ export type ProductVariantOrderByWithRelationInput = {
   isActive?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrderInput | Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  product?: Prisma.ProductOrderByWithRelationInput
-  orderItems?: Prisma.OrderItemOrderByRelationAggregateInput
   _relevance?: Prisma.ProductVariantOrderByRelevanceInput
 }
 
@@ -294,8 +290,6 @@ export type ProductVariantWhereUniqueInput = Prisma.AtLeast<{
   isActive?: Prisma.BoolNullableFilter<"ProductVariant"> | boolean | null
   createdAt?: Prisma.DateTimeNullableFilter<"ProductVariant"> | Date | string | null
   updatedAt?: Prisma.DateTimeNullableFilter<"ProductVariant"> | Date | string | null
-  product?: Prisma.XOR<Prisma.ProductScalarRelationFilter, Prisma.ProductWhereInput>
-  orderItems?: Prisma.OrderItemListRelationFilter
 }, "id" | "sku">
 
 export type ProductVariantOrderByWithAggregationInput = {
@@ -334,6 +328,7 @@ export type ProductVariantScalarWhereWithAggregatesInput = {
 
 export type ProductVariantCreateInput = {
   id?: string
+  productId: string
   sku: string
   name: string
   priceAdjustment?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -342,8 +337,6 @@ export type ProductVariantCreateInput = {
   isActive?: boolean | null
   createdAt?: Date | string | null
   updatedAt?: Date | string | null
-  product: Prisma.ProductCreateNestedOneWithoutVariantsInput
-  orderItems?: Prisma.OrderItemCreateNestedManyWithoutVariantInput
 }
 
 export type ProductVariantUncheckedCreateInput = {
@@ -357,11 +350,11 @@ export type ProductVariantUncheckedCreateInput = {
   isActive?: boolean | null
   createdAt?: Date | string | null
   updatedAt?: Date | string | null
-  orderItems?: Prisma.OrderItemUncheckedCreateNestedManyWithoutVariantInput
 }
 
 export type ProductVariantUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  productId?: Prisma.StringFieldUpdateOperationsInput | string
   sku?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   priceAdjustment?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -370,8 +363,6 @@ export type ProductVariantUpdateInput = {
   isActive?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  product?: Prisma.ProductUpdateOneRequiredWithoutVariantsNestedInput
-  orderItems?: Prisma.OrderItemUpdateManyWithoutVariantNestedInput
 }
 
 export type ProductVariantUncheckedUpdateInput = {
@@ -385,7 +376,6 @@ export type ProductVariantUncheckedUpdateInput = {
   isActive?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  orderItems?: Prisma.OrderItemUncheckedUpdateManyWithoutVariantNestedInput
 }
 
 export type ProductVariantCreateManyInput = {
@@ -403,6 +393,7 @@ export type ProductVariantCreateManyInput = {
 
 export type ProductVariantUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  productId?: Prisma.StringFieldUpdateOperationsInput | string
   sku?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   priceAdjustment?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -424,16 +415,6 @@ export type ProductVariantUncheckedUpdateManyInput = {
   isActive?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-}
-
-export type ProductVariantListRelationFilter = {
-  every?: Prisma.ProductVariantWhereInput
-  some?: Prisma.ProductVariantWhereInput
-  none?: Prisma.ProductVariantWhereInput
-}
-
-export type ProductVariantOrderByRelationAggregateInput = {
-  _count?: Prisma.SortOrder
 }
 
 export type ProductVariantOrderByRelevanceInput = {
@@ -491,288 +472,10 @@ export type ProductVariantSumOrderByAggregateInput = {
   stock?: Prisma.SortOrder
 }
 
-export type ProductVariantNullableScalarRelationFilter = {
-  is?: Prisma.ProductVariantWhereInput | null
-  isNot?: Prisma.ProductVariantWhereInput | null
-}
-
-export type ProductVariantCreateNestedManyWithoutProductInput = {
-  create?: Prisma.XOR<Prisma.ProductVariantCreateWithoutProductInput, Prisma.ProductVariantUncheckedCreateWithoutProductInput> | Prisma.ProductVariantCreateWithoutProductInput[] | Prisma.ProductVariantUncheckedCreateWithoutProductInput[]
-  connectOrCreate?: Prisma.ProductVariantCreateOrConnectWithoutProductInput | Prisma.ProductVariantCreateOrConnectWithoutProductInput[]
-  createMany?: Prisma.ProductVariantCreateManyProductInputEnvelope
-  connect?: Prisma.ProductVariantWhereUniqueInput | Prisma.ProductVariantWhereUniqueInput[]
-}
-
-export type ProductVariantUncheckedCreateNestedManyWithoutProductInput = {
-  create?: Prisma.XOR<Prisma.ProductVariantCreateWithoutProductInput, Prisma.ProductVariantUncheckedCreateWithoutProductInput> | Prisma.ProductVariantCreateWithoutProductInput[] | Prisma.ProductVariantUncheckedCreateWithoutProductInput[]
-  connectOrCreate?: Prisma.ProductVariantCreateOrConnectWithoutProductInput | Prisma.ProductVariantCreateOrConnectWithoutProductInput[]
-  createMany?: Prisma.ProductVariantCreateManyProductInputEnvelope
-  connect?: Prisma.ProductVariantWhereUniqueInput | Prisma.ProductVariantWhereUniqueInput[]
-}
-
-export type ProductVariantUpdateManyWithoutProductNestedInput = {
-  create?: Prisma.XOR<Prisma.ProductVariantCreateWithoutProductInput, Prisma.ProductVariantUncheckedCreateWithoutProductInput> | Prisma.ProductVariantCreateWithoutProductInput[] | Prisma.ProductVariantUncheckedCreateWithoutProductInput[]
-  connectOrCreate?: Prisma.ProductVariantCreateOrConnectWithoutProductInput | Prisma.ProductVariantCreateOrConnectWithoutProductInput[]
-  upsert?: Prisma.ProductVariantUpsertWithWhereUniqueWithoutProductInput | Prisma.ProductVariantUpsertWithWhereUniqueWithoutProductInput[]
-  createMany?: Prisma.ProductVariantCreateManyProductInputEnvelope
-  set?: Prisma.ProductVariantWhereUniqueInput | Prisma.ProductVariantWhereUniqueInput[]
-  disconnect?: Prisma.ProductVariantWhereUniqueInput | Prisma.ProductVariantWhereUniqueInput[]
-  delete?: Prisma.ProductVariantWhereUniqueInput | Prisma.ProductVariantWhereUniqueInput[]
-  connect?: Prisma.ProductVariantWhereUniqueInput | Prisma.ProductVariantWhereUniqueInput[]
-  update?: Prisma.ProductVariantUpdateWithWhereUniqueWithoutProductInput | Prisma.ProductVariantUpdateWithWhereUniqueWithoutProductInput[]
-  updateMany?: Prisma.ProductVariantUpdateManyWithWhereWithoutProductInput | Prisma.ProductVariantUpdateManyWithWhereWithoutProductInput[]
-  deleteMany?: Prisma.ProductVariantScalarWhereInput | Prisma.ProductVariantScalarWhereInput[]
-}
-
-export type ProductVariantUncheckedUpdateManyWithoutProductNestedInput = {
-  create?: Prisma.XOR<Prisma.ProductVariantCreateWithoutProductInput, Prisma.ProductVariantUncheckedCreateWithoutProductInput> | Prisma.ProductVariantCreateWithoutProductInput[] | Prisma.ProductVariantUncheckedCreateWithoutProductInput[]
-  connectOrCreate?: Prisma.ProductVariantCreateOrConnectWithoutProductInput | Prisma.ProductVariantCreateOrConnectWithoutProductInput[]
-  upsert?: Prisma.ProductVariantUpsertWithWhereUniqueWithoutProductInput | Prisma.ProductVariantUpsertWithWhereUniqueWithoutProductInput[]
-  createMany?: Prisma.ProductVariantCreateManyProductInputEnvelope
-  set?: Prisma.ProductVariantWhereUniqueInput | Prisma.ProductVariantWhereUniqueInput[]
-  disconnect?: Prisma.ProductVariantWhereUniqueInput | Prisma.ProductVariantWhereUniqueInput[]
-  delete?: Prisma.ProductVariantWhereUniqueInput | Prisma.ProductVariantWhereUniqueInput[]
-  connect?: Prisma.ProductVariantWhereUniqueInput | Prisma.ProductVariantWhereUniqueInput[]
-  update?: Prisma.ProductVariantUpdateWithWhereUniqueWithoutProductInput | Prisma.ProductVariantUpdateWithWhereUniqueWithoutProductInput[]
-  updateMany?: Prisma.ProductVariantUpdateManyWithWhereWithoutProductInput | Prisma.ProductVariantUpdateManyWithWhereWithoutProductInput[]
-  deleteMany?: Prisma.ProductVariantScalarWhereInput | Prisma.ProductVariantScalarWhereInput[]
-}
-
 export type NullableBoolFieldUpdateOperationsInput = {
   set?: boolean | null
 }
 
-export type ProductVariantCreateNestedOneWithoutOrderItemsInput = {
-  create?: Prisma.XOR<Prisma.ProductVariantCreateWithoutOrderItemsInput, Prisma.ProductVariantUncheckedCreateWithoutOrderItemsInput>
-  connectOrCreate?: Prisma.ProductVariantCreateOrConnectWithoutOrderItemsInput
-  connect?: Prisma.ProductVariantWhereUniqueInput
-}
-
-export type ProductVariantUpdateOneWithoutOrderItemsNestedInput = {
-  create?: Prisma.XOR<Prisma.ProductVariantCreateWithoutOrderItemsInput, Prisma.ProductVariantUncheckedCreateWithoutOrderItemsInput>
-  connectOrCreate?: Prisma.ProductVariantCreateOrConnectWithoutOrderItemsInput
-  upsert?: Prisma.ProductVariantUpsertWithoutOrderItemsInput
-  disconnect?: Prisma.ProductVariantWhereInput | boolean
-  delete?: Prisma.ProductVariantWhereInput | boolean
-  connect?: Prisma.ProductVariantWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.ProductVariantUpdateToOneWithWhereWithoutOrderItemsInput, Prisma.ProductVariantUpdateWithoutOrderItemsInput>, Prisma.ProductVariantUncheckedUpdateWithoutOrderItemsInput>
-}
-
-export type ProductVariantCreateWithoutProductInput = {
-  id?: string
-  sku: string
-  name: string
-  priceAdjustment?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  stock?: number | null
-  attributes?: string
-  isActive?: boolean | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  orderItems?: Prisma.OrderItemCreateNestedManyWithoutVariantInput
-}
-
-export type ProductVariantUncheckedCreateWithoutProductInput = {
-  id?: string
-  sku: string
-  name: string
-  priceAdjustment?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  stock?: number | null
-  attributes?: string
-  isActive?: boolean | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  orderItems?: Prisma.OrderItemUncheckedCreateNestedManyWithoutVariantInput
-}
-
-export type ProductVariantCreateOrConnectWithoutProductInput = {
-  where: Prisma.ProductVariantWhereUniqueInput
-  create: Prisma.XOR<Prisma.ProductVariantCreateWithoutProductInput, Prisma.ProductVariantUncheckedCreateWithoutProductInput>
-}
-
-export type ProductVariantCreateManyProductInputEnvelope = {
-  data: Prisma.ProductVariantCreateManyProductInput | Prisma.ProductVariantCreateManyProductInput[]
-  skipDuplicates?: boolean
-}
-
-export type ProductVariantUpsertWithWhereUniqueWithoutProductInput = {
-  where: Prisma.ProductVariantWhereUniqueInput
-  update: Prisma.XOR<Prisma.ProductVariantUpdateWithoutProductInput, Prisma.ProductVariantUncheckedUpdateWithoutProductInput>
-  create: Prisma.XOR<Prisma.ProductVariantCreateWithoutProductInput, Prisma.ProductVariantUncheckedCreateWithoutProductInput>
-}
-
-export type ProductVariantUpdateWithWhereUniqueWithoutProductInput = {
-  where: Prisma.ProductVariantWhereUniqueInput
-  data: Prisma.XOR<Prisma.ProductVariantUpdateWithoutProductInput, Prisma.ProductVariantUncheckedUpdateWithoutProductInput>
-}
-
-export type ProductVariantUpdateManyWithWhereWithoutProductInput = {
-  where: Prisma.ProductVariantScalarWhereInput
-  data: Prisma.XOR<Prisma.ProductVariantUpdateManyMutationInput, Prisma.ProductVariantUncheckedUpdateManyWithoutProductInput>
-}
-
-export type ProductVariantScalarWhereInput = {
-  AND?: Prisma.ProductVariantScalarWhereInput | Prisma.ProductVariantScalarWhereInput[]
-  OR?: Prisma.ProductVariantScalarWhereInput[]
-  NOT?: Prisma.ProductVariantScalarWhereInput | Prisma.ProductVariantScalarWhereInput[]
-  id?: Prisma.StringFilter<"ProductVariant"> | string
-  productId?: Prisma.StringFilter<"ProductVariant"> | string
-  sku?: Prisma.StringFilter<"ProductVariant"> | string
-  name?: Prisma.StringFilter<"ProductVariant"> | string
-  priceAdjustment?: Prisma.DecimalNullableFilter<"ProductVariant"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  stock?: Prisma.IntNullableFilter<"ProductVariant"> | number | null
-  attributes?: Prisma.StringFilter<"ProductVariant"> | string
-  isActive?: Prisma.BoolNullableFilter<"ProductVariant"> | boolean | null
-  createdAt?: Prisma.DateTimeNullableFilter<"ProductVariant"> | Date | string | null
-  updatedAt?: Prisma.DateTimeNullableFilter<"ProductVariant"> | Date | string | null
-}
-
-export type ProductVariantCreateWithoutOrderItemsInput = {
-  id?: string
-  sku: string
-  name: string
-  priceAdjustment?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  stock?: number | null
-  attributes?: string
-  isActive?: boolean | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  product: Prisma.ProductCreateNestedOneWithoutVariantsInput
-}
-
-export type ProductVariantUncheckedCreateWithoutOrderItemsInput = {
-  id?: string
-  productId: string
-  sku: string
-  name: string
-  priceAdjustment?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  stock?: number | null
-  attributes?: string
-  isActive?: boolean | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-}
-
-export type ProductVariantCreateOrConnectWithoutOrderItemsInput = {
-  where: Prisma.ProductVariantWhereUniqueInput
-  create: Prisma.XOR<Prisma.ProductVariantCreateWithoutOrderItemsInput, Prisma.ProductVariantUncheckedCreateWithoutOrderItemsInput>
-}
-
-export type ProductVariantUpsertWithoutOrderItemsInput = {
-  update: Prisma.XOR<Prisma.ProductVariantUpdateWithoutOrderItemsInput, Prisma.ProductVariantUncheckedUpdateWithoutOrderItemsInput>
-  create: Prisma.XOR<Prisma.ProductVariantCreateWithoutOrderItemsInput, Prisma.ProductVariantUncheckedCreateWithoutOrderItemsInput>
-  where?: Prisma.ProductVariantWhereInput
-}
-
-export type ProductVariantUpdateToOneWithWhereWithoutOrderItemsInput = {
-  where?: Prisma.ProductVariantWhereInput
-  data: Prisma.XOR<Prisma.ProductVariantUpdateWithoutOrderItemsInput, Prisma.ProductVariantUncheckedUpdateWithoutOrderItemsInput>
-}
-
-export type ProductVariantUpdateWithoutOrderItemsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  sku?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  priceAdjustment?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  stock?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  attributes?: Prisma.StringFieldUpdateOperationsInput | string
-  isActive?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  product?: Prisma.ProductUpdateOneRequiredWithoutVariantsNestedInput
-}
-
-export type ProductVariantUncheckedUpdateWithoutOrderItemsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  productId?: Prisma.StringFieldUpdateOperationsInput | string
-  sku?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  priceAdjustment?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  stock?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  attributes?: Prisma.StringFieldUpdateOperationsInput | string
-  isActive?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-}
-
-export type ProductVariantCreateManyProductInput = {
-  id?: string
-  sku: string
-  name: string
-  priceAdjustment?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  stock?: number | null
-  attributes?: string
-  isActive?: boolean | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-}
-
-export type ProductVariantUpdateWithoutProductInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  sku?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  priceAdjustment?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  stock?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  attributes?: Prisma.StringFieldUpdateOperationsInput | string
-  isActive?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  orderItems?: Prisma.OrderItemUpdateManyWithoutVariantNestedInput
-}
-
-export type ProductVariantUncheckedUpdateWithoutProductInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  sku?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  priceAdjustment?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  stock?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  attributes?: Prisma.StringFieldUpdateOperationsInput | string
-  isActive?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  orderItems?: Prisma.OrderItemUncheckedUpdateManyWithoutVariantNestedInput
-}
-
-export type ProductVariantUncheckedUpdateManyWithoutProductInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  sku?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  priceAdjustment?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  stock?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  attributes?: Prisma.StringFieldUpdateOperationsInput | string
-  isActive?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-}
-
-
-/**
- * Count Type ProductVariantCountOutputType
- */
-
-export type ProductVariantCountOutputType = {
-  orderItems: number
-}
-
-export type ProductVariantCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  orderItems?: boolean | ProductVariantCountOutputTypeCountOrderItemsArgs
-}
-
-/**
- * ProductVariantCountOutputType without action
- */
-export type ProductVariantCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the ProductVariantCountOutputType
-   */
-  select?: Prisma.ProductVariantCountOutputTypeSelect<ExtArgs> | null
-}
-
-/**
- * ProductVariantCountOutputType without action
- */
-export type ProductVariantCountOutputTypeCountOrderItemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.OrderItemWhereInput
-}
 
 
 export type ProductVariantSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -786,9 +489,6 @@ export type ProductVariantSelect<ExtArgs extends runtime.Types.Extensions.Intern
   isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  product?: boolean | Prisma.ProductDefaultArgs<ExtArgs>
-  orderItems?: boolean | Prisma.ProductVariant$orderItemsArgs<ExtArgs>
-  _count?: boolean | Prisma.ProductVariantCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["productVariant"]>
 
 
@@ -807,18 +507,10 @@ export type ProductVariantSelectScalar = {
 }
 
 export type ProductVariantOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "productId" | "sku" | "name" | "priceAdjustment" | "stock" | "attributes" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["productVariant"]>
-export type ProductVariantInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  product?: boolean | Prisma.ProductDefaultArgs<ExtArgs>
-  orderItems?: boolean | Prisma.ProductVariant$orderItemsArgs<ExtArgs>
-  _count?: boolean | Prisma.ProductVariantCountOutputTypeDefaultArgs<ExtArgs>
-}
 
 export type $ProductVariantPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "ProductVariant"
-  objects: {
-    product: Prisma.$ProductPayload<ExtArgs>
-    orderItems: Prisma.$OrderItemPayload<ExtArgs>[]
-  }
+  objects: {}
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     productId: string
@@ -1170,8 +862,6 @@ readonly fields: ProductVariantFieldRefs;
  */
 export interface Prisma__ProductVariantClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  product<T extends Prisma.ProductDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ProductDefaultArgs<ExtArgs>>): Prisma.Prisma__ProductClient<runtime.Types.Result.GetResult<Prisma.$ProductPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  orderItems<T extends Prisma.ProductVariant$orderItemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ProductVariant$orderItemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OrderItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1228,10 +918,6 @@ export type ProductVariantFindUniqueArgs<ExtArgs extends runtime.Types.Extension
    */
   omit?: Prisma.ProductVariantOmit<ExtArgs> | null
   /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ProductVariantInclude<ExtArgs> | null
-  /**
    * Filter, which ProductVariant to fetch.
    */
   where: Prisma.ProductVariantWhereUniqueInput
@@ -1250,10 +936,6 @@ export type ProductVariantFindUniqueOrThrowArgs<ExtArgs extends runtime.Types.Ex
    */
   omit?: Prisma.ProductVariantOmit<ExtArgs> | null
   /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ProductVariantInclude<ExtArgs> | null
-  /**
    * Filter, which ProductVariant to fetch.
    */
   where: Prisma.ProductVariantWhereUniqueInput
@@ -1271,10 +953,6 @@ export type ProductVariantFindFirstArgs<ExtArgs extends runtime.Types.Extensions
    * Omit specific fields from the ProductVariant
    */
   omit?: Prisma.ProductVariantOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ProductVariantInclude<ExtArgs> | null
   /**
    * Filter, which ProductVariant to fetch.
    */
@@ -1324,10 +1002,6 @@ export type ProductVariantFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Ext
    */
   omit?: Prisma.ProductVariantOmit<ExtArgs> | null
   /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ProductVariantInclude<ExtArgs> | null
-  /**
    * Filter, which ProductVariant to fetch.
    */
   where?: Prisma.ProductVariantWhereInput
@@ -1375,10 +1049,6 @@ export type ProductVariantFindManyArgs<ExtArgs extends runtime.Types.Extensions.
    * Omit specific fields from the ProductVariant
    */
   omit?: Prisma.ProductVariantOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ProductVariantInclude<ExtArgs> | null
   /**
    * Filter, which ProductVariants to fetch.
    */
@@ -1428,10 +1098,6 @@ export type ProductVariantCreateArgs<ExtArgs extends runtime.Types.Extensions.In
    */
   omit?: Prisma.ProductVariantOmit<ExtArgs> | null
   /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ProductVariantInclude<ExtArgs> | null
-  /**
    * The data needed to create a ProductVariant.
    */
   data: Prisma.XOR<Prisma.ProductVariantCreateInput, Prisma.ProductVariantUncheckedCreateInput>
@@ -1460,10 +1126,6 @@ export type ProductVariantUpdateArgs<ExtArgs extends runtime.Types.Extensions.In
    * Omit specific fields from the ProductVariant
    */
   omit?: Prisma.ProductVariantOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ProductVariantInclude<ExtArgs> | null
   /**
    * The data needed to update a ProductVariant.
    */
@@ -1505,10 +1167,6 @@ export type ProductVariantUpsertArgs<ExtArgs extends runtime.Types.Extensions.In
    */
   omit?: Prisma.ProductVariantOmit<ExtArgs> | null
   /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ProductVariantInclude<ExtArgs> | null
-  /**
    * The filter to search for the ProductVariant to update in case it exists.
    */
   where: Prisma.ProductVariantWhereUniqueInput
@@ -1535,10 +1193,6 @@ export type ProductVariantDeleteArgs<ExtArgs extends runtime.Types.Extensions.In
    */
   omit?: Prisma.ProductVariantOmit<ExtArgs> | null
   /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ProductVariantInclude<ExtArgs> | null
-  /**
    * Filter which ProductVariant to delete.
    */
   where: Prisma.ProductVariantWhereUniqueInput
@@ -1559,30 +1213,6 @@ export type ProductVariantDeleteManyArgs<ExtArgs extends runtime.Types.Extension
 }
 
 /**
- * ProductVariant.orderItems
- */
-export type ProductVariant$orderItemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the OrderItem
-   */
-  select?: Prisma.OrderItemSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the OrderItem
-   */
-  omit?: Prisma.OrderItemOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.OrderItemInclude<ExtArgs> | null
-  where?: Prisma.OrderItemWhereInput
-  orderBy?: Prisma.OrderItemOrderByWithRelationInput | Prisma.OrderItemOrderByWithRelationInput[]
-  cursor?: Prisma.OrderItemWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.OrderItemScalarFieldEnum | Prisma.OrderItemScalarFieldEnum[]
-}
-
-/**
  * ProductVariant without action
  */
 export type ProductVariantDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1594,8 +1224,4 @@ export type ProductVariantDefaultArgs<ExtArgs extends runtime.Types.Extensions.I
    * Omit specific fields from the ProductVariant
    */
   omit?: Prisma.ProductVariantOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ProductVariantInclude<ExtArgs> | null
 }
