@@ -1,4 +1,11 @@
-import { IsEmail, IsNumber, IsOptional, IsString, Min } from "class-validator";
+import {
+  IsEmail,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+  Min,
+} from "class-validator";
 
 export class UpdateUserRequest {
   @IsEmail()
@@ -16,6 +23,10 @@ export class UpdateUserRequest {
   @IsString()
   @IsOptional()
   password?: string;
+
+  @IsString()
+  @IsOptional()
+  role?: string;
 }
 
 export class UpdateUserResponse {
@@ -38,7 +49,8 @@ export class GetUserResponse {
 
 export class GetUserById {
   @IsString()
-  id?: string;
+  @IsNotEmpty()
+  id!: string;
 }
 
 export class User {
@@ -74,7 +86,7 @@ export class ListQueryRequest {
 }
 
 export class RequestQuery {
-  query: unknown;
+  query!: unknown;
 }
 
 export class UserResponseAll {
