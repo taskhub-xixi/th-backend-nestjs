@@ -1,4 +1,3 @@
-import { UserResponse } from "../../model/auth.model";
 import {
   GetAllUserResponse,
   GetUserResponse,
@@ -12,7 +11,7 @@ export abstract class IUserService {
     me: string,
     request: UpdateUserRequest,
   ): Promise<UpdateUserResponse>;
-  abstract getUserById(id: number): Promise<GetUserResponse>;
+  abstract getUserById(id: string): Promise<GetUserResponse>;
   abstract getAllUser(
     req: ListQueryRequest,
   ): Promise<GetAllUserResponse<UserResponseAll>>;

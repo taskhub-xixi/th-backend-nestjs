@@ -23,6 +23,7 @@ import {
 import { IUserRepository } from "./interfaces/user.interface";
 import { UserService } from "./user.service";
 import { UserResponse } from "../model/auth.model";
+import { JwtPayload } from "../auth/dto/payload-interface";
 
 @Controller("/api/users")
 export class UserController implements IUserRepository {
@@ -48,7 +49,7 @@ export class UserController implements IUserRepository {
   @HttpCode(HttpStatus.OK)
   @Patch("me")
   async updateUser(
-    @Req() me,
+    @Req() me: User,
     @Body() request: UpdateUserRequest,
   ): Promise<UpdateUserResponse> {
     const result = await this.userService.updateUser(request, me.user.email);
