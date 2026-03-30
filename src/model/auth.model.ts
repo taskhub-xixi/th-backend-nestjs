@@ -14,31 +14,35 @@ export class LoginDTO {
   @IsNotEmpty()
   @IsEmail()
   @MaxLength(100)
-  email: string;
+  email!: string;
 
   @IsNotEmpty()
   @MinLength(8)
   @MaxLength(100)
-  password: string;
+  password!: string;
 }
 
 export class RegisterDTO {
   @IsNotEmpty()
   @MaxLength(100)
   @IsEmail()
-  email: string;
+  email!: string;
 
   @IsNotEmpty()
   @IsString()
   @MinLength(8)
   @MaxLength(100)
-  password: string;
+  password!: string;
 
-  @IsOptional()
   @IsString()
   @MinLength(3)
   @MaxLength(100)
-  username?: string;
+  firstname!: string;
+
+  @IsString()
+  @MinLength(3)
+  @MaxLength(100)
+  lastname!: string;
 }
 
 export class UpdateDTO {
@@ -68,30 +72,30 @@ export class UpdateDTO {
 export class DeleteDTO {
   @IsEmail()
   @IsNotEmpty()
-  email: string;
+  email!: string;
 
   @IsString()
   @IsNotEmpty()
-  password: string;
+  password!: string;
 
   @IsString()
   @IsNotEmpty()
-  confPassword: string;
+  confPassword!: string;
 }
 
 export class LogoutDTO {
   @IsEmail()
-  email: string;
+  email!: string;
 }
 
 export class CookiePayload {
   @IsString()
   @IsEmpty()
-  refreshtoken: string;
+  refreshtoken!: string;
 
   @IsString()
   @IsEmpty()
-  accessToken: string;
+  accessToken!: string;
 }
 
 export class UserResponse {
@@ -103,45 +107,41 @@ export class JWTResponse {
   access_token?: string;
   refresh_token?: string;
   exp?: Date;
+  createdAt!: Date;
 }
 
 export class RegisterResponse {
-  data: {
-    username: string;
+  data!: {
+    firstname: string;
+    lastname: string;
     email: string;
     role: string;
-    createdAt: Date;
   };
-  statusCode: number;
 }
 
 export class LoginResponse {
-  data: {
+  data!: {
     refresh_token: string;
     access_token: string;
     expiresIn: Date;
   };
-  statusCode: number;
 }
 
 export class UpdateResponse {
-  data: {
+  data!: {
     email: string;
   };
-  message: string;
-  statusCode: number;
 }
 
 export class LogoutResponse {
-  data: {
+  data!: {
     message: string;
   };
-  statusCode: number;
 }
 
 export class RefreshTokenResponse {
-  refresh_token: string;
-  access_token: string;
+  refresh_token!: string;
+  access_token!: string;
 }
 
 // REGISTER DTO --> logic code

@@ -14,55 +14,55 @@ import {
 export class CreateProductRequest {
   @IsString()
   @IsNotEmpty()
-  name: string;
+  name!: string;
 
   @IsString()
-  slug: string;
+  slug!: string;
 
   @IsString()
-  sku: string;
+  sku!: string;
 
   @IsNumber()
   @Min(1)
-  price: Decimal;
+  price!: Decimal;
 
   @IsString()
-  description: string;
+  description!: string;
 
   @IsString()
-  brandId: string;
+  brandId!: string;
 
   @IsString()
   @IsNotEmpty()
-  categoryId: string;
+  categoryId!: string;
 }
 
 export class CreateProductResponseSuccess {
-  id?: string;
-  name: string;
-  price: Decimal;
-  slug: string;
-  sku: string;
-  description: string;
-  originalPrice?: Decimal;
-  categoryId: string;
-  brandId: string;
-  stock: number;
-  lowStockThreshold: number;
-  ratingAverage: Decimal;
-  ratingCount: number;
-  reviewCount: number;
-  isActive: boolean;
-  metadata: {};
-  createdAt?: Date;
-  updatedAt?: Date;
-  shortDescription?: string;
-  deletedAt?: Date;
+  id!: string;
+  name!: string;
+  price!: Decimal;
+  slug!: string;
+  sku!: string;
+  description!: string;
+  originalPrice!: Decimal | null;
+  categoryId!: string;
+  brandId!: string | null;
+  stock!: number;
+  lowStockThreshold!: number | null;
+  ratingAverage!: Decimal | null;
+  ratingCount!: number | null;
+  reviewCount!: number | null;
+  isActive!: boolean;
+  metadata!: {} | null;
+  createdAt!: Date | null;
+  updatedAt!: Date | null;
+  shortDescription!: string | null;
+  deletedAt?: Date | null;
 }
 
 export class CreateProductResponseError {
-  message: string[];
-  statusCode: number;
+  message!: string[];
+  statusCode!: number;
 }
 
 export class GetProductsRequest {
@@ -97,27 +97,27 @@ export class GetProductsRequest {
 }
 
 export class GetProductsResponseSuccess {
-  products: {
-    id?: string;
+  products!: {
+    id: string;
     name: string;
     price: Decimal;
     slug: string;
     sku: string;
     description: string;
-    originalPrice?: Decimal;
+    originalPrice: Decimal | null;
     categoryId: string;
-    brandId: string;
+    brandId: string | null;
     stock: number;
-    lowStockThreshold: number;
-    ratingAverage: Decimal;
-    ratingCount: number;
-    reviewCount: number;
+    lowStockThreshold: number | null;
+    ratingAverage: Decimal | null;
+    ratingCount: number | null;
+    reviewCount: number | null;
     isActive: boolean;
-    metadata: {};
-    createdAt?: Date;
-    updatedAt?: Date;
-    shortDescription?: string;
-    deletedAt?: Date;
+    metadata: {} | null;
+    createdAt: Date | null;
+    updatedAt: Date | null;
+    shortDescription: string | null;
+    deletedAt?: Date | null;
   }[];
   total?: number;
   page?: number;
@@ -125,8 +125,8 @@ export class GetProductsResponseSuccess {
   totalPages?: number;
 }
 export class GetProductsResponseError {
-  message: string[];
-  statusCode: number;
+  message!: string[];
+  statusCode!: number;
 }
 
 export class GetProductById {
@@ -135,43 +135,43 @@ export class GetProductById {
 }
 
 export class UpdateProductResponse {
-  products: {
-    id?: string;
+  products!: {
+    id: string;
     name: string;
     price: Decimal;
     slug: string;
     sku: string;
     description: string;
-    originalPrice?: Decimal;
+    originalPrice: Decimal | null;
     categoryId: string;
-    brandId: string;
+    brandId: string | null;
     stock: number;
-    lowStockThreshold: number;
-    ratingAverage: Decimal;
-    ratingCount: number;
-    reviewCount: number;
+    lowStockThreshold: number | null;
+    ratingAverage: Decimal | null;
+    ratingCount: number | null;
+    reviewCount: number | null;
     isActive: boolean;
-    metadata: {};
-    createdAt?: Date;
-    updatedAt?: Date;
-    shortDescription?: string;
-    deletedAt?: Date;
+    metadata: {} | null;
+    createdAt: Date | null;
+    updatedAt: Date | null;
+    shortDescription: string | null;
+    deletedAt?: Date | null;
   };
 }
 
 export class UpdateProductRequest {
   @IsString()
   @IsOptional()
-  name: string;
+  name?: string;
 
   @IsDecimal()
   @Min(0)
   @IsOptional()
-  price: Decimal;
+  price?: Decimal;
 
   @IsString()
   @IsOptional()
-  description: string;
+  description?: string;
 
   @IsDecimal()
   @IsOptional()
@@ -179,80 +179,79 @@ export class UpdateProductRequest {
 
   @IsString()
   @IsOptional()
-  slug: string;
+  slug?: string;
 
   @IsString()
   @IsOptional()
-  sku: string;
+  sku?: string;
 
   @IsString()
   @IsOptional()
-  brandId: string;
+  brandId?: string;
 
   @IsNumber()
   @IsOptional()
-  stock: number;
+  stock?: number;
 
   @IsNumber()
   @IsOptional()
-  lowStockThreshold: number;
+  lowStockThreshold?: number;
 
   @IsNumber()
   @IsOptional()
-  ratingAverage: Decimal;
+  ratingAverage?: Decimal;
 
   @IsNumber()
   @IsOptional()
-  ratingCount: number;
+  ratingCount?: number;
 
   @IsNumber()
   @IsOptional()
-  reviewCount: number;
+  reviewCount?: number;
 
   @IsBoolean()
   @IsOptional()
-  isActive: boolean;
+  isActive?: boolean;
 
   @IsObject()
   @IsOptional()
-  metadata: {};
+  metadata?: {};
 }
 
 export class UploadPhotoRequest {
   @IsString()
-  filename: string;
+  filename!: string;
 }
 
 export class UploadPhotoResponseSuccess {
-  data: {
+  data!: {
     filename: string;
     originalName: string;
   };
-  statusCode: number;
 }
 
 export class GetProductByCategoryResponse {
-  products: {
-    id?: string;
+  products!: {
+    id: string;
     name: string;
     price: Decimal;
     slug: string;
     sku: string;
     description: string;
-    originalPrice?: Decimal;
+    originalPrice: Decimal | null;
     categoryId: string;
-    brandId: string;
+    brandId: string | null;
     stock: number;
-    lowStockThreshold: number;
-    ratingAverage: Decimal;
-    ratingCount: number;
-    reviewCount: number;
+    lowStockThreshold: number | null;
+    ratingAverage: Decimal | null;
+    ratingCount: number | null;
+    reviewCount: number | null;
     isActive: boolean;
-    metadata: {};
-    createdAt?: Date;
-    updatedAt?: Date;
-    shortDescription?: string;
-    deletedAt?: Date;
+    metadata: {} | null;
+    createdAt: Date | null;
+    updatedAt: Date | null;
+    shortDescription: string | null;
+    deletedAt?: Date | null;
   }[];
   total?: number;
   page?: number;
@@ -260,13 +259,18 @@ export class GetProductByCategoryResponse {
   totalPages?: number;
 }
 
+export class TotalResultCategories {
+  perCategory!: number;
+  name!: string;
+}
+
 export class SearchRequest {
   @IsString()
   @IsNotEmpty()
-  name: string;
+  name!: string;
 }
 
 export class DeleteProductResponse {
   @IsBoolean()
-  deleted: boolean;
+  deleted!: boolean;
 }

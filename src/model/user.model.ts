@@ -7,7 +7,11 @@ export class UpdateUserRequest {
 
   @IsString()
   @IsOptional()
-  username?: string;
+  firstname?: string;
+
+  @IsString()
+  @IsOptional()
+  lastname?: string;
 
   @IsString()
   @IsOptional()
@@ -15,42 +19,43 @@ export class UpdateUserRequest {
 }
 
 export class UpdateUserResponse {
-  data: {
-    id?: number;
-    username: string;
+  data!: {
+    id?: string;
+    firstname: string;
+    lastname: string;
     email: string;
   };
 }
 
 export class GetUserResponse {
-  data: {
-    id?: number;
-    username: string;
+  data!: {
+    id?: string;
+    firstname: string;
+    lastname: string;
     email: string;
   };
 }
 
 export class GetUserById {
-  @IsNumber()
-  id?: number;
+  @IsString()
+  id?: string;
 }
 
 export class User {
-  user: {
-    sub: number;
+  user!: {
+    sub: string;
     email: string;
   };
 }
 
 export class UserResponse {
-  data: {
-    id: number;
-    username: string;
+  data!: {
+    id: string;
+    firstname: string;
+    lastname: string;
     email: string;
     role: string;
-    createdAt: Date;
   };
-  statusCode?: number;
 }
 
 export class ListQueryRequest {
@@ -74,7 +79,7 @@ export class RequestQuery {
 
 export class UserResponseAll {
   user?: unknown;
-  id?: number;
+  id?: string;
   username?: string;
   email?: string;
   role?: string;
@@ -82,12 +87,11 @@ export class UserResponseAll {
 }
 
 export class GetAllUserResponse<T> {
-  data: T;
-  pagination: {
+  data!: T;
+  pagination!: {
     page: number;
     limit: number;
     total: number;
     totalPages: number;
   };
-  statusCode: number;
 }
