@@ -43,6 +43,9 @@ export class AdminGuard implements CanActivate {
     if (!user) {
       throw new HttpException("AdminGuard: Forbidden user", 403);
     }
+    if (!user.email) {
+      throw new HttpException("AdminGuard: Forbidden user", 403);
+    }
 
     await this.authService.checkRole(user.email);
     return true;
