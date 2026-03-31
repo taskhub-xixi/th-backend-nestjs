@@ -1,18 +1,16 @@
-import { HttpException, HttpStatus, Inject, Injectable } from "@nestjs/common";
+import { HttpException, Inject, Injectable } from "@nestjs/common";
 import { WINSTON_MODULE_PROVIDER } from "nest-winston";
 import { Logger } from "winston";
+import { PrismaService } from "../common/prisma.service";
+import { users } from "../generated/prisma/client";
 import {
   GetAllUserResponse,
   GetUserResponse,
   ListQueryRequest,
   UpdateUserRequest,
   UpdateUserResponse,
-  User,
-  UserResponse,
-  UserResponseAll,
 } from "../model/user.model";
 import { IUserService } from "./interfaces/user.service.interface";
-import { PrismaService } from "../common/prisma.service";
 
 @Injectable()
 export class UserService implements IUserService {
@@ -37,11 +35,12 @@ export class UserService implements IUserService {
       .$executeRaw`UPDATE users SET email = ${request.email} WHERE id = ${isExist.id}`;
 
     return {
-      data: {
+      users: {
         id: isExist.id,
         email: isExist.email,
-        firstname: isExist.first_name,
-        lastname: isExist.last_name,
+        first_name: isExist.first_name,
+        last_name: isExist.last_name,
+        role: isExist.role,
       },
     };
   }
@@ -54,22 +53,15 @@ export class UserService implements IUserService {
     if (!isExist) {
       throw new HttpException("Data not found", 404);
     }
-    await this.prismaService
-      .$queryRaw`SELECT email, first_name, last_name FROM users where id = ${id}`;
+    const result = await this.prismaService
+      .$queryRaw<users>`SELECT id, email, first_name, last_name FROM users where id = ${id}`;
 
     return {
-      data: {
-        id: isExist.id,
-        email: isExist.email,
-        firstname: isExist.first_name,
-        lastname: isExist.last_name,
-      },
+      users: result,
     };
   }
 
-  async getAllUser(
-    req: ListQueryRequest,
-  ): Promise<GetAllUserResponse<UserResponseAll>> {
+  async getAllUser(req: ListQueryRequest): Promise<GetAllUserResponse> {
     this.logger.debug(`UserService.getAllUser ${JSON.stringify(req)})`);
     // conversion
     const limit = Number(req.limit);
@@ -89,22 +81,23 @@ export class UserService implements IUserService {
         last_name: true,
         role: true,
       },
+      orderBy: { id: req.order },
       take: limit <= 0 ? 1 : limit,
       skip: skipPage === 10 ? 0 : skipPage,
     });
 
     return {
-      data: { user: result },
+      users: result,
       pagination: {
         page: page === 0 ? 1 : page && page >= pages ? pages : page,
         limit: Number(req.limit),
-        total: total,
-        totalPages: pages,
+        total_users: total,
+        total_pages: pages,
       },
     };
   }
 
-  async me(email: string): Promise<UserResponse> {
+  async me(email: string): Promise<GetUserResponse> {
     const result = await this.prismaService.users.findUnique({
       where: { email: email },
     });
@@ -115,13 +108,7 @@ export class UserService implements IUserService {
     this.logger.info(result);
 
     return {
-      data: {
-        id: result.id,
-        firstname: result.first_name,
-        lastname: result.last_name,
-        email: result.email,
-        role: result.role,
-      },
+      users: result,
     };
   }
 }
