@@ -13,19 +13,17 @@ import { Admin, Public } from "../common/decorator";
 import { AdminGuard, JwtAuthGuard } from "../common/guards";
 import { PublicGuard } from "../common/guards/public.guards";
 import {
+  GetAllUserResponse,
   GetUserById,
   GetUserResponse,
+  ListQueryRequest,
   UpdateUserRequest,
   UpdateUserResponse,
-  RequestQuery,
   User,
-  GetAllUserResponse,
-  ListQueryRequest,
 } from "../model/user.model";
+import { WebResponse } from "../model/web.mode";
 import { IUserRepository } from "./interfaces/user.interface";
 import { UserService } from "./user.service";
-import { UserResponse } from "../model/auth.model";
-import { JwtPayload } from "../auth/dto/payload-interface";
 
 @Controller("/api/users")
 export class UserController implements IUserRepository {
@@ -38,9 +36,12 @@ export class UserController implements IUserRepository {
   @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.OK)
   @Get("me")
-  async me(@Req() req: User) {
-    const data = await this.userService.me(req.user.email);
-    return data;
+  async me(@Req() req: User): Promise<WebResponse<GetUserResponse>> {
+    const result = await this.userService.me(req.user.email);
+    return {
+      data: result,
+      statusCode: HttpStatus.OK,
+    };
   }
 
   @Admin()
@@ -52,9 +53,12 @@ export class UserController implements IUserRepository {
   @Patch("me")
   async updateUser(
     @Body() request: UpdateUserRequest,
-  ): Promise<UpdateUserResponse> {
+  ): Promise<WebResponse<UpdateUserResponse>> {
     const result = await this.userService.updateUser(request);
-    return result;
+    return {
+      data: result,
+      statusCode: HttpStatus.OK,
+    };
   }
 
   @Admin()
@@ -63,12 +67,21 @@ export class UserController implements IUserRepository {
   @UseGuards(PublicGuard)
   @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.OK)
-  @Get("/all")
+  @Get()
   async getAllUser(
     @Query() query: ListQueryRequest,
-  ): Promise<GetAllUserResponse<UserResponse>> {
+  ): Promise<WebResponse<GetAllUserResponse>> {
     const result = await this.userService.getAllUser(query);
-    return result;
+    return {
+      data: result,
+      paging: {
+        current_page: result.pagination.page,
+        total_page: result.pagination.total_pages,
+        page_size: result.pagination.limit,
+        total_item: result.pagination.total_users,
+      },
+      statusCode: HttpStatus.OK,
+    };
   }
 
   @Admin()
@@ -78,8 +91,13 @@ export class UserController implements IUserRepository {
   @UseGuards(JwtAuthGuard)
   @Get("/:id")
   @HttpCode(HttpStatus.OK)
-  async getUserById(@Req() request: GetUserById): Promise<GetUserResponse> {
+  async getUserById(
+    @Req() request: GetUserById,
+  ): Promise<WebResponse<GetUserResponse>> {
     const result = await this.userService.getUserById(request.id);
-    return result;
+    return {
+      data: result,
+      statusCode: HttpStatus.OK,
+    };
   }
 }
