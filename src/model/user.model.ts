@@ -6,6 +6,7 @@ import {
   IsString,
   Min,
 } from "class-validator";
+import { SortOrder } from "../generated/prisma/internal/prismaNamespace";
 
 export class UpdateUserRequest {
   @IsEmail()
@@ -30,20 +31,22 @@ export class UpdateUserRequest {
 }
 
 export class UpdateUserResponse {
-  data!: {
-    id?: string;
-    firstname: string;
-    lastname: string;
-    email: string;
+  users!: {
+    id: string;
+    first_name: string;
+    last_name: string;
+    email?: string;
+    role?: string;
   };
 }
 
 export class GetUserResponse {
-  data!: {
-    id?: string;
-    firstname: string;
-    lastname: string;
-    email: string;
+  users!: {
+    id: string;
+    first_name: string;
+    last_name: string;
+    email?: string;
+    role?: string;
   };
 }
 
@@ -61,28 +64,28 @@ export class User {
 }
 
 export class UserResponse {
-  data!: {
+  users!: {
     id: string;
-    firstname: string;
-    lastname: string;
-    email: string;
-    role: string;
+    first_name: string;
+    last_name: string;
+    email?: string;
+    role?: string;
   };
 }
 
 export class ListQueryRequest {
+  @IsOptional()
   @IsNumber()
   @Min(1)
-  page?: number;
+  page?: number = 1;
 
+  @IsOptional()
   @IsNumber()
-  limit?: number;
+  limit?: number = 10;
 
+  @IsOptional()
   @IsString()
-  order?: string;
-
-  @IsString()
-  sort?: string;
+  order?: SortOrder;
 }
 
 export class RequestQuery {
@@ -98,12 +101,18 @@ export class UserResponseAll {
   createdAt?: Date;
 }
 
-export class GetAllUserResponse<T> {
-  data!: T;
+export class GetAllUserResponse {
+  users!: {
+    id: string;
+    first_name: string;
+    last_name: string;
+    email?: string;
+    role?: string;
+  }[];
   pagination!: {
     page: number;
     limit: number;
-    total: number;
-    totalPages: number;
+    total_users: number;
+    total_pages: number;
   };
 }
