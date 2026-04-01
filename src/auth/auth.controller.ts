@@ -33,9 +33,14 @@ export class AuthController {
 
   @Post("register")
   @HttpCode(HttpStatus.CREATED)
-  async register(@Body() registerDTO: RegisterDTO): Promise<RegisterResponse> {
+  async register(
+    @Body() registerDTO: RegisterDTO,
+  ): Promise<WebResponse<RegisterResponse>> {
     const result = await this.authService.create(registerDTO);
-    return result;
+    return {
+      data: result,
+      statusCode: HttpStatus.CREATED,
+    };
   }
 
   @Post("login")
@@ -43,10 +48,13 @@ export class AuthController {
   async login(
     @Body() loginDTO: LoginDTO,
     @Res({ passthrough: true }) res: Response,
-  ): Promise<LoginResponse> {
+  ): Promise<WebResponse<LoginResponse>> {
     const result = await this.authService.login(loginDTO, res);
 
-    return result;
+    return {
+      data: result,
+      statusCode: HttpStatus.OK,
+    };
   }
 
   @UseGuards(RTGuard)
@@ -65,10 +73,8 @@ export class AuthController {
     const tokens = await this.authService.refresh(refreshToken, res);
 
     return {
-      data: {
-        access_token: tokens.access_token,
-        refresh_token: tokens.refresh_token,
-      },
+      data: tokens,
+      statusCode: HttpStatus.OK,
     };
   }
 
