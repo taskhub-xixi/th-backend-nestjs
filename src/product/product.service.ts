@@ -1,4 +1,5 @@
-import { HttpException, HttpStatus, Inject, Injectable } from "@nestjs/common";
+import { HttpException, Inject, Injectable } from "@nestjs/common";
+import { Product } from "@prisma/client";
 import { WINSTON_MODULE_PROVIDER } from "nest-winston";
 import { Logger } from "winston";
 import { PrismaService } from "../common/prisma.service";
@@ -13,7 +14,6 @@ import {
   UpdateProductRequest,
   UpdateProductResponse,
 } from "../model/product.model";
-import { Product } from "@prisma/client";
 
 @Injectable()
 export class ProductService {
