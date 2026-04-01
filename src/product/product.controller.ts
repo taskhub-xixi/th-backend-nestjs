@@ -2,21 +2,15 @@ import {
   Body,
   Controller,
   Delete,
-  FileTypeValidator,
   Get,
   HttpCode,
   HttpStatus,
   Param,
-  ParseFilePipe,
   Patch,
   Post,
   Query,
-  Req,
-  UploadedFile,
   UseGuards,
-  UseInterceptors,
 } from "@nestjs/common";
-import { FileInterceptor } from "@nestjs/platform-express";
 import { Public } from "../common/decorator";
 import { Admin } from "../common/decorator/admin.decorator";
 import { JwtAuthGuard } from "../common/guards";
@@ -33,8 +27,8 @@ import {
   UpdateProductRequest,
   UpdateProductResponse,
 } from "../model/product.model";
-import { ProductService } from "./product.service";
 import { WebResponse } from "../model/web.mode";
+import { ProductService } from "./product.service";
 
 @Controller("/api/products")
 export class ProductController {
@@ -98,10 +92,15 @@ export class ProductController {
   @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.OK)
   @Get("/:name")
-  async searchProductName(@Query() req: SearchRequest) {
+  async searchProductName(
+    @Query() req: SearchRequest,
+  ): Promise<WebResponse<GetProductsResponseSuccess>> {
     console.log(typeof req);
-    const data = await this.productService.search(req.name);
-    return data;
+    const result = await this.productService.search(req.name);
+    return {
+      data: result,
+      statusCode: HttpStatus.OK,
+    };
   }
   //
   // @Admin()
