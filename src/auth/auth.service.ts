@@ -1,17 +1,15 @@
 import {
   HttpException,
-  HttpStatus,
   Inject,
   Injectable,
   UnauthorizedException,
 } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
-import { InjectRepository } from "@nestjs/typeorm";
 import * as bcrypt from "bcrypt";
 import { Response } from "express";
 import { WINSTON_MODULE_PROVIDER } from "nest-winston";
-import { Repository } from "typeorm";
 import { Logger } from "winston";
+import { PrismaService } from "../common/prisma.service";
 import {
   LoginDTO,
   LoginResponse,
@@ -23,9 +21,7 @@ import {
   UpdateDTO,
 } from "../model/auth.model";
 import { IAuthService } from "./interface/auth.service.interface";
-import { AuthRepositorySQL } from "./repository_query/auth.repository";
 import { TokenService } from "./services/token.service";
-import { PrismaService } from "../common/prisma.service";
 
 @Injectable()
 export class AuthService implements IAuthService {
