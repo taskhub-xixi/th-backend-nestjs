@@ -1,8 +1,5 @@
-import {
-  JWTResponse,
-  RefreshTokenResponse,
-  UserResponse,
-} from "../../model/auth.model";
+import { JWTResponse, RefreshTokenResponse } from "../../model/auth.model";
+import { RefreshTokenResponseQuery } from "../../model/token.model";
 import { JwtPayload } from "../dto/payload-interface";
 import { Response } from "express";
 import {
@@ -14,7 +11,6 @@ import {
 import { WINSTON_MODULE_PROVIDER } from "nest-winston";
 import { Logger } from "winston";
 import { JwtService } from "@nestjs/jwt";
-import { jwtConstants } from "../constants";
 import * as bcrypt from "bcrypt";
 import { PrismaService } from "../../common/prisma.service";
 
@@ -40,11 +36,9 @@ export class TokenService {
     // GENERATE TOKEN
     const [at, rt] = await Promise.all([
       this.jwtService.signAsync(jwtPayload, {
-        secret: jwtConstants.secrets,
         expiresIn: "1h",
       }),
       this.jwtService.signAsync(jwtPayload, {
-        secret: jwtConstants.secrets,
         expiresIn: "7d",
       }),
     ]);
@@ -90,8 +84,9 @@ export class TokenService {
 
     this.logger.debug(`payload: ${JSON.stringify(payload)}`);
     // find id
-    const [row] = await this.prismaService
-      .$queryRaw<any>`SELECT u.id, u.email, at.refresh_token_hash
+    const [row] = await this.prismaService.$queryRaw<
+      RefreshTokenResponseQuery[]
+    >`SELECT u.id, u.email, at.expires_at, at.refresh_token_hash
 from users as u
     LEFT JOIN auth_tokens AS at ON u.id = at.user_id
 WHERE
@@ -100,29 +95,33 @@ WHERE
     const user = {
       id: row.id,
       email: row.email,
+      expires_at: row.expires_at,
       refresh_token_hash: row.refresh_token_hash,
     };
 
-    this.logger.debug(JSON.stringify(`user: ${user.email}`));
+    this.logger.debug(JSON.stringify(`user: ${JSON.stringify(user)}`));
 
     // validate
     if (!user) {
       throw new UnauthorizedException();
     }
+
     if (!user.refresh_token_hash) {
-      throw new UnauthorizedException();
-    }
-    if (!user.refresh_token_hash) {
-      throw new UnauthorizedException("Missing refresh token");
+      throw new UnauthorizedException("Missing token");
     }
 
-    if (new Date() > user.refresh_token_hash) {
-      throw new UnauthorizedException("Refresh token expired");
+    if (!user.expires_at) {
+      throw new UnauthorizedException("Missing token");
+    }
+
+    if (new Date() > user.expires_at) {
+      throw new UnauthorizedException("token expired");
     }
     const isMatch = await bcrypt.compare(
       oldRefreshToken,
       user?.refresh_token_hash,
     );
+
     if (!isMatch) {
       throw new HttpException("Token Invalid", 401);
     }
