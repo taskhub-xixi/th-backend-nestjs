@@ -8,7 +8,6 @@ import { Reflector } from "@nestjs/core";
 import { AuthGuard } from "@nestjs/passport";
 import { AuthService } from "../../auth/auth.service";
 import { JwtService } from "@nestjs/jwt";
-import { jwtConstants } from "../../auth/constants";
 import { JwtPayload } from "../../auth/dto/payload-interface";
 
 @Injectable()
@@ -36,9 +35,7 @@ export class AdminGuard implements CanActivate {
     }
 
     // verify token and get JWT payload
-    const user: JwtPayload = this.jwtService.verify(token, {
-      secret: jwtConstants.secrets,
-    });
+    const user: JwtPayload = this.jwtService.verify(token);
 
     if (!user) {
       throw new HttpException("AdminGuard: Forbidden user", 403);
