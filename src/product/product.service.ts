@@ -217,7 +217,14 @@ GROUP BY
 
   async search(name: string): Promise<GetProductByCategoryResponse> {
     this.logger.info(`PRODUCT_SERVICE:search ${name}`);
-    const flex = name.concat("%");
+
+    if (!name || typeof name !== "string") {
+      throw new HttpException("Search term is required", 400);
+    }
+
+    const sanitized = name.replace("/%/g", "\\%").replace("/_/g", "\\_");
+
+    const flex = sanitized.concat("%");
 
     const resultRaw = await this.prismaService.$queryRaw<
       Product[]
