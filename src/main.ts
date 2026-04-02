@@ -3,6 +3,9 @@ import { NestFactory } from "@nestjs/core";
 import cookieParser from "cookie-parser";
 import { WINSTON_MODULE_NEST_PROVIDER } from "nest-winston";
 import { AppModule } from "./app.module";
+import * as dotenv from "dotenv";
+
+// dotenv.config();
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -14,8 +17,10 @@ async function bootstrap() {
 
   app.enableCors({
     credentials: true,
-    origin: "http://localhost:3000",
+    origin: process.env.CORS_ALLOWED,
   });
+
+  app.use(cookieParser());
 
   const logger = app.get(WINSTON_MODULE_NEST_PROVIDER);
   app.useLogger(logger);
@@ -26,9 +31,7 @@ async function bootstrap() {
     }),
   );
 
-  app.use(cookieParser());
-  const port = 5000;
-  await app.listen(port);
+  await app.listen(process.env.PORT_USED as string);
 }
 
 bootstrap();

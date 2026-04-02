@@ -10,10 +10,20 @@ import { CommonModule } from "./common/common.module";
 import { LogMiddleware } from "./log/log.middleware";
 import { ProductModule } from "./product/product.module";
 import { UserModule } from "./user/user.module";
+import * as dotenv from "dotenv";
+import { JwtModule } from "@nestjs/jwt";
+import { ConfigService } from "@nestjs/config";
+// dotenv.config();
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
+    JwtModule.registerAsync({
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => ({
+        secret: config.get<string>("JWT_SECRET"),
+      }),
+    }),
     // TypeOrmModule.forRoot({
     //   type: "mysql",
     //   host: "localhost",

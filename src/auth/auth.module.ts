@@ -7,15 +7,19 @@ import { JwtStrategy } from "../common/strategies/jwt.strategy";
 import { RtStrategy } from "../common/strategies/rt.strategy";
 import { AuthController } from "./auth.controller";
 import { AuthService } from "./auth.service";
-import { jwtConstants } from "./constants";
 import { AuthRepositorySQL } from "./repository_query/auth.repository";
 import { TokenService } from "./services/token.service";
+import { ConfigService } from "@nestjs/config";
 
 @Module({
   imports: [
     PassportModule,
-    JwtModule.register({
-      secret: jwtConstants.secrets,
+    JwtModule.registerAsync({
+      global: true,
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => ({
+        secret: config.get<string>("JWT_SECRET"),
+      }),
     }),
   ],
   controllers: [AuthController],
