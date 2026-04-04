@@ -11,6 +11,7 @@ import { WINSTON_MODULE_PROVIDER } from "nest-winston";
 import { Logger } from "winston";
 import { PrismaService } from "../common/prisma.service";
 import {
+  DeleteDTO,
   LoginDTO,
   LoginResponse,
   LogoutDTO,
@@ -172,6 +173,30 @@ export class AuthService implements IAuthService {
       data: {
         message: "Logout Suuccesfully",
       },
+    };
+  }
+
+  async delete(deleteDTO: DeleteDTO, res: Response) {
+    const data = await this.prismaService.users.findUnique({
+      where: { email: deleteDTO.email },
+    });
+
+    if (!data) {
+      throw new HttpException("Account not found", 404);
+    }
+
+    await this.prismaService.users.delete({ where: { email: data.email } });
+
+    const makeSure = await this.prismaService.users.findUnique({
+      where: { email: data.email },
+    });
+
+    if (makeSure) {
+      throw new HttpException("Account is not deleted", 403);
+    }
+
+    return {
+      message: "account deleted",
     };
   }
 
