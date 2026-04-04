@@ -7,6 +7,7 @@ import {
   HttpStatus,
   Patch,
   Post,
+  Delete,
   Req,
   Res,
   UseGuards,
@@ -24,6 +25,7 @@ import {
   RegisterResponse,
   UpdateDTO,
   VerifyResponseToken,
+  DeleteDTO,
 } from "../model/auth.model";
 import { WebResponse } from "../model/web.mode";
 import { AuthService } from "./auth.service";
@@ -86,23 +88,26 @@ export class AuthController {
     if (!resetDTO.email) throw new HttpException("Something Wrong", 404);
     if (!resetDTO.password) throw new HttpException("Something Wrong", 404);
     await this.authService.resetPassword(resetDTO);
-
     return {
       statusCode: HttpStatus.OK,
       message: "Success",
     };
   }
-  //
-  // @UseGuards(CheckUserGuard)
-  // @UseGuards(JwtAuthGuard)
-  // @Put("delete")
-  // @HttpCode(HttpStatus.OK)
-  // async delete(
-  //   @Body() deleteDTO: DeleteDTO,
-  //   @Res({ passthrough: true }) response: Response,
-  // ): Promise<void> {
-  //   await this.authService.deleteSQL(deleteDTO.email, response);
-  // }
+
+  @UseGuards(JwtAuthGuard)
+  @Delete("delete")
+  @HttpCode(HttpStatus.OK)
+  async delete(
+    @Body() deleteDTO: DeleteDTO,
+    @Res({ passthrough: true }) response: Response,
+  ): Promise<WebResponse<void>> {
+    const result = await this.authService.delete(deleteDTO, response);
+
+    return {
+      message: result.message,
+      statusCode: HttpStatus.OK,
+    };
+  }
 
   @UseGuards(JwtAuthGuard)
   @Get("verify")
@@ -126,10 +131,11 @@ export class AuthController {
   async logout(
     @Body() deleteDTO: LogoutDTO,
     @Res({ passthrough: true }) res: Response,
-  ): Promise<{ message: string }> {
+  ): Promise<WebResponse<void>> {
     await this.authService.logout(deleteDTO, res);
     return {
       message: "clear Cookie",
+      statusCode: HttpStatus.OK,
     };
   }
 }
