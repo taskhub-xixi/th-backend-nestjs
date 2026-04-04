@@ -23,6 +23,7 @@ import {
   RegisterDTO,
   RegisterResponse,
   UpdateDTO,
+  VerifyResponseToken,
 } from "../model/auth.model";
 import { WebResponse } from "../model/web.mode";
 import { AuthService } from "./auth.service";
@@ -81,10 +82,15 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   @Patch("reset")
   @HttpCode(HttpStatus.OK)
-  async resetPassword(@Body() resetDTO: UpdateDTO): Promise<void> {
+  async resetPassword(@Body() resetDTO: UpdateDTO): Promise<WebResponse<void>> {
     if (!resetDTO.email) throw new HttpException("Something Wrong", 404);
     if (!resetDTO.password) throw new HttpException("Something Wrong", 404);
     await this.authService.resetPassword(resetDTO);
+
+    return {
+      statusCode: HttpStatus.OK,
+      message: "Success",
+    };
   }
   //
   // @UseGuards(CheckUserGuard)
@@ -101,11 +107,17 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   @Get("verify")
   @HttpCode(HttpStatus.OK)
-  async verify(@Req() request: Request) {
+  async verify(
+    @Req() request: Request,
+  ): Promise<WebResponse<VerifyResponseToken>> {
     // take cookie from browser
     const cookie = (request.cookies as CookiePayload).accessToken;
     console.log(cookie);
-    return await this.authService.verify(cookie);
+    const result = await this.authService.verify(cookie);
+    return {
+      data: result,
+      statusCode: HttpStatus.OK,
+    };
   }
 
   @UseGuards(JwtAuthGuard)
