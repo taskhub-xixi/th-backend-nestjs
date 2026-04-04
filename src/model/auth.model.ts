@@ -77,10 +77,6 @@ export class DeleteDTO {
   @IsString()
   @IsNotEmpty()
   password!: string;
-
-  @IsString()
-  @IsNotEmpty()
-  confPassword!: string;
 }
 
 export class LogoutDTO {
