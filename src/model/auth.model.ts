@@ -144,6 +144,10 @@ export class RefreshTokenResponse {
   access_token!: string;
 }
 
+export class VerifyResponseToken {
+  id!: number;
+}
+
 // REGISTER DTO --> logic code
 // // validate
 //     if (!registerDTO.username || registerDTO.username.trim() === "") {
