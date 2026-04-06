@@ -1,5 +1,7 @@
-import { Controller, HttpCode, HttpStatus, Post } from "@nestjs/common";
+import { Body, Controller, HttpCode, HttpStatus, Post } from "@nestjs/common";
 import { OrderService } from "./order.service";
+import { CreateOrderRequest, OrderResponse } from "./order.model";
+import { WebResponse } from "../model/web.mode";
 
 @Controller("/api/orders")
 export class OrderController {
@@ -7,7 +9,13 @@ export class OrderController {
 
   @HttpCode(HttpStatus.CREATED)
   @Post()
-  createOrder() {
-    return null;
+  async createOrder(
+    @Body() req: CreateOrderRequest,
+  ): Promise<WebResponse<OrderResponse>> {
+    const result = await this.orderService.createOrder(req);
+    return {
+      data: result,
+      statusCode: HttpStatus.OK,
+    };
   }
 }
