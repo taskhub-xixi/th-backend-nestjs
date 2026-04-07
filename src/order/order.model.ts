@@ -25,20 +25,5 @@ export class OrderResponse {
     id: string;
     orderNumber: string;
     userId: string;
-    status: string;
-    subtotal: Decimal;
-    shippingCost: Decimal;
-    discount: Decimal;
-    tax: Decimal;
-    total: Decimal;
-    shippingMethod: string;
-    shippingAddress: string;
-    billingAddress: string;
-    trackingNumber: string;
-    notes: string;
-    couponId: string;
-    createdAt: Date;
-    updatedAt: Date;
-    deletedAt: Date | null;
-  } | null;
+  };
 }
