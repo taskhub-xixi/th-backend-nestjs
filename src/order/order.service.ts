@@ -15,11 +15,13 @@ export class OrderService {
   // unfinished -->
   async createOrder(req: CreateOrderRequest): Promise<OrderResponse> {
     this.logger.info(`ORDER_SERVICE.createOrder: ...`);
-    const data = await this.prismaService.order.create({
-      data: { orderNumber: req.order_number },
+    await this.prismaService.order.create({ data: req });
+    const result = await this.prismaService.order.findFirst({
+      where: { userId: req.userId },
     });
-
-    return data;
+    return {
+      data: result,
+    };
   }
 
   // generateNumber() {
