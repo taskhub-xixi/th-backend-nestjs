@@ -14,6 +14,7 @@ import { JwtModule } from "@nestjs/jwt";
 import { ConfigService } from "@nestjs/config";
 import { ThrottlerGuard, ThrottlerModule } from "@nestjs/throttler";
 import { APP_GUARD } from "@nestjs/core";
+import { OrderModule } from "./order/order.module";
 
 @Module({
   imports: [
@@ -47,6 +48,7 @@ import { APP_GUARD } from "@nestjs/core";
     ProductModule,
     UserModule,
     AuthModule,
+    OrderModule,
   ],
   controllers: [],
   providers: [
