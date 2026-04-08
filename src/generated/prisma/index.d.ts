@@ -110,9 +110,7 @@ export type users = $Result.DefaultSelection<Prisma.$usersPayload>
  * Type-safe database client for TypeScript & Node.js
  * @example
  * ```
- * const prisma = new PrismaClient({
- *   adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL })
- * })
+ * const prisma = new PrismaClient()
  * // Fetch zero or more Categories
  * const categories = await prisma.category.findMany()
  * ```
@@ -133,9 +131,7 @@ export class PrismaClient<
    * Type-safe database client for TypeScript & Node.js
    * @example
    * ```
-   * const prisma = new PrismaClient({
-   *   adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL })
-   * })
+   * const prisma = new PrismaClient()
    * // Fetch zero or more Categories
    * const categories = await prisma.category.findMany()
    * ```
@@ -454,8 +450,8 @@ export namespace Prisma {
   export import Exact = $Public.Exact
 
   /**
-   * Prisma Client JS version: 7.6.0
-   * Query Engine version: 75cbdc1eb7150937890ad5465d861175c6624711
+   * Prisma Client JS version: 7.4.1
+   * Query Engine version: 55ae170b1ced7fc6ed07a15f110549408c501bb3
    */
   export type PrismaVersion = {
     client: string
@@ -3176,11 +3172,6 @@ export namespace Prisma {
      * Skip the first `n` Categories.
      */
     skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Categories.
-     */
     distinct?: CategoryScalarFieldEnum | CategoryScalarFieldEnum[]
   }
 
@@ -4118,11 +4109,6 @@ export namespace Prisma {
      * Skip the first `n` Brands.
      */
     skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Brands.
-     */
     distinct?: BrandScalarFieldEnum | BrandScalarFieldEnum[]
   }
 
@@ -5228,11 +5214,6 @@ export namespace Prisma {
      * Skip the first `n` Products.
      */
     skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Products.
-     */
     distinct?: ProductScalarFieldEnum | ProductScalarFieldEnum[]
   }
 
@@ -6208,11 +6189,6 @@ export namespace Prisma {
      * Skip the first `n` ProductVariants.
      */
     skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of ProductVariants.
-     */
     distinct?: ProductVariantScalarFieldEnum | ProductVariantScalarFieldEnum[]
   }
 
@@ -7151,11 +7127,6 @@ export namespace Prisma {
      * Skip the first `n` ProductImages.
      */
     skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of ProductImages.
-     */
     distinct?: ProductImageScalarFieldEnum | ProductImageScalarFieldEnum[]
   }
 
@@ -8153,11 +8124,6 @@ export namespace Prisma {
      * Skip the first `n` ProductReviews.
      */
     skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of ProductReviews.
-     */
     distinct?: ProductReviewScalarFieldEnum | ProductReviewScalarFieldEnum[]
   }
 
@@ -9029,11 +8995,6 @@ export namespace Prisma {
      * Skip the first `n` ProductTags.
      */
     skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of ProductTags.
-     */
     distinct?: ProductTagScalarFieldEnum | ProductTagScalarFieldEnum[]
   }
 
@@ -9916,11 +9877,6 @@ export namespace Prisma {
      * Skip the first `n` ProductAttributes.
      */
     skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of ProductAttributes.
-     */
     distinct?: ProductAttributeScalarFieldEnum | ProductAttributeScalarFieldEnum[]
   }
 
@@ -10952,11 +10908,6 @@ export namespace Prisma {
      * Skip the first `n` Coupons.
      */
     skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Coupons.
-     */
     distinct?: CouponScalarFieldEnum | CouponScalarFieldEnum[]
   }
 
@@ -11884,11 +11835,6 @@ export namespace Prisma {
      * Skip the first `n` CouponUsages.
      */
     skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of CouponUsages.
-     */
     distinct?: CouponUsageScalarFieldEnum | CouponUsageScalarFieldEnum[]
   }
 
@@ -12964,11 +12910,6 @@ export namespace Prisma {
      * Skip the first `n` Orders.
      */
     skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Orders.
-     */
     distinct?: OrderScalarFieldEnum | OrderScalarFieldEnum[]
   }
 
@@ -13926,11 +13867,6 @@ export namespace Prisma {
      * Skip the first `n` OrderItems.
      */
     skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of OrderItems.
-     */
     distinct?: OrderItemScalarFieldEnum | OrderItemScalarFieldEnum[]
   }
 
@@ -14824,11 +14760,6 @@ export namespace Prisma {
      * Skip the first `n` OrderStatusHistories.
      */
     skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of OrderStatusHistories.
-     */
     distinct?: OrderStatusHistoryScalarFieldEnum | OrderStatusHistoryScalarFieldEnum[]
   }
 
@@ -15821,11 +15752,6 @@ export namespace Prisma {
      * Skip the first `n` user_addresses.
      */
     skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of user_addresses.
-     */
     distinct?: User_addressesScalarFieldEnum | User_addressesScalarFieldEnum[]
   }
 
@@ -16775,11 +16701,6 @@ export namespace Prisma {
      * Skip the first `n` auth_tokens.
      */
     skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of auth_tokens.
-     */
     distinct?: Auth_tokensScalarFieldEnum | Auth_tokensScalarFieldEnum[]
   }
 
@@ -17720,11 +17641,6 @@ export namespace Prisma {
      * Skip the first `n` password_reset_tokens.
      */
     skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of password_reset_tokens.
-     */
     distinct?: Password_reset_tokensScalarFieldEnum | Password_reset_tokensScalarFieldEnum[]
   }
 
@@ -18665,11 +18581,6 @@ export namespace Prisma {
      * Skip the first `n` email_verification_tokens.
      */
     skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of email_verification_tokens.
-     */
     distinct?: Email_verification_tokensScalarFieldEnum | Email_verification_tokensScalarFieldEnum[]
   }
 
@@ -19719,11 +19630,6 @@ export namespace Prisma {
      * Skip the first `n` users.
      */
     skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of users.
-     */
     distinct?: UsersScalarFieldEnum | UsersScalarFieldEnum[]
   }
 
@@ -21431,10 +21337,10 @@ export namespace Prisma {
   export type OrderWhereUniqueInput = Prisma.AtLeast<{
     id?: string
     orderNumber?: string
+    userId?: string
     AND?: OrderWhereInput | OrderWhereInput[]
     OR?: OrderWhereInput[]
     NOT?: OrderWhereInput | OrderWhereInput[]
-    userId?: StringFilter<"Order"> | string
     status?: StringFilter<"Order"> | string
     subtotal?: DecimalFilter<"Order"> | Decimal | DecimalJsLike | number | string
     shippingCost?: DecimalFilter<"Order"> | Decimal | DecimalJsLike | number | string
@@ -21450,7 +21356,7 @@ export namespace Prisma {
     createdAt?: DateTimeNullableFilter<"Order"> | Date | string | null
     updatedAt?: DateTimeNullableFilter<"Order"> | Date | string | null
     deletedAt?: DateTimeNullableFilter<"Order"> | Date | string | null
-  }, "id" | "orderNumber">
+  }, "id" | "orderNumber" | "userId">
 
   export type OrderOrderByWithAggregationInput = {
     id?: SortOrder
@@ -21765,10 +21671,10 @@ export namespace Prisma {
 
   export type auth_tokensWhereUniqueInput = Prisma.AtLeast<{
     id?: string
+    user_id?: string
     AND?: auth_tokensWhereInput | auth_tokensWhereInput[]
     OR?: auth_tokensWhereInput[]
     NOT?: auth_tokensWhereInput | auth_tokensWhereInput[]
-    user_id?: StringFilter<"auth_tokens"> | string
     refresh_token_hash?: StringFilter<"auth_tokens"> | string
     device_info?: JsonNullableFilter<"auth_tokens">
     ip_address?: StringNullableFilter<"auth_tokens"> | string | null
@@ -21777,7 +21683,7 @@ export namespace Prisma {
     revoked_at?: DateTimeNullableFilter<"auth_tokens"> | Date | string | null
     deleted_at?: DateTimeNullableFilter<"auth_tokens"> | Date | string | null
     user?: XOR<UsersScalarRelationFilter, usersWhereInput>
-  }, "id">
+  }, "id" | "user_id">
 
   export type auth_tokensOrderByWithAggregationInput = {
     id?: SortOrder
@@ -21999,7 +21905,7 @@ export namespace Prisma {
     authTokens?: Auth_tokensListRelationFilter
     passwordResetTokens?: Password_reset_tokensListRelationFilter
     emailVerificationTokens?: Email_verification_tokensListRelationFilter
-  }, "id" | "email">
+  }, "id" | "id" | "email">
 
   export type usersOrderByWithAggregationInput = {
     id?: SortOrder
