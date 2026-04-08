@@ -23,6 +23,7 @@ import {
 } from "../model/auth.model";
 import { IAuthService } from "./interface/auth.service.interface";
 import { TokenService } from "./services/token.service";
+import { ConfigService } from "@nestjs/config";
 
 @Injectable()
 export class AuthService implements IAuthService {
@@ -74,7 +75,7 @@ export class AuthService implements IAuthService {
   }
 
   async login(request: LoginDTO, res: Response): Promise<LoginResponse> {
-    this.logger.info(`AUTH_SERVICE.login: ${JSON.stringify(request)}`);
+    this.logger.info(`AUTH_SERVICE.login: ${JSON.stringify(request.email)}`);
 
     const data = await this.prismaService.users.findUnique({
       where: { email: request.email },

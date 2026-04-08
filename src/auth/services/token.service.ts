@@ -1,18 +1,22 @@
-import { JWTResponse, RefreshTokenResponse } from "../../model/auth.model";
-import { RefreshTokenResponseQuery } from "../../model/token.model";
-import { JwtPayload } from "../dto/payload-interface";
-import { Response } from "express";
 import {
   HttpException,
   Inject,
   Injectable,
   UnauthorizedException,
 } from "@nestjs/common";
-import { WINSTON_MODULE_PROVIDER } from "nest-winston";
-import { Logger } from "winston";
+import { ConfigService } from "@nestjs/config";
 import { JwtService } from "@nestjs/jwt";
 import * as bcrypt from "bcrypt";
+import { Response } from "express";
+import { WINSTON_MODULE_PROVIDER } from "nest-winston";
+import { Logger } from "winston";
 import { PrismaService } from "../../common/prisma.service";
+import { JWTResponse } from "../../model/auth.model";
+import {
+  RefreshTokenResponse,
+  RefreshTokenResponseQuery,
+} from "../../model/token.model";
+import { JwtPayload } from "../dto/payload-interface";
 
 @Injectable()
 export class TokenService {
@@ -20,6 +24,7 @@ export class TokenService {
     @Inject(WINSTON_MODULE_PROVIDER) private logger: Logger,
     private readonly jwtService: JwtService,
     private prismaService: PrismaService,
+    private readonly configService: ConfigService,
   ) {}
 
   async UpdateToken(payload: JwtPayload, res: Response): Promise<JWTResponse> {
@@ -33,13 +38,17 @@ export class TokenService {
       role: payload.role,
     };
 
+    const jwt = this.configService.get<string>("JWT_SECRET");
+
     // GENERATE TOKEN
     const [at, rt] = await Promise.all([
       this.jwtService.signAsync(jwtPayload, {
         expiresIn: "1h",
+        secret: jwt,
       }),
       this.jwtService.signAsync(jwtPayload, {
         expiresIn: "7d",
+        secret: jwt,
       }),
     ]);
     res.cookie("access_token", at, {
@@ -77,20 +86,24 @@ export class TokenService {
     res: Response,
   ): Promise<RefreshTokenResponse> {
     this.logger.info(`AUTH_SERVICE.refresh: ${oldRefreshToken}`);
-    // make payload variable global
 
-    const payload =
-      await this.jwtService.verifyAsync<JwtPayload>(oldRefreshToken);
+    const jwt = this.configService.get<string>("JWT_SECRET");
+    const payload = await this.jwtService.verifyAsync<JwtPayload>(
+      oldRefreshToken,
+      {
+        secret: jwt,
+      },
+    );
 
     this.logger.debug(`payload: ${JSON.stringify(payload)}`);
     // find id
     const [row] = await this.prismaService.$queryRaw<
       RefreshTokenResponseQuery[]
     >`SELECT u.id, u.email, at.expires_at, at.refresh_token_hash
-from users as u
-    LEFT JOIN auth_tokens AS at ON u.id = at.user_id
-WHERE
-    u.id = ${payload.sub} ;`;
+      from users as u
+      LEFT JOIN auth_tokens AS at ON u.id = at.user_id
+      WHERE
+      u.id = ${payload.sub} ;`;
 
     const user = {
       id: row.id,
@@ -115,8 +128,9 @@ WHERE
     }
 
     if (new Date() > user.expires_at) {
-      throw new UnauthorizedException("token expired");
+      throw new UnauthorizedException("Token expired");
     }
+
     const isMatch = await bcrypt.compare(
       oldRefreshToken,
       user?.refresh_token_hash,
@@ -134,7 +148,11 @@ WHERE
     if (!token.access_token) {
       throw new HttpException("Token not generated", 400);
     }
-    await this.updateRtHashDatabase(user.id, token.refresh_token);
+    await this.updateRtHashDatabase(
+      user.id,
+      token.refresh_token,
+      token.createdAt,
+    );
 
     return {
       access_token: token.access_token,
@@ -148,12 +166,10 @@ WHERE
     createAt?: Date,
     exp?: Date,
   ) {
-    this.logger.info(
-      `TOKEN_SERVICE.updateRtHashDatabase: ${id}, ${rt}, ${exp}, ${createAt}`,
-    );
     // GET EXPIRES DATE AND SET DATE
     const expiresAt = new Date();
     expiresAt.setDate(expiresAt.getDate() + 7);
+    this.logger.info(`TOKEN_SERVICE.updateRtHashDatabase:  ${id}`);
     if (!id) {
       throw new HttpException("Something Wrong", 401);
     }
@@ -161,25 +177,20 @@ WHERE
 
     if (!exp) {
       this.logger.debug(`TOKEN_SERVICE.updateRtHash.access_token: ${rt}`);
-      const res = await this.prismaService.$executeRaw`
-INSERT INTO auth_tokens (user_id, refresh_token_hash, expires_at, created_at)
-VALUES (${id}, ${hash}, ${createAt})
-ON DUPLICATE KEY UPDATE
-  refresh_token_hash = ${hash},
-  created_at = ${createAt}
-      `;
-      this.logger.info(res);
-      return res;
+      await this.prismaService.$executeRaw`
+          INSERT INTO auth_tokens (user_id, refresh_token_hash, expires_at, created_at)
+          VALUES (${id}, ${hash}, ${expiresAt}, ${createAt})
+          ON DUPLICATE KEY UPDATE
+          refresh_token_hash = ${hash}`;
     } else {
       this.logger.debug(`AUTH_SERVICE.updateRtHash.refresh_token: ${rt}`);
       return await this.prismaService.$executeRaw`
-INSERT INTO auth_tokens (user_id, refresh_token_hash, expires_at, created_at)
-VALUES (${id}, ${hash}, ${exp}, ${createAt})
-ON DUPLICATE KEY UPDATE
-  refresh_token_hash = ${hash},
-  expires_at = ${exp},
-  created_at = ${createAt}
-      `;
+          INSERT INTO auth_tokens (user_id, refresh_token_hash, expires_at, created_at)
+          VALUES (${id}, ${hash}, ${exp}, ${createAt})
+          ON DUPLICATE KEY UPDATE
+          refresh_token_hash = ${hash},
+          expires_at = ${exp},
+          created_at = ${createAt}`;
     }
   }
 

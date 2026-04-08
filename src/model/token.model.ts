@@ -5,3 +5,8 @@ export class RefreshTokenResponseQuery {
   refresh_token_hash!: string;
 }
 [];
+
+export class RefreshTokenResponse {
+  refresh_token!: string;
+  access_token!: string;
+}

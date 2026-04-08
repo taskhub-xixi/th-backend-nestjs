@@ -1,4 +1,5 @@
 import { Module } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
 import { JwtModule, JwtService } from "@nestjs/jwt";
 import { PassportModule } from "@nestjs/passport";
 import { UserStrategy } from "../common/strategies/admin.strategy";
@@ -9,7 +10,6 @@ import { AuthController } from "./auth.controller";
 import { AuthService } from "./auth.service";
 import { AuthRepositorySQL } from "./repository_query/auth.repository";
 import { TokenService } from "./services/token.service";
-import { ConfigService } from "@nestjs/config";
 
 @Module({
   imports: [
@@ -17,8 +17,8 @@ import { ConfigService } from "@nestjs/config";
     JwtModule.registerAsync({
       global: true,
       inject: [ConfigService],
-      useFactory: (config: ConfigService) => ({
-        secret: config.get<string>("JWT_SECRET"),
+      useFactory: (config: ConfigService): { secret: string | undefined } => ({
+        secret: process.env.JWT_SECRET,
       }),
     }),
   ],
