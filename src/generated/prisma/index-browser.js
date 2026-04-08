@@ -402,6 +402,43 @@ exports.Prisma.RefundsScalarFieldEnum = {
   metadata: 'metadata'
 };
 
+exports.Prisma.InventoryScalarFieldEnum = {
+  id: 'id',
+  product_id: 'product_id',
+  variant_id: 'variant_id',
+  available_stock: 'available_stock',
+  reserved_stock: 'reserved_stock',
+  low_stock_threshold: 'low_stock_threshold',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+};
+
+exports.Prisma.Inventory_transactionsScalarFieldEnum = {
+  id: 'id',
+  product_id: 'product_id',
+  variant_id: 'variant_id',
+  order_id: 'order_id',
+  type: 'type',
+  quantity: 'quantity',
+  balance_after: 'balance_after',
+  reason: 'reason',
+  note: 'note',
+  created_by: 'created_by',
+  created_at: 'created_at'
+};
+
+exports.Prisma.Stock_reservationsScalarFieldEnum = {
+  id: 'id',
+  order_id: 'order_id',
+  product_id: 'product_id',
+  variant_id: 'variant_id',
+  quantity: 'quantity',
+  status: 'status',
+  expires_at: 'expires_at',
+  created_at: 'created_at',
+  released_at: 'released_at'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -596,6 +633,31 @@ exports.Prisma.refundsOrderByRelevanceFieldEnum = {
   metadata: 'metadata'
 };
 
+exports.Prisma.inventoryOrderByRelevanceFieldEnum = {
+  id: 'id',
+  product_id: 'product_id',
+  variant_id: 'variant_id'
+};
+
+exports.Prisma.inventory_transactionsOrderByRelevanceFieldEnum = {
+  id: 'id',
+  product_id: 'product_id',
+  variant_id: 'variant_id',
+  order_id: 'order_id',
+  type: 'type',
+  reason: 'reason',
+  note: 'note',
+  created_by: 'created_by'
+};
+
+exports.Prisma.stock_reservationsOrderByRelevanceFieldEnum = {
+  id: 'id',
+  order_id: 'order_id',
+  product_id: 'product_id',
+  variant_id: 'variant_id',
+  status: 'status'
+};
+
 
 exports.Prisma.ModelName = {
   Category: 'Category',
@@ -618,7 +680,10 @@ exports.Prisma.ModelName = {
   users: 'users',
   payment_providers: 'payment_providers',
   payments: 'payments',
-  refunds: 'refunds'
+  refunds: 'refunds',
+  inventory: 'inventory',
+  inventory_transactions: 'inventory_transactions',
+  stock_reservations: 'stock_reservations'
 };
 
 /**
