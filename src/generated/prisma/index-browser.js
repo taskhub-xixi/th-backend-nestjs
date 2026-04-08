@@ -24,12 +24,12 @@ exports.Prisma = Prisma
 exports.$Enums = {}
 
 /**
- * Prisma Client JS version: 7.4.1
- * Query Engine version: 55ae170b1ced7fc6ed07a15f110549408c501bb3
+ * Prisma Client JS version: 7.6.0
+ * Query Engine version: 75cbdc1eb7150937890ad5465d861175c6624711
  */
 Prisma.prismaVersion = {
-  client: "7.4.1",
-  engine: "55ae170b1ced7fc6ed07a15f110549408c501bb3"
+  client: "7.6.0",
+  engine: "75cbdc1eb7150937890ad5465d861175c6624711"
 }
 
 Prisma.PrismaClientKnownRequestError = () => {
@@ -358,14 +358,53 @@ exports.Prisma.UsersScalarFieldEnum = {
   deleted_at: 'deleted_at'
 };
 
+exports.Prisma.Payment_providersScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  is_enabled: 'is_enabled',
+  config: 'config',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+};
+
+exports.Prisma.PaymentsScalarFieldEnum = {
+  id: 'id',
+  order_id: 'order_id',
+  provider: 'provider',
+  provider_transaction_id: 'provider_transaction_id',
+  amount: 'amount',
+  fee: 'fee',
+  net_amount: 'net_amount',
+  currency: 'currency',
+  method: 'method',
+  status: 'status',
+  payment_url: 'payment_url',
+  deadline: 'deadline',
+  metadata: 'metadata',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  paid_at: 'paid_at',
+  expired_at: 'expired_at'
+};
+
+exports.Prisma.RefundsScalarFieldEnum = {
+  id: 'id',
+  payment_id: 'payment_id',
+  order_id: 'order_id',
+  amount: 'amount',
+  type: 'type',
+  reason: 'reason',
+  provider_refund_id: 'provider_refund_id',
+  status: 'status',
+  processed_at: 'processed_at',
+  completed_at: 'completed_at',
+  created_at: 'created_at',
+  metadata: 'metadata'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
-};
-
-exports.Prisma.NullableJsonNullValueInput = {
-  DbNull: Prisma.DbNull,
-  JsonNull: Prisma.JsonNull
 };
 
 exports.Prisma.NullsOrder = {
@@ -496,21 +535,11 @@ exports.Prisma.user_addressesOrderByRelevanceFieldEnum = {
   country: 'country'
 };
 
-exports.Prisma.JsonNullValueFilter = {
-  DbNull: Prisma.DbNull,
-  JsonNull: Prisma.JsonNull,
-  AnyNull: Prisma.AnyNull
-};
-
-exports.Prisma.QueryMode = {
-  default: 'default',
-  insensitive: 'insensitive'
-};
-
 exports.Prisma.auth_tokensOrderByRelevanceFieldEnum = {
   id: 'id',
   user_id: 'user_id',
   refresh_token_hash: 'refresh_token_hash',
+  device_info: 'device_info',
   ip_address: 'ip_address'
 };
 
@@ -538,6 +567,35 @@ exports.Prisma.usersOrderByRelevanceFieldEnum = {
   metadata: 'metadata'
 };
 
+exports.Prisma.payment_providersOrderByRelevanceFieldEnum = {
+  id: 'id',
+  name: 'name',
+  config: 'config'
+};
+
+exports.Prisma.paymentsOrderByRelevanceFieldEnum = {
+  id: 'id',
+  order_id: 'order_id',
+  provider: 'provider',
+  provider_transaction_id: 'provider_transaction_id',
+  currency: 'currency',
+  method: 'method',
+  status: 'status',
+  payment_url: 'payment_url',
+  metadata: 'metadata'
+};
+
+exports.Prisma.refundsOrderByRelevanceFieldEnum = {
+  id: 'id',
+  payment_id: 'payment_id',
+  order_id: 'order_id',
+  type: 'type',
+  reason: 'reason',
+  provider_refund_id: 'provider_refund_id',
+  status: 'status',
+  metadata: 'metadata'
+};
+
 
 exports.Prisma.ModelName = {
   Category: 'Category',
@@ -557,7 +615,10 @@ exports.Prisma.ModelName = {
   auth_tokens: 'auth_tokens',
   password_reset_tokens: 'password_reset_tokens',
   email_verification_tokens: 'email_verification_tokens',
-  users: 'users'
+  users: 'users',
+  payment_providers: 'payment_providers',
+  payments: 'payments',
+  refunds: 'refunds'
 };
 
 /**

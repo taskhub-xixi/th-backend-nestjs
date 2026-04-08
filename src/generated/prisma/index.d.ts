@@ -103,6 +103,21 @@ export type email_verification_tokens = $Result.DefaultSelection<Prisma.$email_v
  * 
  */
 export type users = $Result.DefaultSelection<Prisma.$usersPayload>
+/**
+ * Model payment_providers
+ * 
+ */
+export type payment_providers = $Result.DefaultSelection<Prisma.$payment_providersPayload>
+/**
+ * Model payments
+ * 
+ */
+export type payments = $Result.DefaultSelection<Prisma.$paymentsPayload>
+/**
+ * Model refunds
+ * 
+ */
+export type refunds = $Result.DefaultSelection<Prisma.$refundsPayload>
 
 /**
  * ##  Prisma Client ʲˢ
@@ -110,7 +125,9 @@ export type users = $Result.DefaultSelection<Prisma.$usersPayload>
  * Type-safe database client for TypeScript & Node.js
  * @example
  * ```
- * const prisma = new PrismaClient()
+ * const prisma = new PrismaClient({
+ *   adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL })
+ * })
  * // Fetch zero or more Categories
  * const categories = await prisma.category.findMany()
  * ```
@@ -131,7 +148,9 @@ export class PrismaClient<
    * Type-safe database client for TypeScript & Node.js
    * @example
    * ```
-   * const prisma = new PrismaClient()
+   * const prisma = new PrismaClient({
+   *   adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL })
+   * })
    * // Fetch zero or more Categories
    * const categories = await prisma.category.findMany()
    * ```
@@ -400,6 +419,36 @@ export class PrismaClient<
     * ```
     */
   get users(): Prisma.usersDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.payment_providers`: Exposes CRUD operations for the **payment_providers** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Payment_providers
+    * const payment_providers = await prisma.payment_providers.findMany()
+    * ```
+    */
+  get payment_providers(): Prisma.payment_providersDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.payments`: Exposes CRUD operations for the **payments** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Payments
+    * const payments = await prisma.payments.findMany()
+    * ```
+    */
+  get payments(): Prisma.paymentsDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.refunds`: Exposes CRUD operations for the **refunds** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Refunds
+    * const refunds = await prisma.refunds.findMany()
+    * ```
+    */
+  get refunds(): Prisma.refundsDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -450,8 +499,8 @@ export namespace Prisma {
   export import Exact = $Public.Exact
 
   /**
-   * Prisma Client JS version: 7.4.1
-   * Query Engine version: 55ae170b1ced7fc6ed07a15f110549408c501bb3
+   * Prisma Client JS version: 7.6.0
+   * Query Engine version: 75cbdc1eb7150937890ad5465d861175c6624711
    */
   export type PrismaVersion = {
     client: string
@@ -851,7 +900,10 @@ export namespace Prisma {
     auth_tokens: 'auth_tokens',
     password_reset_tokens: 'password_reset_tokens',
     email_verification_tokens: 'email_verification_tokens',
-    users: 'users'
+    users: 'users',
+    payment_providers: 'payment_providers',
+    payments: 'payments',
+    refunds: 'refunds'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -867,7 +919,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "category" | "brand" | "product" | "productVariant" | "productImage" | "productReview" | "productTag" | "productAttribute" | "coupon" | "couponUsage" | "order" | "orderItem" | "orderStatusHistory" | "user_addresses" | "auth_tokens" | "password_reset_tokens" | "email_verification_tokens" | "users"
+      modelProps: "category" | "brand" | "product" | "productVariant" | "productImage" | "productReview" | "productTag" | "productAttribute" | "coupon" | "couponUsage" | "order" | "orderItem" | "orderStatusHistory" | "user_addresses" | "auth_tokens" | "password_reset_tokens" | "email_verification_tokens" | "users" | "payment_providers" | "payments" | "refunds"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2059,6 +2111,204 @@ export namespace Prisma {
           }
         }
       }
+      payment_providers: {
+        payload: Prisma.$payment_providersPayload<ExtArgs>
+        fields: Prisma.payment_providersFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.payment_providersFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$payment_providersPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.payment_providersFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$payment_providersPayload>
+          }
+          findFirst: {
+            args: Prisma.payment_providersFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$payment_providersPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.payment_providersFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$payment_providersPayload>
+          }
+          findMany: {
+            args: Prisma.payment_providersFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$payment_providersPayload>[]
+          }
+          create: {
+            args: Prisma.payment_providersCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$payment_providersPayload>
+          }
+          createMany: {
+            args: Prisma.payment_providersCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          delete: {
+            args: Prisma.payment_providersDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$payment_providersPayload>
+          }
+          update: {
+            args: Prisma.payment_providersUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$payment_providersPayload>
+          }
+          deleteMany: {
+            args: Prisma.payment_providersDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.payment_providersUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.payment_providersUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$payment_providersPayload>
+          }
+          aggregate: {
+            args: Prisma.Payment_providersAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregatePayment_providers>
+          }
+          groupBy: {
+            args: Prisma.payment_providersGroupByArgs<ExtArgs>
+            result: $Utils.Optional<Payment_providersGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.payment_providersCountArgs<ExtArgs>
+            result: $Utils.Optional<Payment_providersCountAggregateOutputType> | number
+          }
+        }
+      }
+      payments: {
+        payload: Prisma.$paymentsPayload<ExtArgs>
+        fields: Prisma.paymentsFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.paymentsFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$paymentsPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.paymentsFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$paymentsPayload>
+          }
+          findFirst: {
+            args: Prisma.paymentsFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$paymentsPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.paymentsFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$paymentsPayload>
+          }
+          findMany: {
+            args: Prisma.paymentsFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$paymentsPayload>[]
+          }
+          create: {
+            args: Prisma.paymentsCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$paymentsPayload>
+          }
+          createMany: {
+            args: Prisma.paymentsCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          delete: {
+            args: Prisma.paymentsDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$paymentsPayload>
+          }
+          update: {
+            args: Prisma.paymentsUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$paymentsPayload>
+          }
+          deleteMany: {
+            args: Prisma.paymentsDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.paymentsUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.paymentsUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$paymentsPayload>
+          }
+          aggregate: {
+            args: Prisma.PaymentsAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregatePayments>
+          }
+          groupBy: {
+            args: Prisma.paymentsGroupByArgs<ExtArgs>
+            result: $Utils.Optional<PaymentsGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.paymentsCountArgs<ExtArgs>
+            result: $Utils.Optional<PaymentsCountAggregateOutputType> | number
+          }
+        }
+      }
+      refunds: {
+        payload: Prisma.$refundsPayload<ExtArgs>
+        fields: Prisma.refundsFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.refundsFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$refundsPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.refundsFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$refundsPayload>
+          }
+          findFirst: {
+            args: Prisma.refundsFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$refundsPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.refundsFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$refundsPayload>
+          }
+          findMany: {
+            args: Prisma.refundsFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$refundsPayload>[]
+          }
+          create: {
+            args: Prisma.refundsCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$refundsPayload>
+          }
+          createMany: {
+            args: Prisma.refundsCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          delete: {
+            args: Prisma.refundsDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$refundsPayload>
+          }
+          update: {
+            args: Prisma.refundsUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$refundsPayload>
+          }
+          deleteMany: {
+            args: Prisma.refundsDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.refundsUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.refundsUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$refundsPayload>
+          }
+          aggregate: {
+            args: Prisma.RefundsAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateRefunds>
+          }
+          groupBy: {
+            args: Prisma.refundsGroupByArgs<ExtArgs>
+            result: $Utils.Optional<RefundsGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.refundsCountArgs<ExtArgs>
+            result: $Utils.Optional<RefundsCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -2185,6 +2435,9 @@ export namespace Prisma {
     password_reset_tokens?: password_reset_tokensOmit
     email_verification_tokens?: email_verification_tokensOmit
     users?: usersOmit
+    payment_providers?: payment_providersOmit
+    payments?: paymentsOmit
+    refunds?: refundsOmit
   }
 
   /* Types for Logging */
@@ -2265,15 +2518,13 @@ export namespace Prisma {
    */
 
   export type UsersCountOutputType = {
-    authTokens: number
-    passwordResetTokens: number
     emailVerificationTokens: number
+    passwordResetTokens: number
   }
 
   export type UsersCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    authTokens?: boolean | UsersCountOutputTypeCountAuthTokensArgs
-    passwordResetTokens?: boolean | UsersCountOutputTypeCountPasswordResetTokensArgs
     emailVerificationTokens?: boolean | UsersCountOutputTypeCountEmailVerificationTokensArgs
+    passwordResetTokens?: boolean | UsersCountOutputTypeCountPasswordResetTokensArgs
   }
 
   // Custom InputTypes
@@ -2290,8 +2541,8 @@ export namespace Prisma {
   /**
    * UsersCountOutputType without action
    */
-  export type UsersCountOutputTypeCountAuthTokensArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: auth_tokensWhereInput
+  export type UsersCountOutputTypeCountEmailVerificationTokensArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: email_verification_tokensWhereInput
   }
 
   /**
@@ -2299,13 +2550,6 @@ export namespace Prisma {
    */
   export type UsersCountOutputTypeCountPasswordResetTokensArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: password_reset_tokensWhereInput
-  }
-
-  /**
-   * UsersCountOutputType without action
-   */
-  export type UsersCountOutputTypeCountEmailVerificationTokensArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: email_verification_tokensWhereInput
   }
 
 
@@ -3172,6 +3416,11 @@ export namespace Prisma {
      * Skip the first `n` Categories.
      */
     skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Categories.
+     */
     distinct?: CategoryScalarFieldEnum | CategoryScalarFieldEnum[]
   }
 
@@ -4109,6 +4358,11 @@ export namespace Prisma {
      * Skip the first `n` Brands.
      */
     skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Brands.
+     */
     distinct?: BrandScalarFieldEnum | BrandScalarFieldEnum[]
   }
 
@@ -5214,6 +5468,11 @@ export namespace Prisma {
      * Skip the first `n` Products.
      */
     skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Products.
+     */
     distinct?: ProductScalarFieldEnum | ProductScalarFieldEnum[]
   }
 
@@ -6189,6 +6448,11 @@ export namespace Prisma {
      * Skip the first `n` ProductVariants.
      */
     skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ProductVariants.
+     */
     distinct?: ProductVariantScalarFieldEnum | ProductVariantScalarFieldEnum[]
   }
 
@@ -7127,6 +7391,11 @@ export namespace Prisma {
      * Skip the first `n` ProductImages.
      */
     skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ProductImages.
+     */
     distinct?: ProductImageScalarFieldEnum | ProductImageScalarFieldEnum[]
   }
 
@@ -8124,6 +8393,11 @@ export namespace Prisma {
      * Skip the first `n` ProductReviews.
      */
     skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ProductReviews.
+     */
     distinct?: ProductReviewScalarFieldEnum | ProductReviewScalarFieldEnum[]
   }
 
@@ -8995,6 +9269,11 @@ export namespace Prisma {
      * Skip the first `n` ProductTags.
      */
     skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ProductTags.
+     */
     distinct?: ProductTagScalarFieldEnum | ProductTagScalarFieldEnum[]
   }
 
@@ -9877,6 +10156,11 @@ export namespace Prisma {
      * Skip the first `n` ProductAttributes.
      */
     skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ProductAttributes.
+     */
     distinct?: ProductAttributeScalarFieldEnum | ProductAttributeScalarFieldEnum[]
   }
 
@@ -10908,6 +11192,11 @@ export namespace Prisma {
      * Skip the first `n` Coupons.
      */
     skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Coupons.
+     */
     distinct?: CouponScalarFieldEnum | CouponScalarFieldEnum[]
   }
 
@@ -11835,6 +12124,11 @@ export namespace Prisma {
      * Skip the first `n` CouponUsages.
      */
     skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CouponUsages.
+     */
     distinct?: CouponUsageScalarFieldEnum | CouponUsageScalarFieldEnum[]
   }
 
@@ -12910,6 +13204,11 @@ export namespace Prisma {
      * Skip the first `n` Orders.
      */
     skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Orders.
+     */
     distinct?: OrderScalarFieldEnum | OrderScalarFieldEnum[]
   }
 
@@ -13867,6 +14166,11 @@ export namespace Prisma {
      * Skip the first `n` OrderItems.
      */
     skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of OrderItems.
+     */
     distinct?: OrderItemScalarFieldEnum | OrderItemScalarFieldEnum[]
   }
 
@@ -14760,6 +15064,11 @@ export namespace Prisma {
      * Skip the first `n` OrderStatusHistories.
      */
     skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of OrderStatusHistories.
+     */
     distinct?: OrderStatusHistoryScalarFieldEnum | OrderStatusHistoryScalarFieldEnum[]
   }
 
@@ -15752,6 +16061,11 @@ export namespace Prisma {
      * Skip the first `n` user_addresses.
      */
     skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of user_addresses.
+     */
     distinct?: User_addressesScalarFieldEnum | User_addressesScalarFieldEnum[]
   }
 
@@ -15911,6 +16225,7 @@ export namespace Prisma {
     id: string | null
     user_id: string | null
     refresh_token_hash: string | null
+    device_info: string | null
     ip_address: string | null
     expires_at: Date | null
     created_at: Date | null
@@ -15922,6 +16237,7 @@ export namespace Prisma {
     id: string | null
     user_id: string | null
     refresh_token_hash: string | null
+    device_info: string | null
     ip_address: string | null
     expires_at: Date | null
     created_at: Date | null
@@ -15947,6 +16263,7 @@ export namespace Prisma {
     id?: true
     user_id?: true
     refresh_token_hash?: true
+    device_info?: true
     ip_address?: true
     expires_at?: true
     created_at?: true
@@ -15958,6 +16275,7 @@ export namespace Prisma {
     id?: true
     user_id?: true
     refresh_token_hash?: true
+    device_info?: true
     ip_address?: true
     expires_at?: true
     created_at?: true
@@ -16054,7 +16372,7 @@ export namespace Prisma {
     id: string
     user_id: string
     refresh_token_hash: string
-    device_info: JsonValue | null
+    device_info: string | null
     ip_address: string | null
     expires_at: Date
     created_at: Date
@@ -16120,7 +16438,7 @@ export namespace Prisma {
       id: string
       user_id: string
       refresh_token_hash: string
-      device_info: Prisma.JsonValue | null
+      device_info: string | null
       ip_address: string | null
       expires_at: Date
       created_at: Date
@@ -16499,7 +16817,7 @@ export namespace Prisma {
     readonly id: FieldRef<"auth_tokens", 'String'>
     readonly user_id: FieldRef<"auth_tokens", 'String'>
     readonly refresh_token_hash: FieldRef<"auth_tokens", 'String'>
-    readonly device_info: FieldRef<"auth_tokens", 'Json'>
+    readonly device_info: FieldRef<"auth_tokens", 'String'>
     readonly ip_address: FieldRef<"auth_tokens", 'String'>
     readonly expires_at: FieldRef<"auth_tokens", 'DateTime'>
     readonly created_at: FieldRef<"auth_tokens", 'DateTime'>
@@ -16701,6 +17019,11 @@ export namespace Prisma {
      * Skip the first `n` auth_tokens.
      */
     skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of auth_tokens.
+     */
     distinct?: Auth_tokensScalarFieldEnum | Auth_tokensScalarFieldEnum[]
   }
 
@@ -17641,6 +17964,11 @@ export namespace Prisma {
      * Skip the first `n` password_reset_tokens.
      */
     skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of password_reset_tokens.
+     */
     distinct?: Password_reset_tokensScalarFieldEnum | Password_reset_tokensScalarFieldEnum[]
   }
 
@@ -18581,6 +18909,11 @@ export namespace Prisma {
      * Skip the first `n` email_verification_tokens.
      */
     skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of email_verification_tokens.
+     */
     distinct?: Email_verification_tokensScalarFieldEnum | Email_verification_tokensScalarFieldEnum[]
   }
 
@@ -18991,8 +19324,8 @@ export namespace Prisma {
     updated_at?: boolean
     deleted_at?: boolean
     authTokens?: boolean | users$authTokensArgs<ExtArgs>
-    passwordResetTokens?: boolean | users$passwordResetTokensArgs<ExtArgs>
     emailVerificationTokens?: boolean | users$emailVerificationTokensArgs<ExtArgs>
+    passwordResetTokens?: boolean | users$passwordResetTokensArgs<ExtArgs>
     _count?: boolean | UsersCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["users"]>
 
@@ -19019,17 +19352,17 @@ export namespace Prisma {
   export type usersOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "password_hash" | "first_name" | "last_name" | "phone" | "avatar_url" | "role" | "email_verified" | "is_active" | "date_of_birth" | "metadata" | "created_at" | "updated_at" | "deleted_at", ExtArgs["result"]["users"]>
   export type usersInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     authTokens?: boolean | users$authTokensArgs<ExtArgs>
-    passwordResetTokens?: boolean | users$passwordResetTokensArgs<ExtArgs>
     emailVerificationTokens?: boolean | users$emailVerificationTokensArgs<ExtArgs>
+    passwordResetTokens?: boolean | users$passwordResetTokensArgs<ExtArgs>
     _count?: boolean | UsersCountOutputTypeDefaultArgs<ExtArgs>
   }
 
   export type $usersPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "users"
     objects: {
-      authTokens: Prisma.$auth_tokensPayload<ExtArgs>[]
-      passwordResetTokens: Prisma.$password_reset_tokensPayload<ExtArgs>[]
+      authTokens: Prisma.$auth_tokensPayload<ExtArgs> | null
       emailVerificationTokens: Prisma.$email_verification_tokensPayload<ExtArgs>[]
+      passwordResetTokens: Prisma.$password_reset_tokensPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -19387,9 +19720,9 @@ export namespace Prisma {
    */
   export interface Prisma__usersClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    authTokens<T extends users$authTokensArgs<ExtArgs> = {}>(args?: Subset<T, users$authTokensArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$auth_tokensPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    passwordResetTokens<T extends users$passwordResetTokensArgs<ExtArgs> = {}>(args?: Subset<T, users$passwordResetTokensArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$password_reset_tokensPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    authTokens<T extends users$authTokensArgs<ExtArgs> = {}>(args?: Subset<T, users$authTokensArgs<ExtArgs>>): Prisma__auth_tokensClient<$Result.GetResult<Prisma.$auth_tokensPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     emailVerificationTokens<T extends users$emailVerificationTokensArgs<ExtArgs> = {}>(args?: Subset<T, users$emailVerificationTokensArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$email_verification_tokensPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    passwordResetTokens<T extends users$passwordResetTokensArgs<ExtArgs> = {}>(args?: Subset<T, users$passwordResetTokensArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$password_reset_tokensPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -19630,6 +19963,11 @@ export namespace Prisma {
      * Skip the first `n` users.
      */
     skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of users.
+     */
     distinct?: UsersScalarFieldEnum | UsersScalarFieldEnum[]
   }
 
@@ -19793,35 +20131,6 @@ export namespace Prisma {
      */
     include?: auth_tokensInclude<ExtArgs> | null
     where?: auth_tokensWhereInput
-    orderBy?: auth_tokensOrderByWithRelationInput | auth_tokensOrderByWithRelationInput[]
-    cursor?: auth_tokensWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: Auth_tokensScalarFieldEnum | Auth_tokensScalarFieldEnum[]
-  }
-
-  /**
-   * users.passwordResetTokens
-   */
-  export type users$passwordResetTokensArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the password_reset_tokens
-     */
-    select?: password_reset_tokensSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the password_reset_tokens
-     */
-    omit?: password_reset_tokensOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: password_reset_tokensInclude<ExtArgs> | null
-    where?: password_reset_tokensWhereInput
-    orderBy?: password_reset_tokensOrderByWithRelationInput | password_reset_tokensOrderByWithRelationInput[]
-    cursor?: password_reset_tokensWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: Password_reset_tokensScalarFieldEnum | Password_reset_tokensScalarFieldEnum[]
   }
 
   /**
@@ -19849,6 +20158,30 @@ export namespace Prisma {
   }
 
   /**
+   * users.passwordResetTokens
+   */
+  export type users$passwordResetTokensArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the password_reset_tokens
+     */
+    select?: password_reset_tokensSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the password_reset_tokens
+     */
+    omit?: password_reset_tokensOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: password_reset_tokensInclude<ExtArgs> | null
+    where?: password_reset_tokensWhereInput
+    orderBy?: password_reset_tokensOrderByWithRelationInput | password_reset_tokensOrderByWithRelationInput[]
+    cursor?: password_reset_tokensWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: Password_reset_tokensScalarFieldEnum | Password_reset_tokensScalarFieldEnum[]
+  }
+
+  /**
    * users without action
    */
   export type usersDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -19864,6 +20197,2963 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: usersInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model payment_providers
+   */
+
+  export type AggregatePayment_providers = {
+    _count: Payment_providersCountAggregateOutputType | null
+    _min: Payment_providersMinAggregateOutputType | null
+    _max: Payment_providersMaxAggregateOutputType | null
+  }
+
+  export type Payment_providersMinAggregateOutputType = {
+    id: string | null
+    name: string | null
+    is_enabled: boolean | null
+    config: string | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type Payment_providersMaxAggregateOutputType = {
+    id: string | null
+    name: string | null
+    is_enabled: boolean | null
+    config: string | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type Payment_providersCountAggregateOutputType = {
+    id: number
+    name: number
+    is_enabled: number
+    config: number
+    created_at: number
+    updated_at: number
+    _all: number
+  }
+
+
+  export type Payment_providersMinAggregateInputType = {
+    id?: true
+    name?: true
+    is_enabled?: true
+    config?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type Payment_providersMaxAggregateInputType = {
+    id?: true
+    name?: true
+    is_enabled?: true
+    config?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type Payment_providersCountAggregateInputType = {
+    id?: true
+    name?: true
+    is_enabled?: true
+    config?: true
+    created_at?: true
+    updated_at?: true
+    _all?: true
+  }
+
+  export type Payment_providersAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which payment_providers to aggregate.
+     */
+    where?: payment_providersWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of payment_providers to fetch.
+     */
+    orderBy?: payment_providersOrderByWithRelationInput | payment_providersOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: payment_providersWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` payment_providers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` payment_providers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned payment_providers
+    **/
+    _count?: true | Payment_providersCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: Payment_providersMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: Payment_providersMaxAggregateInputType
+  }
+
+  export type GetPayment_providersAggregateType<T extends Payment_providersAggregateArgs> = {
+        [P in keyof T & keyof AggregatePayment_providers]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregatePayment_providers[P]>
+      : GetScalarType<T[P], AggregatePayment_providers[P]>
+  }
+
+
+
+
+  export type payment_providersGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: payment_providersWhereInput
+    orderBy?: payment_providersOrderByWithAggregationInput | payment_providersOrderByWithAggregationInput[]
+    by: Payment_providersScalarFieldEnum[] | Payment_providersScalarFieldEnum
+    having?: payment_providersScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: Payment_providersCountAggregateInputType | true
+    _min?: Payment_providersMinAggregateInputType
+    _max?: Payment_providersMaxAggregateInputType
+  }
+
+  export type Payment_providersGroupByOutputType = {
+    id: string
+    name: string
+    is_enabled: boolean | null
+    config: string
+    created_at: Date | null
+    updated_at: Date | null
+    _count: Payment_providersCountAggregateOutputType | null
+    _min: Payment_providersMinAggregateOutputType | null
+    _max: Payment_providersMaxAggregateOutputType | null
+  }
+
+  type GetPayment_providersGroupByPayload<T extends payment_providersGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<Payment_providersGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof Payment_providersGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], Payment_providersGroupByOutputType[P]>
+            : GetScalarType<T[P], Payment_providersGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type payment_providersSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    is_enabled?: boolean
+    config?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+  }, ExtArgs["result"]["payment_providers"]>
+
+
+
+  export type payment_providersSelectScalar = {
+    id?: boolean
+    name?: boolean
+    is_enabled?: boolean
+    config?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+  }
+
+  export type payment_providersOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "is_enabled" | "config" | "created_at" | "updated_at", ExtArgs["result"]["payment_providers"]>
+
+  export type $payment_providersPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "payment_providers"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      name: string
+      is_enabled: boolean | null
+      config: string
+      created_at: Date | null
+      updated_at: Date | null
+    }, ExtArgs["result"]["payment_providers"]>
+    composites: {}
+  }
+
+  type payment_providersGetPayload<S extends boolean | null | undefined | payment_providersDefaultArgs> = $Result.GetResult<Prisma.$payment_providersPayload, S>
+
+  type payment_providersCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<payment_providersFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: Payment_providersCountAggregateInputType | true
+    }
+
+  export interface payment_providersDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['payment_providers'], meta: { name: 'payment_providers' } }
+    /**
+     * Find zero or one Payment_providers that matches the filter.
+     * @param {payment_providersFindUniqueArgs} args - Arguments to find a Payment_providers
+     * @example
+     * // Get one Payment_providers
+     * const payment_providers = await prisma.payment_providers.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends payment_providersFindUniqueArgs>(args: SelectSubset<T, payment_providersFindUniqueArgs<ExtArgs>>): Prisma__payment_providersClient<$Result.GetResult<Prisma.$payment_providersPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Payment_providers that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {payment_providersFindUniqueOrThrowArgs} args - Arguments to find a Payment_providers
+     * @example
+     * // Get one Payment_providers
+     * const payment_providers = await prisma.payment_providers.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends payment_providersFindUniqueOrThrowArgs>(args: SelectSubset<T, payment_providersFindUniqueOrThrowArgs<ExtArgs>>): Prisma__payment_providersClient<$Result.GetResult<Prisma.$payment_providersPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Payment_providers that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {payment_providersFindFirstArgs} args - Arguments to find a Payment_providers
+     * @example
+     * // Get one Payment_providers
+     * const payment_providers = await prisma.payment_providers.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends payment_providersFindFirstArgs>(args?: SelectSubset<T, payment_providersFindFirstArgs<ExtArgs>>): Prisma__payment_providersClient<$Result.GetResult<Prisma.$payment_providersPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Payment_providers that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {payment_providersFindFirstOrThrowArgs} args - Arguments to find a Payment_providers
+     * @example
+     * // Get one Payment_providers
+     * const payment_providers = await prisma.payment_providers.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends payment_providersFindFirstOrThrowArgs>(args?: SelectSubset<T, payment_providersFindFirstOrThrowArgs<ExtArgs>>): Prisma__payment_providersClient<$Result.GetResult<Prisma.$payment_providersPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Payment_providers that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {payment_providersFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Payment_providers
+     * const payment_providers = await prisma.payment_providers.findMany()
+     * 
+     * // Get first 10 Payment_providers
+     * const payment_providers = await prisma.payment_providers.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const payment_providersWithIdOnly = await prisma.payment_providers.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends payment_providersFindManyArgs>(args?: SelectSubset<T, payment_providersFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$payment_providersPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Payment_providers.
+     * @param {payment_providersCreateArgs} args - Arguments to create a Payment_providers.
+     * @example
+     * // Create one Payment_providers
+     * const Payment_providers = await prisma.payment_providers.create({
+     *   data: {
+     *     // ... data to create a Payment_providers
+     *   }
+     * })
+     * 
+     */
+    create<T extends payment_providersCreateArgs>(args: SelectSubset<T, payment_providersCreateArgs<ExtArgs>>): Prisma__payment_providersClient<$Result.GetResult<Prisma.$payment_providersPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Payment_providers.
+     * @param {payment_providersCreateManyArgs} args - Arguments to create many Payment_providers.
+     * @example
+     * // Create many Payment_providers
+     * const payment_providers = await prisma.payment_providers.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends payment_providersCreateManyArgs>(args?: SelectSubset<T, payment_providersCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a Payment_providers.
+     * @param {payment_providersDeleteArgs} args - Arguments to delete one Payment_providers.
+     * @example
+     * // Delete one Payment_providers
+     * const Payment_providers = await prisma.payment_providers.delete({
+     *   where: {
+     *     // ... filter to delete one Payment_providers
+     *   }
+     * })
+     * 
+     */
+    delete<T extends payment_providersDeleteArgs>(args: SelectSubset<T, payment_providersDeleteArgs<ExtArgs>>): Prisma__payment_providersClient<$Result.GetResult<Prisma.$payment_providersPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Payment_providers.
+     * @param {payment_providersUpdateArgs} args - Arguments to update one Payment_providers.
+     * @example
+     * // Update one Payment_providers
+     * const payment_providers = await prisma.payment_providers.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends payment_providersUpdateArgs>(args: SelectSubset<T, payment_providersUpdateArgs<ExtArgs>>): Prisma__payment_providersClient<$Result.GetResult<Prisma.$payment_providersPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Payment_providers.
+     * @param {payment_providersDeleteManyArgs} args - Arguments to filter Payment_providers to delete.
+     * @example
+     * // Delete a few Payment_providers
+     * const { count } = await prisma.payment_providers.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends payment_providersDeleteManyArgs>(args?: SelectSubset<T, payment_providersDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Payment_providers.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {payment_providersUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Payment_providers
+     * const payment_providers = await prisma.payment_providers.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends payment_providersUpdateManyArgs>(args: SelectSubset<T, payment_providersUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one Payment_providers.
+     * @param {payment_providersUpsertArgs} args - Arguments to update or create a Payment_providers.
+     * @example
+     * // Update or create a Payment_providers
+     * const payment_providers = await prisma.payment_providers.upsert({
+     *   create: {
+     *     // ... data to create a Payment_providers
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Payment_providers we want to update
+     *   }
+     * })
+     */
+    upsert<T extends payment_providersUpsertArgs>(args: SelectSubset<T, payment_providersUpsertArgs<ExtArgs>>): Prisma__payment_providersClient<$Result.GetResult<Prisma.$payment_providersPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Payment_providers.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {payment_providersCountArgs} args - Arguments to filter Payment_providers to count.
+     * @example
+     * // Count the number of Payment_providers
+     * const count = await prisma.payment_providers.count({
+     *   where: {
+     *     // ... the filter for the Payment_providers we want to count
+     *   }
+     * })
+    **/
+    count<T extends payment_providersCountArgs>(
+      args?: Subset<T, payment_providersCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], Payment_providersCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Payment_providers.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {Payment_providersAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends Payment_providersAggregateArgs>(args: Subset<T, Payment_providersAggregateArgs>): Prisma.PrismaPromise<GetPayment_providersAggregateType<T>>
+
+    /**
+     * Group by Payment_providers.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {payment_providersGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends payment_providersGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: payment_providersGroupByArgs['orderBy'] }
+        : { orderBy?: payment_providersGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, payment_providersGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPayment_providersGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the payment_providers model
+   */
+  readonly fields: payment_providersFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for payment_providers.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__payment_providersClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the payment_providers model
+   */
+  interface payment_providersFieldRefs {
+    readonly id: FieldRef<"payment_providers", 'String'>
+    readonly name: FieldRef<"payment_providers", 'String'>
+    readonly is_enabled: FieldRef<"payment_providers", 'Boolean'>
+    readonly config: FieldRef<"payment_providers", 'String'>
+    readonly created_at: FieldRef<"payment_providers", 'DateTime'>
+    readonly updated_at: FieldRef<"payment_providers", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * payment_providers findUnique
+   */
+  export type payment_providersFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the payment_providers
+     */
+    select?: payment_providersSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the payment_providers
+     */
+    omit?: payment_providersOmit<ExtArgs> | null
+    /**
+     * Filter, which payment_providers to fetch.
+     */
+    where: payment_providersWhereUniqueInput
+  }
+
+  /**
+   * payment_providers findUniqueOrThrow
+   */
+  export type payment_providersFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the payment_providers
+     */
+    select?: payment_providersSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the payment_providers
+     */
+    omit?: payment_providersOmit<ExtArgs> | null
+    /**
+     * Filter, which payment_providers to fetch.
+     */
+    where: payment_providersWhereUniqueInput
+  }
+
+  /**
+   * payment_providers findFirst
+   */
+  export type payment_providersFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the payment_providers
+     */
+    select?: payment_providersSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the payment_providers
+     */
+    omit?: payment_providersOmit<ExtArgs> | null
+    /**
+     * Filter, which payment_providers to fetch.
+     */
+    where?: payment_providersWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of payment_providers to fetch.
+     */
+    orderBy?: payment_providersOrderByWithRelationInput | payment_providersOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for payment_providers.
+     */
+    cursor?: payment_providersWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` payment_providers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` payment_providers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of payment_providers.
+     */
+    distinct?: Payment_providersScalarFieldEnum | Payment_providersScalarFieldEnum[]
+  }
+
+  /**
+   * payment_providers findFirstOrThrow
+   */
+  export type payment_providersFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the payment_providers
+     */
+    select?: payment_providersSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the payment_providers
+     */
+    omit?: payment_providersOmit<ExtArgs> | null
+    /**
+     * Filter, which payment_providers to fetch.
+     */
+    where?: payment_providersWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of payment_providers to fetch.
+     */
+    orderBy?: payment_providersOrderByWithRelationInput | payment_providersOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for payment_providers.
+     */
+    cursor?: payment_providersWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` payment_providers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` payment_providers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of payment_providers.
+     */
+    distinct?: Payment_providersScalarFieldEnum | Payment_providersScalarFieldEnum[]
+  }
+
+  /**
+   * payment_providers findMany
+   */
+  export type payment_providersFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the payment_providers
+     */
+    select?: payment_providersSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the payment_providers
+     */
+    omit?: payment_providersOmit<ExtArgs> | null
+    /**
+     * Filter, which payment_providers to fetch.
+     */
+    where?: payment_providersWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of payment_providers to fetch.
+     */
+    orderBy?: payment_providersOrderByWithRelationInput | payment_providersOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing payment_providers.
+     */
+    cursor?: payment_providersWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` payment_providers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` payment_providers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of payment_providers.
+     */
+    distinct?: Payment_providersScalarFieldEnum | Payment_providersScalarFieldEnum[]
+  }
+
+  /**
+   * payment_providers create
+   */
+  export type payment_providersCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the payment_providers
+     */
+    select?: payment_providersSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the payment_providers
+     */
+    omit?: payment_providersOmit<ExtArgs> | null
+    /**
+     * The data needed to create a payment_providers.
+     */
+    data: XOR<payment_providersCreateInput, payment_providersUncheckedCreateInput>
+  }
+
+  /**
+   * payment_providers createMany
+   */
+  export type payment_providersCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many payment_providers.
+     */
+    data: payment_providersCreateManyInput | payment_providersCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * payment_providers update
+   */
+  export type payment_providersUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the payment_providers
+     */
+    select?: payment_providersSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the payment_providers
+     */
+    omit?: payment_providersOmit<ExtArgs> | null
+    /**
+     * The data needed to update a payment_providers.
+     */
+    data: XOR<payment_providersUpdateInput, payment_providersUncheckedUpdateInput>
+    /**
+     * Choose, which payment_providers to update.
+     */
+    where: payment_providersWhereUniqueInput
+  }
+
+  /**
+   * payment_providers updateMany
+   */
+  export type payment_providersUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update payment_providers.
+     */
+    data: XOR<payment_providersUpdateManyMutationInput, payment_providersUncheckedUpdateManyInput>
+    /**
+     * Filter which payment_providers to update
+     */
+    where?: payment_providersWhereInput
+    /**
+     * Limit how many payment_providers to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * payment_providers upsert
+   */
+  export type payment_providersUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the payment_providers
+     */
+    select?: payment_providersSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the payment_providers
+     */
+    omit?: payment_providersOmit<ExtArgs> | null
+    /**
+     * The filter to search for the payment_providers to update in case it exists.
+     */
+    where: payment_providersWhereUniqueInput
+    /**
+     * In case the payment_providers found by the `where` argument doesn't exist, create a new payment_providers with this data.
+     */
+    create: XOR<payment_providersCreateInput, payment_providersUncheckedCreateInput>
+    /**
+     * In case the payment_providers was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<payment_providersUpdateInput, payment_providersUncheckedUpdateInput>
+  }
+
+  /**
+   * payment_providers delete
+   */
+  export type payment_providersDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the payment_providers
+     */
+    select?: payment_providersSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the payment_providers
+     */
+    omit?: payment_providersOmit<ExtArgs> | null
+    /**
+     * Filter which payment_providers to delete.
+     */
+    where: payment_providersWhereUniqueInput
+  }
+
+  /**
+   * payment_providers deleteMany
+   */
+  export type payment_providersDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which payment_providers to delete
+     */
+    where?: payment_providersWhereInput
+    /**
+     * Limit how many payment_providers to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * payment_providers without action
+   */
+  export type payment_providersDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the payment_providers
+     */
+    select?: payment_providersSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the payment_providers
+     */
+    omit?: payment_providersOmit<ExtArgs> | null
+  }
+
+
+  /**
+   * Model payments
+   */
+
+  export type AggregatePayments = {
+    _count: PaymentsCountAggregateOutputType | null
+    _avg: PaymentsAvgAggregateOutputType | null
+    _sum: PaymentsSumAggregateOutputType | null
+    _min: PaymentsMinAggregateOutputType | null
+    _max: PaymentsMaxAggregateOutputType | null
+  }
+
+  export type PaymentsAvgAggregateOutputType = {
+    amount: Decimal | null
+    fee: Decimal | null
+    net_amount: Decimal | null
+  }
+
+  export type PaymentsSumAggregateOutputType = {
+    amount: Decimal | null
+    fee: Decimal | null
+    net_amount: Decimal | null
+  }
+
+  export type PaymentsMinAggregateOutputType = {
+    id: string | null
+    order_id: string | null
+    provider: string | null
+    provider_transaction_id: string | null
+    amount: Decimal | null
+    fee: Decimal | null
+    net_amount: Decimal | null
+    currency: string | null
+    method: string | null
+    status: string | null
+    payment_url: string | null
+    deadline: Date | null
+    metadata: string | null
+    created_at: Date | null
+    updated_at: Date | null
+    paid_at: Date | null
+    expired_at: Date | null
+  }
+
+  export type PaymentsMaxAggregateOutputType = {
+    id: string | null
+    order_id: string | null
+    provider: string | null
+    provider_transaction_id: string | null
+    amount: Decimal | null
+    fee: Decimal | null
+    net_amount: Decimal | null
+    currency: string | null
+    method: string | null
+    status: string | null
+    payment_url: string | null
+    deadline: Date | null
+    metadata: string | null
+    created_at: Date | null
+    updated_at: Date | null
+    paid_at: Date | null
+    expired_at: Date | null
+  }
+
+  export type PaymentsCountAggregateOutputType = {
+    id: number
+    order_id: number
+    provider: number
+    provider_transaction_id: number
+    amount: number
+    fee: number
+    net_amount: number
+    currency: number
+    method: number
+    status: number
+    payment_url: number
+    deadline: number
+    metadata: number
+    created_at: number
+    updated_at: number
+    paid_at: number
+    expired_at: number
+    _all: number
+  }
+
+
+  export type PaymentsAvgAggregateInputType = {
+    amount?: true
+    fee?: true
+    net_amount?: true
+  }
+
+  export type PaymentsSumAggregateInputType = {
+    amount?: true
+    fee?: true
+    net_amount?: true
+  }
+
+  export type PaymentsMinAggregateInputType = {
+    id?: true
+    order_id?: true
+    provider?: true
+    provider_transaction_id?: true
+    amount?: true
+    fee?: true
+    net_amount?: true
+    currency?: true
+    method?: true
+    status?: true
+    payment_url?: true
+    deadline?: true
+    metadata?: true
+    created_at?: true
+    updated_at?: true
+    paid_at?: true
+    expired_at?: true
+  }
+
+  export type PaymentsMaxAggregateInputType = {
+    id?: true
+    order_id?: true
+    provider?: true
+    provider_transaction_id?: true
+    amount?: true
+    fee?: true
+    net_amount?: true
+    currency?: true
+    method?: true
+    status?: true
+    payment_url?: true
+    deadline?: true
+    metadata?: true
+    created_at?: true
+    updated_at?: true
+    paid_at?: true
+    expired_at?: true
+  }
+
+  export type PaymentsCountAggregateInputType = {
+    id?: true
+    order_id?: true
+    provider?: true
+    provider_transaction_id?: true
+    amount?: true
+    fee?: true
+    net_amount?: true
+    currency?: true
+    method?: true
+    status?: true
+    payment_url?: true
+    deadline?: true
+    metadata?: true
+    created_at?: true
+    updated_at?: true
+    paid_at?: true
+    expired_at?: true
+    _all?: true
+  }
+
+  export type PaymentsAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which payments to aggregate.
+     */
+    where?: paymentsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of payments to fetch.
+     */
+    orderBy?: paymentsOrderByWithRelationInput | paymentsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: paymentsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` payments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` payments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned payments
+    **/
+    _count?: true | PaymentsCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: PaymentsAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: PaymentsSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: PaymentsMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: PaymentsMaxAggregateInputType
+  }
+
+  export type GetPaymentsAggregateType<T extends PaymentsAggregateArgs> = {
+        [P in keyof T & keyof AggregatePayments]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregatePayments[P]>
+      : GetScalarType<T[P], AggregatePayments[P]>
+  }
+
+
+
+
+  export type paymentsGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: paymentsWhereInput
+    orderBy?: paymentsOrderByWithAggregationInput | paymentsOrderByWithAggregationInput[]
+    by: PaymentsScalarFieldEnum[] | PaymentsScalarFieldEnum
+    having?: paymentsScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: PaymentsCountAggregateInputType | true
+    _avg?: PaymentsAvgAggregateInputType
+    _sum?: PaymentsSumAggregateInputType
+    _min?: PaymentsMinAggregateInputType
+    _max?: PaymentsMaxAggregateInputType
+  }
+
+  export type PaymentsGroupByOutputType = {
+    id: string
+    order_id: string
+    provider: string
+    provider_transaction_id: string | null
+    amount: Decimal
+    fee: Decimal | null
+    net_amount: Decimal | null
+    currency: string | null
+    method: string | null
+    status: string
+    payment_url: string | null
+    deadline: Date
+    metadata: string | null
+    created_at: Date | null
+    updated_at: Date | null
+    paid_at: Date | null
+    expired_at: Date | null
+    _count: PaymentsCountAggregateOutputType | null
+    _avg: PaymentsAvgAggregateOutputType | null
+    _sum: PaymentsSumAggregateOutputType | null
+    _min: PaymentsMinAggregateOutputType | null
+    _max: PaymentsMaxAggregateOutputType | null
+  }
+
+  type GetPaymentsGroupByPayload<T extends paymentsGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<PaymentsGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof PaymentsGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], PaymentsGroupByOutputType[P]>
+            : GetScalarType<T[P], PaymentsGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type paymentsSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    order_id?: boolean
+    provider?: boolean
+    provider_transaction_id?: boolean
+    amount?: boolean
+    fee?: boolean
+    net_amount?: boolean
+    currency?: boolean
+    method?: boolean
+    status?: boolean
+    payment_url?: boolean
+    deadline?: boolean
+    metadata?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    paid_at?: boolean
+    expired_at?: boolean
+  }, ExtArgs["result"]["payments"]>
+
+
+
+  export type paymentsSelectScalar = {
+    id?: boolean
+    order_id?: boolean
+    provider?: boolean
+    provider_transaction_id?: boolean
+    amount?: boolean
+    fee?: boolean
+    net_amount?: boolean
+    currency?: boolean
+    method?: boolean
+    status?: boolean
+    payment_url?: boolean
+    deadline?: boolean
+    metadata?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    paid_at?: boolean
+    expired_at?: boolean
+  }
+
+  export type paymentsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "order_id" | "provider" | "provider_transaction_id" | "amount" | "fee" | "net_amount" | "currency" | "method" | "status" | "payment_url" | "deadline" | "metadata" | "created_at" | "updated_at" | "paid_at" | "expired_at", ExtArgs["result"]["payments"]>
+
+  export type $paymentsPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "payments"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      order_id: string
+      provider: string
+      provider_transaction_id: string | null
+      amount: Prisma.Decimal
+      fee: Prisma.Decimal | null
+      net_amount: Prisma.Decimal | null
+      currency: string | null
+      method: string | null
+      status: string
+      payment_url: string | null
+      deadline: Date
+      metadata: string | null
+      created_at: Date | null
+      updated_at: Date | null
+      paid_at: Date | null
+      expired_at: Date | null
+    }, ExtArgs["result"]["payments"]>
+    composites: {}
+  }
+
+  type paymentsGetPayload<S extends boolean | null | undefined | paymentsDefaultArgs> = $Result.GetResult<Prisma.$paymentsPayload, S>
+
+  type paymentsCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<paymentsFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: PaymentsCountAggregateInputType | true
+    }
+
+  export interface paymentsDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['payments'], meta: { name: 'payments' } }
+    /**
+     * Find zero or one Payments that matches the filter.
+     * @param {paymentsFindUniqueArgs} args - Arguments to find a Payments
+     * @example
+     * // Get one Payments
+     * const payments = await prisma.payments.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends paymentsFindUniqueArgs>(args: SelectSubset<T, paymentsFindUniqueArgs<ExtArgs>>): Prisma__paymentsClient<$Result.GetResult<Prisma.$paymentsPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Payments that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {paymentsFindUniqueOrThrowArgs} args - Arguments to find a Payments
+     * @example
+     * // Get one Payments
+     * const payments = await prisma.payments.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends paymentsFindUniqueOrThrowArgs>(args: SelectSubset<T, paymentsFindUniqueOrThrowArgs<ExtArgs>>): Prisma__paymentsClient<$Result.GetResult<Prisma.$paymentsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Payments that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {paymentsFindFirstArgs} args - Arguments to find a Payments
+     * @example
+     * // Get one Payments
+     * const payments = await prisma.payments.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends paymentsFindFirstArgs>(args?: SelectSubset<T, paymentsFindFirstArgs<ExtArgs>>): Prisma__paymentsClient<$Result.GetResult<Prisma.$paymentsPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Payments that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {paymentsFindFirstOrThrowArgs} args - Arguments to find a Payments
+     * @example
+     * // Get one Payments
+     * const payments = await prisma.payments.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends paymentsFindFirstOrThrowArgs>(args?: SelectSubset<T, paymentsFindFirstOrThrowArgs<ExtArgs>>): Prisma__paymentsClient<$Result.GetResult<Prisma.$paymentsPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Payments that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {paymentsFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Payments
+     * const payments = await prisma.payments.findMany()
+     * 
+     * // Get first 10 Payments
+     * const payments = await prisma.payments.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const paymentsWithIdOnly = await prisma.payments.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends paymentsFindManyArgs>(args?: SelectSubset<T, paymentsFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$paymentsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Payments.
+     * @param {paymentsCreateArgs} args - Arguments to create a Payments.
+     * @example
+     * // Create one Payments
+     * const Payments = await prisma.payments.create({
+     *   data: {
+     *     // ... data to create a Payments
+     *   }
+     * })
+     * 
+     */
+    create<T extends paymentsCreateArgs>(args: SelectSubset<T, paymentsCreateArgs<ExtArgs>>): Prisma__paymentsClient<$Result.GetResult<Prisma.$paymentsPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Payments.
+     * @param {paymentsCreateManyArgs} args - Arguments to create many Payments.
+     * @example
+     * // Create many Payments
+     * const payments = await prisma.payments.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends paymentsCreateManyArgs>(args?: SelectSubset<T, paymentsCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a Payments.
+     * @param {paymentsDeleteArgs} args - Arguments to delete one Payments.
+     * @example
+     * // Delete one Payments
+     * const Payments = await prisma.payments.delete({
+     *   where: {
+     *     // ... filter to delete one Payments
+     *   }
+     * })
+     * 
+     */
+    delete<T extends paymentsDeleteArgs>(args: SelectSubset<T, paymentsDeleteArgs<ExtArgs>>): Prisma__paymentsClient<$Result.GetResult<Prisma.$paymentsPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Payments.
+     * @param {paymentsUpdateArgs} args - Arguments to update one Payments.
+     * @example
+     * // Update one Payments
+     * const payments = await prisma.payments.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends paymentsUpdateArgs>(args: SelectSubset<T, paymentsUpdateArgs<ExtArgs>>): Prisma__paymentsClient<$Result.GetResult<Prisma.$paymentsPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Payments.
+     * @param {paymentsDeleteManyArgs} args - Arguments to filter Payments to delete.
+     * @example
+     * // Delete a few Payments
+     * const { count } = await prisma.payments.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends paymentsDeleteManyArgs>(args?: SelectSubset<T, paymentsDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Payments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {paymentsUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Payments
+     * const payments = await prisma.payments.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends paymentsUpdateManyArgs>(args: SelectSubset<T, paymentsUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one Payments.
+     * @param {paymentsUpsertArgs} args - Arguments to update or create a Payments.
+     * @example
+     * // Update or create a Payments
+     * const payments = await prisma.payments.upsert({
+     *   create: {
+     *     // ... data to create a Payments
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Payments we want to update
+     *   }
+     * })
+     */
+    upsert<T extends paymentsUpsertArgs>(args: SelectSubset<T, paymentsUpsertArgs<ExtArgs>>): Prisma__paymentsClient<$Result.GetResult<Prisma.$paymentsPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Payments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {paymentsCountArgs} args - Arguments to filter Payments to count.
+     * @example
+     * // Count the number of Payments
+     * const count = await prisma.payments.count({
+     *   where: {
+     *     // ... the filter for the Payments we want to count
+     *   }
+     * })
+    **/
+    count<T extends paymentsCountArgs>(
+      args?: Subset<T, paymentsCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], PaymentsCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Payments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PaymentsAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends PaymentsAggregateArgs>(args: Subset<T, PaymentsAggregateArgs>): Prisma.PrismaPromise<GetPaymentsAggregateType<T>>
+
+    /**
+     * Group by Payments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {paymentsGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends paymentsGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: paymentsGroupByArgs['orderBy'] }
+        : { orderBy?: paymentsGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, paymentsGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPaymentsGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the payments model
+   */
+  readonly fields: paymentsFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for payments.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__paymentsClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the payments model
+   */
+  interface paymentsFieldRefs {
+    readonly id: FieldRef<"payments", 'String'>
+    readonly order_id: FieldRef<"payments", 'String'>
+    readonly provider: FieldRef<"payments", 'String'>
+    readonly provider_transaction_id: FieldRef<"payments", 'String'>
+    readonly amount: FieldRef<"payments", 'Decimal'>
+    readonly fee: FieldRef<"payments", 'Decimal'>
+    readonly net_amount: FieldRef<"payments", 'Decimal'>
+    readonly currency: FieldRef<"payments", 'String'>
+    readonly method: FieldRef<"payments", 'String'>
+    readonly status: FieldRef<"payments", 'String'>
+    readonly payment_url: FieldRef<"payments", 'String'>
+    readonly deadline: FieldRef<"payments", 'DateTime'>
+    readonly metadata: FieldRef<"payments", 'String'>
+    readonly created_at: FieldRef<"payments", 'DateTime'>
+    readonly updated_at: FieldRef<"payments", 'DateTime'>
+    readonly paid_at: FieldRef<"payments", 'DateTime'>
+    readonly expired_at: FieldRef<"payments", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * payments findUnique
+   */
+  export type paymentsFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the payments
+     */
+    select?: paymentsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the payments
+     */
+    omit?: paymentsOmit<ExtArgs> | null
+    /**
+     * Filter, which payments to fetch.
+     */
+    where: paymentsWhereUniqueInput
+  }
+
+  /**
+   * payments findUniqueOrThrow
+   */
+  export type paymentsFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the payments
+     */
+    select?: paymentsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the payments
+     */
+    omit?: paymentsOmit<ExtArgs> | null
+    /**
+     * Filter, which payments to fetch.
+     */
+    where: paymentsWhereUniqueInput
+  }
+
+  /**
+   * payments findFirst
+   */
+  export type paymentsFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the payments
+     */
+    select?: paymentsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the payments
+     */
+    omit?: paymentsOmit<ExtArgs> | null
+    /**
+     * Filter, which payments to fetch.
+     */
+    where?: paymentsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of payments to fetch.
+     */
+    orderBy?: paymentsOrderByWithRelationInput | paymentsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for payments.
+     */
+    cursor?: paymentsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` payments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` payments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of payments.
+     */
+    distinct?: PaymentsScalarFieldEnum | PaymentsScalarFieldEnum[]
+  }
+
+  /**
+   * payments findFirstOrThrow
+   */
+  export type paymentsFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the payments
+     */
+    select?: paymentsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the payments
+     */
+    omit?: paymentsOmit<ExtArgs> | null
+    /**
+     * Filter, which payments to fetch.
+     */
+    where?: paymentsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of payments to fetch.
+     */
+    orderBy?: paymentsOrderByWithRelationInput | paymentsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for payments.
+     */
+    cursor?: paymentsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` payments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` payments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of payments.
+     */
+    distinct?: PaymentsScalarFieldEnum | PaymentsScalarFieldEnum[]
+  }
+
+  /**
+   * payments findMany
+   */
+  export type paymentsFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the payments
+     */
+    select?: paymentsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the payments
+     */
+    omit?: paymentsOmit<ExtArgs> | null
+    /**
+     * Filter, which payments to fetch.
+     */
+    where?: paymentsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of payments to fetch.
+     */
+    orderBy?: paymentsOrderByWithRelationInput | paymentsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing payments.
+     */
+    cursor?: paymentsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` payments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` payments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of payments.
+     */
+    distinct?: PaymentsScalarFieldEnum | PaymentsScalarFieldEnum[]
+  }
+
+  /**
+   * payments create
+   */
+  export type paymentsCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the payments
+     */
+    select?: paymentsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the payments
+     */
+    omit?: paymentsOmit<ExtArgs> | null
+    /**
+     * The data needed to create a payments.
+     */
+    data: XOR<paymentsCreateInput, paymentsUncheckedCreateInput>
+  }
+
+  /**
+   * payments createMany
+   */
+  export type paymentsCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many payments.
+     */
+    data: paymentsCreateManyInput | paymentsCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * payments update
+   */
+  export type paymentsUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the payments
+     */
+    select?: paymentsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the payments
+     */
+    omit?: paymentsOmit<ExtArgs> | null
+    /**
+     * The data needed to update a payments.
+     */
+    data: XOR<paymentsUpdateInput, paymentsUncheckedUpdateInput>
+    /**
+     * Choose, which payments to update.
+     */
+    where: paymentsWhereUniqueInput
+  }
+
+  /**
+   * payments updateMany
+   */
+  export type paymentsUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update payments.
+     */
+    data: XOR<paymentsUpdateManyMutationInput, paymentsUncheckedUpdateManyInput>
+    /**
+     * Filter which payments to update
+     */
+    where?: paymentsWhereInput
+    /**
+     * Limit how many payments to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * payments upsert
+   */
+  export type paymentsUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the payments
+     */
+    select?: paymentsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the payments
+     */
+    omit?: paymentsOmit<ExtArgs> | null
+    /**
+     * The filter to search for the payments to update in case it exists.
+     */
+    where: paymentsWhereUniqueInput
+    /**
+     * In case the payments found by the `where` argument doesn't exist, create a new payments with this data.
+     */
+    create: XOR<paymentsCreateInput, paymentsUncheckedCreateInput>
+    /**
+     * In case the payments was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<paymentsUpdateInput, paymentsUncheckedUpdateInput>
+  }
+
+  /**
+   * payments delete
+   */
+  export type paymentsDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the payments
+     */
+    select?: paymentsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the payments
+     */
+    omit?: paymentsOmit<ExtArgs> | null
+    /**
+     * Filter which payments to delete.
+     */
+    where: paymentsWhereUniqueInput
+  }
+
+  /**
+   * payments deleteMany
+   */
+  export type paymentsDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which payments to delete
+     */
+    where?: paymentsWhereInput
+    /**
+     * Limit how many payments to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * payments without action
+   */
+  export type paymentsDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the payments
+     */
+    select?: paymentsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the payments
+     */
+    omit?: paymentsOmit<ExtArgs> | null
+  }
+
+
+  /**
+   * Model refunds
+   */
+
+  export type AggregateRefunds = {
+    _count: RefundsCountAggregateOutputType | null
+    _avg: RefundsAvgAggregateOutputType | null
+    _sum: RefundsSumAggregateOutputType | null
+    _min: RefundsMinAggregateOutputType | null
+    _max: RefundsMaxAggregateOutputType | null
+  }
+
+  export type RefundsAvgAggregateOutputType = {
+    amount: Decimal | null
+  }
+
+  export type RefundsSumAggregateOutputType = {
+    amount: Decimal | null
+  }
+
+  export type RefundsMinAggregateOutputType = {
+    id: string | null
+    payment_id: string | null
+    order_id: string | null
+    amount: Decimal | null
+    type: string | null
+    reason: string | null
+    provider_refund_id: string | null
+    status: string | null
+    processed_at: Date | null
+    completed_at: Date | null
+    created_at: Date | null
+    metadata: string | null
+  }
+
+  export type RefundsMaxAggregateOutputType = {
+    id: string | null
+    payment_id: string | null
+    order_id: string | null
+    amount: Decimal | null
+    type: string | null
+    reason: string | null
+    provider_refund_id: string | null
+    status: string | null
+    processed_at: Date | null
+    completed_at: Date | null
+    created_at: Date | null
+    metadata: string | null
+  }
+
+  export type RefundsCountAggregateOutputType = {
+    id: number
+    payment_id: number
+    order_id: number
+    amount: number
+    type: number
+    reason: number
+    provider_refund_id: number
+    status: number
+    processed_at: number
+    completed_at: number
+    created_at: number
+    metadata: number
+    _all: number
+  }
+
+
+  export type RefundsAvgAggregateInputType = {
+    amount?: true
+  }
+
+  export type RefundsSumAggregateInputType = {
+    amount?: true
+  }
+
+  export type RefundsMinAggregateInputType = {
+    id?: true
+    payment_id?: true
+    order_id?: true
+    amount?: true
+    type?: true
+    reason?: true
+    provider_refund_id?: true
+    status?: true
+    processed_at?: true
+    completed_at?: true
+    created_at?: true
+    metadata?: true
+  }
+
+  export type RefundsMaxAggregateInputType = {
+    id?: true
+    payment_id?: true
+    order_id?: true
+    amount?: true
+    type?: true
+    reason?: true
+    provider_refund_id?: true
+    status?: true
+    processed_at?: true
+    completed_at?: true
+    created_at?: true
+    metadata?: true
+  }
+
+  export type RefundsCountAggregateInputType = {
+    id?: true
+    payment_id?: true
+    order_id?: true
+    amount?: true
+    type?: true
+    reason?: true
+    provider_refund_id?: true
+    status?: true
+    processed_at?: true
+    completed_at?: true
+    created_at?: true
+    metadata?: true
+    _all?: true
+  }
+
+  export type RefundsAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which refunds to aggregate.
+     */
+    where?: refundsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of refunds to fetch.
+     */
+    orderBy?: refundsOrderByWithRelationInput | refundsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: refundsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` refunds from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` refunds.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned refunds
+    **/
+    _count?: true | RefundsCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: RefundsAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: RefundsSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: RefundsMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: RefundsMaxAggregateInputType
+  }
+
+  export type GetRefundsAggregateType<T extends RefundsAggregateArgs> = {
+        [P in keyof T & keyof AggregateRefunds]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateRefunds[P]>
+      : GetScalarType<T[P], AggregateRefunds[P]>
+  }
+
+
+
+
+  export type refundsGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: refundsWhereInput
+    orderBy?: refundsOrderByWithAggregationInput | refundsOrderByWithAggregationInput[]
+    by: RefundsScalarFieldEnum[] | RefundsScalarFieldEnum
+    having?: refundsScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: RefundsCountAggregateInputType | true
+    _avg?: RefundsAvgAggregateInputType
+    _sum?: RefundsSumAggregateInputType
+    _min?: RefundsMinAggregateInputType
+    _max?: RefundsMaxAggregateInputType
+  }
+
+  export type RefundsGroupByOutputType = {
+    id: string
+    payment_id: string
+    order_id: string
+    amount: Decimal
+    type: string
+    reason: string | null
+    provider_refund_id: string | null
+    status: string
+    processed_at: Date | null
+    completed_at: Date | null
+    created_at: Date | null
+    metadata: string | null
+    _count: RefundsCountAggregateOutputType | null
+    _avg: RefundsAvgAggregateOutputType | null
+    _sum: RefundsSumAggregateOutputType | null
+    _min: RefundsMinAggregateOutputType | null
+    _max: RefundsMaxAggregateOutputType | null
+  }
+
+  type GetRefundsGroupByPayload<T extends refundsGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<RefundsGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof RefundsGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], RefundsGroupByOutputType[P]>
+            : GetScalarType<T[P], RefundsGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type refundsSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    payment_id?: boolean
+    order_id?: boolean
+    amount?: boolean
+    type?: boolean
+    reason?: boolean
+    provider_refund_id?: boolean
+    status?: boolean
+    processed_at?: boolean
+    completed_at?: boolean
+    created_at?: boolean
+    metadata?: boolean
+  }, ExtArgs["result"]["refunds"]>
+
+
+
+  export type refundsSelectScalar = {
+    id?: boolean
+    payment_id?: boolean
+    order_id?: boolean
+    amount?: boolean
+    type?: boolean
+    reason?: boolean
+    provider_refund_id?: boolean
+    status?: boolean
+    processed_at?: boolean
+    completed_at?: boolean
+    created_at?: boolean
+    metadata?: boolean
+  }
+
+  export type refundsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "payment_id" | "order_id" | "amount" | "type" | "reason" | "provider_refund_id" | "status" | "processed_at" | "completed_at" | "created_at" | "metadata", ExtArgs["result"]["refunds"]>
+
+  export type $refundsPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "refunds"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      payment_id: string
+      order_id: string
+      amount: Prisma.Decimal
+      type: string
+      reason: string | null
+      provider_refund_id: string | null
+      status: string
+      processed_at: Date | null
+      completed_at: Date | null
+      created_at: Date | null
+      metadata: string | null
+    }, ExtArgs["result"]["refunds"]>
+    composites: {}
+  }
+
+  type refundsGetPayload<S extends boolean | null | undefined | refundsDefaultArgs> = $Result.GetResult<Prisma.$refundsPayload, S>
+
+  type refundsCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<refundsFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: RefundsCountAggregateInputType | true
+    }
+
+  export interface refundsDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['refunds'], meta: { name: 'refunds' } }
+    /**
+     * Find zero or one Refunds that matches the filter.
+     * @param {refundsFindUniqueArgs} args - Arguments to find a Refunds
+     * @example
+     * // Get one Refunds
+     * const refunds = await prisma.refunds.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends refundsFindUniqueArgs>(args: SelectSubset<T, refundsFindUniqueArgs<ExtArgs>>): Prisma__refundsClient<$Result.GetResult<Prisma.$refundsPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Refunds that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {refundsFindUniqueOrThrowArgs} args - Arguments to find a Refunds
+     * @example
+     * // Get one Refunds
+     * const refunds = await prisma.refunds.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends refundsFindUniqueOrThrowArgs>(args: SelectSubset<T, refundsFindUniqueOrThrowArgs<ExtArgs>>): Prisma__refundsClient<$Result.GetResult<Prisma.$refundsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Refunds that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {refundsFindFirstArgs} args - Arguments to find a Refunds
+     * @example
+     * // Get one Refunds
+     * const refunds = await prisma.refunds.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends refundsFindFirstArgs>(args?: SelectSubset<T, refundsFindFirstArgs<ExtArgs>>): Prisma__refundsClient<$Result.GetResult<Prisma.$refundsPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Refunds that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {refundsFindFirstOrThrowArgs} args - Arguments to find a Refunds
+     * @example
+     * // Get one Refunds
+     * const refunds = await prisma.refunds.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends refundsFindFirstOrThrowArgs>(args?: SelectSubset<T, refundsFindFirstOrThrowArgs<ExtArgs>>): Prisma__refundsClient<$Result.GetResult<Prisma.$refundsPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Refunds that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {refundsFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Refunds
+     * const refunds = await prisma.refunds.findMany()
+     * 
+     * // Get first 10 Refunds
+     * const refunds = await prisma.refunds.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const refundsWithIdOnly = await prisma.refunds.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends refundsFindManyArgs>(args?: SelectSubset<T, refundsFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$refundsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Refunds.
+     * @param {refundsCreateArgs} args - Arguments to create a Refunds.
+     * @example
+     * // Create one Refunds
+     * const Refunds = await prisma.refunds.create({
+     *   data: {
+     *     // ... data to create a Refunds
+     *   }
+     * })
+     * 
+     */
+    create<T extends refundsCreateArgs>(args: SelectSubset<T, refundsCreateArgs<ExtArgs>>): Prisma__refundsClient<$Result.GetResult<Prisma.$refundsPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Refunds.
+     * @param {refundsCreateManyArgs} args - Arguments to create many Refunds.
+     * @example
+     * // Create many Refunds
+     * const refunds = await prisma.refunds.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends refundsCreateManyArgs>(args?: SelectSubset<T, refundsCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a Refunds.
+     * @param {refundsDeleteArgs} args - Arguments to delete one Refunds.
+     * @example
+     * // Delete one Refunds
+     * const Refunds = await prisma.refunds.delete({
+     *   where: {
+     *     // ... filter to delete one Refunds
+     *   }
+     * })
+     * 
+     */
+    delete<T extends refundsDeleteArgs>(args: SelectSubset<T, refundsDeleteArgs<ExtArgs>>): Prisma__refundsClient<$Result.GetResult<Prisma.$refundsPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Refunds.
+     * @param {refundsUpdateArgs} args - Arguments to update one Refunds.
+     * @example
+     * // Update one Refunds
+     * const refunds = await prisma.refunds.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends refundsUpdateArgs>(args: SelectSubset<T, refundsUpdateArgs<ExtArgs>>): Prisma__refundsClient<$Result.GetResult<Prisma.$refundsPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Refunds.
+     * @param {refundsDeleteManyArgs} args - Arguments to filter Refunds to delete.
+     * @example
+     * // Delete a few Refunds
+     * const { count } = await prisma.refunds.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends refundsDeleteManyArgs>(args?: SelectSubset<T, refundsDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Refunds.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {refundsUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Refunds
+     * const refunds = await prisma.refunds.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends refundsUpdateManyArgs>(args: SelectSubset<T, refundsUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one Refunds.
+     * @param {refundsUpsertArgs} args - Arguments to update or create a Refunds.
+     * @example
+     * // Update or create a Refunds
+     * const refunds = await prisma.refunds.upsert({
+     *   create: {
+     *     // ... data to create a Refunds
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Refunds we want to update
+     *   }
+     * })
+     */
+    upsert<T extends refundsUpsertArgs>(args: SelectSubset<T, refundsUpsertArgs<ExtArgs>>): Prisma__refundsClient<$Result.GetResult<Prisma.$refundsPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Refunds.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {refundsCountArgs} args - Arguments to filter Refunds to count.
+     * @example
+     * // Count the number of Refunds
+     * const count = await prisma.refunds.count({
+     *   where: {
+     *     // ... the filter for the Refunds we want to count
+     *   }
+     * })
+    **/
+    count<T extends refundsCountArgs>(
+      args?: Subset<T, refundsCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], RefundsCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Refunds.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RefundsAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends RefundsAggregateArgs>(args: Subset<T, RefundsAggregateArgs>): Prisma.PrismaPromise<GetRefundsAggregateType<T>>
+
+    /**
+     * Group by Refunds.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {refundsGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends refundsGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: refundsGroupByArgs['orderBy'] }
+        : { orderBy?: refundsGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, refundsGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetRefundsGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the refunds model
+   */
+  readonly fields: refundsFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for refunds.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__refundsClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the refunds model
+   */
+  interface refundsFieldRefs {
+    readonly id: FieldRef<"refunds", 'String'>
+    readonly payment_id: FieldRef<"refunds", 'String'>
+    readonly order_id: FieldRef<"refunds", 'String'>
+    readonly amount: FieldRef<"refunds", 'Decimal'>
+    readonly type: FieldRef<"refunds", 'String'>
+    readonly reason: FieldRef<"refunds", 'String'>
+    readonly provider_refund_id: FieldRef<"refunds", 'String'>
+    readonly status: FieldRef<"refunds", 'String'>
+    readonly processed_at: FieldRef<"refunds", 'DateTime'>
+    readonly completed_at: FieldRef<"refunds", 'DateTime'>
+    readonly created_at: FieldRef<"refunds", 'DateTime'>
+    readonly metadata: FieldRef<"refunds", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * refunds findUnique
+   */
+  export type refundsFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the refunds
+     */
+    select?: refundsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the refunds
+     */
+    omit?: refundsOmit<ExtArgs> | null
+    /**
+     * Filter, which refunds to fetch.
+     */
+    where: refundsWhereUniqueInput
+  }
+
+  /**
+   * refunds findUniqueOrThrow
+   */
+  export type refundsFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the refunds
+     */
+    select?: refundsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the refunds
+     */
+    omit?: refundsOmit<ExtArgs> | null
+    /**
+     * Filter, which refunds to fetch.
+     */
+    where: refundsWhereUniqueInput
+  }
+
+  /**
+   * refunds findFirst
+   */
+  export type refundsFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the refunds
+     */
+    select?: refundsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the refunds
+     */
+    omit?: refundsOmit<ExtArgs> | null
+    /**
+     * Filter, which refunds to fetch.
+     */
+    where?: refundsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of refunds to fetch.
+     */
+    orderBy?: refundsOrderByWithRelationInput | refundsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for refunds.
+     */
+    cursor?: refundsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` refunds from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` refunds.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of refunds.
+     */
+    distinct?: RefundsScalarFieldEnum | RefundsScalarFieldEnum[]
+  }
+
+  /**
+   * refunds findFirstOrThrow
+   */
+  export type refundsFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the refunds
+     */
+    select?: refundsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the refunds
+     */
+    omit?: refundsOmit<ExtArgs> | null
+    /**
+     * Filter, which refunds to fetch.
+     */
+    where?: refundsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of refunds to fetch.
+     */
+    orderBy?: refundsOrderByWithRelationInput | refundsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for refunds.
+     */
+    cursor?: refundsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` refunds from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` refunds.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of refunds.
+     */
+    distinct?: RefundsScalarFieldEnum | RefundsScalarFieldEnum[]
+  }
+
+  /**
+   * refunds findMany
+   */
+  export type refundsFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the refunds
+     */
+    select?: refundsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the refunds
+     */
+    omit?: refundsOmit<ExtArgs> | null
+    /**
+     * Filter, which refunds to fetch.
+     */
+    where?: refundsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of refunds to fetch.
+     */
+    orderBy?: refundsOrderByWithRelationInput | refundsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing refunds.
+     */
+    cursor?: refundsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` refunds from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` refunds.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of refunds.
+     */
+    distinct?: RefundsScalarFieldEnum | RefundsScalarFieldEnum[]
+  }
+
+  /**
+   * refunds create
+   */
+  export type refundsCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the refunds
+     */
+    select?: refundsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the refunds
+     */
+    omit?: refundsOmit<ExtArgs> | null
+    /**
+     * The data needed to create a refunds.
+     */
+    data: XOR<refundsCreateInput, refundsUncheckedCreateInput>
+  }
+
+  /**
+   * refunds createMany
+   */
+  export type refundsCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many refunds.
+     */
+    data: refundsCreateManyInput | refundsCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * refunds update
+   */
+  export type refundsUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the refunds
+     */
+    select?: refundsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the refunds
+     */
+    omit?: refundsOmit<ExtArgs> | null
+    /**
+     * The data needed to update a refunds.
+     */
+    data: XOR<refundsUpdateInput, refundsUncheckedUpdateInput>
+    /**
+     * Choose, which refunds to update.
+     */
+    where: refundsWhereUniqueInput
+  }
+
+  /**
+   * refunds updateMany
+   */
+  export type refundsUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update refunds.
+     */
+    data: XOR<refundsUpdateManyMutationInput, refundsUncheckedUpdateManyInput>
+    /**
+     * Filter which refunds to update
+     */
+    where?: refundsWhereInput
+    /**
+     * Limit how many refunds to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * refunds upsert
+   */
+  export type refundsUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the refunds
+     */
+    select?: refundsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the refunds
+     */
+    omit?: refundsOmit<ExtArgs> | null
+    /**
+     * The filter to search for the refunds to update in case it exists.
+     */
+    where: refundsWhereUniqueInput
+    /**
+     * In case the refunds found by the `where` argument doesn't exist, create a new refunds with this data.
+     */
+    create: XOR<refundsCreateInput, refundsUncheckedCreateInput>
+    /**
+     * In case the refunds was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<refundsUpdateInput, refundsUncheckedUpdateInput>
+  }
+
+  /**
+   * refunds delete
+   */
+  export type refundsDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the refunds
+     */
+    select?: refundsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the refunds
+     */
+    omit?: refundsOmit<ExtArgs> | null
+    /**
+     * Filter which refunds to delete.
+     */
+    where: refundsWhereUniqueInput
+  }
+
+  /**
+   * refunds deleteMany
+   */
+  export type refundsDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which refunds to delete
+     */
+    where?: refundsWhereInput
+    /**
+     * Limit how many refunds to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * refunds without action
+   */
+  export type refundsDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the refunds
+     */
+    select?: refundsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the refunds
+     */
+    omit?: refundsOmit<ExtArgs> | null
   }
 
 
@@ -20173,20 +23463,65 @@ export namespace Prisma {
   export type UsersScalarFieldEnum = (typeof UsersScalarFieldEnum)[keyof typeof UsersScalarFieldEnum]
 
 
+  export const Payment_providersScalarFieldEnum: {
+    id: 'id',
+    name: 'name',
+    is_enabled: 'is_enabled',
+    config: 'config',
+    created_at: 'created_at',
+    updated_at: 'updated_at'
+  };
+
+  export type Payment_providersScalarFieldEnum = (typeof Payment_providersScalarFieldEnum)[keyof typeof Payment_providersScalarFieldEnum]
+
+
+  export const PaymentsScalarFieldEnum: {
+    id: 'id',
+    order_id: 'order_id',
+    provider: 'provider',
+    provider_transaction_id: 'provider_transaction_id',
+    amount: 'amount',
+    fee: 'fee',
+    net_amount: 'net_amount',
+    currency: 'currency',
+    method: 'method',
+    status: 'status',
+    payment_url: 'payment_url',
+    deadline: 'deadline',
+    metadata: 'metadata',
+    created_at: 'created_at',
+    updated_at: 'updated_at',
+    paid_at: 'paid_at',
+    expired_at: 'expired_at'
+  };
+
+  export type PaymentsScalarFieldEnum = (typeof PaymentsScalarFieldEnum)[keyof typeof PaymentsScalarFieldEnum]
+
+
+  export const RefundsScalarFieldEnum: {
+    id: 'id',
+    payment_id: 'payment_id',
+    order_id: 'order_id',
+    amount: 'amount',
+    type: 'type',
+    reason: 'reason',
+    provider_refund_id: 'provider_refund_id',
+    status: 'status',
+    processed_at: 'processed_at',
+    completed_at: 'completed_at',
+    created_at: 'created_at',
+    metadata: 'metadata'
+  };
+
+  export type RefundsScalarFieldEnum = (typeof RefundsScalarFieldEnum)[keyof typeof RefundsScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
   };
 
   export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
-
-
-  export const NullableJsonNullValueInput: {
-    DbNull: typeof DbNull,
-    JsonNull: typeof JsonNull
-  };
-
-  export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
 
 
   export const NullsOrder: {
@@ -20362,27 +23697,11 @@ export namespace Prisma {
   export type user_addressesOrderByRelevanceFieldEnum = (typeof user_addressesOrderByRelevanceFieldEnum)[keyof typeof user_addressesOrderByRelevanceFieldEnum]
 
 
-  export const JsonNullValueFilter: {
-    DbNull: typeof DbNull,
-    JsonNull: typeof JsonNull,
-    AnyNull: typeof AnyNull
-  };
-
-  export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
-
-
-  export const QueryMode: {
-    default: 'default',
-    insensitive: 'insensitive'
-  };
-
-  export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
-
-
   export const auth_tokensOrderByRelevanceFieldEnum: {
     id: 'id',
     user_id: 'user_id',
     refresh_token_hash: 'refresh_token_hash',
+    device_info: 'device_info',
     ip_address: 'ip_address'
   };
 
@@ -20422,6 +23741,44 @@ export namespace Prisma {
   export type usersOrderByRelevanceFieldEnum = (typeof usersOrderByRelevanceFieldEnum)[keyof typeof usersOrderByRelevanceFieldEnum]
 
 
+  export const payment_providersOrderByRelevanceFieldEnum: {
+    id: 'id',
+    name: 'name',
+    config: 'config'
+  };
+
+  export type payment_providersOrderByRelevanceFieldEnum = (typeof payment_providersOrderByRelevanceFieldEnum)[keyof typeof payment_providersOrderByRelevanceFieldEnum]
+
+
+  export const paymentsOrderByRelevanceFieldEnum: {
+    id: 'id',
+    order_id: 'order_id',
+    provider: 'provider',
+    provider_transaction_id: 'provider_transaction_id',
+    currency: 'currency',
+    method: 'method',
+    status: 'status',
+    payment_url: 'payment_url',
+    metadata: 'metadata'
+  };
+
+  export type paymentsOrderByRelevanceFieldEnum = (typeof paymentsOrderByRelevanceFieldEnum)[keyof typeof paymentsOrderByRelevanceFieldEnum]
+
+
+  export const refundsOrderByRelevanceFieldEnum: {
+    id: 'id',
+    payment_id: 'payment_id',
+    order_id: 'order_id',
+    type: 'type',
+    reason: 'reason',
+    provider_refund_id: 'provider_refund_id',
+    status: 'status',
+    metadata: 'metadata'
+  };
+
+  export type refundsOrderByRelevanceFieldEnum = (typeof refundsOrderByRelevanceFieldEnum)[keyof typeof refundsOrderByRelevanceFieldEnum]
+
+
   /**
    * Field references
    */
@@ -20459,20 +23816,6 @@ export namespace Prisma {
    * Reference to a field of type 'Decimal'
    */
   export type DecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal'>
-    
-
-
-  /**
-   * Reference to a field of type 'Json'
-   */
-  export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
-    
-
-
-  /**
-   * Reference to a field of type 'QueryMode'
-   */
-  export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
     
 
 
@@ -21337,10 +24680,10 @@ export namespace Prisma {
   export type OrderWhereUniqueInput = Prisma.AtLeast<{
     id?: string
     orderNumber?: string
-    userId?: string
     AND?: OrderWhereInput | OrderWhereInput[]
     OR?: OrderWhereInput[]
     NOT?: OrderWhereInput | OrderWhereInput[]
+    userId?: StringFilter<"Order"> | string
     status?: StringFilter<"Order"> | string
     subtotal?: DecimalFilter<"Order"> | Decimal | DecimalJsLike | number | string
     shippingCost?: DecimalFilter<"Order"> | Decimal | DecimalJsLike | number | string
@@ -21356,7 +24699,7 @@ export namespace Prisma {
     createdAt?: DateTimeNullableFilter<"Order"> | Date | string | null
     updatedAt?: DateTimeNullableFilter<"Order"> | Date | string | null
     deletedAt?: DateTimeNullableFilter<"Order"> | Date | string | null
-  }, "id" | "orderNumber" | "userId">
+  }, "id" | "orderNumber">
 
   export type OrderOrderByWithAggregationInput = {
     id?: SortOrder
@@ -21646,7 +24989,7 @@ export namespace Prisma {
     id?: StringFilter<"auth_tokens"> | string
     user_id?: StringFilter<"auth_tokens"> | string
     refresh_token_hash?: StringFilter<"auth_tokens"> | string
-    device_info?: JsonNullableFilter<"auth_tokens">
+    device_info?: StringNullableFilter<"auth_tokens"> | string | null
     ip_address?: StringNullableFilter<"auth_tokens"> | string | null
     expires_at?: DateTimeFilter<"auth_tokens"> | Date | string
     created_at?: DateTimeFilter<"auth_tokens"> | Date | string
@@ -21676,7 +25019,7 @@ export namespace Prisma {
     OR?: auth_tokensWhereInput[]
     NOT?: auth_tokensWhereInput | auth_tokensWhereInput[]
     refresh_token_hash?: StringFilter<"auth_tokens"> | string
-    device_info?: JsonNullableFilter<"auth_tokens">
+    device_info?: StringNullableFilter<"auth_tokens"> | string | null
     ip_address?: StringNullableFilter<"auth_tokens"> | string | null
     expires_at?: DateTimeFilter<"auth_tokens"> | Date | string
     created_at?: DateTimeFilter<"auth_tokens"> | Date | string
@@ -21707,7 +25050,7 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"auth_tokens"> | string
     user_id?: StringWithAggregatesFilter<"auth_tokens"> | string
     refresh_token_hash?: StringWithAggregatesFilter<"auth_tokens"> | string
-    device_info?: JsonNullableWithAggregatesFilter<"auth_tokens">
+    device_info?: StringNullableWithAggregatesFilter<"auth_tokens"> | string | null
     ip_address?: StringNullableWithAggregatesFilter<"auth_tokens"> | string | null
     expires_at?: DateTimeWithAggregatesFilter<"auth_tokens"> | Date | string
     created_at?: DateTimeWithAggregatesFilter<"auth_tokens"> | Date | string
@@ -21856,9 +25199,9 @@ export namespace Prisma {
     created_at?: DateTimeNullableFilter<"users"> | Date | string | null
     updated_at?: DateTimeNullableFilter<"users"> | Date | string | null
     deleted_at?: DateTimeNullableFilter<"users"> | Date | string | null
-    authTokens?: Auth_tokensListRelationFilter
-    passwordResetTokens?: Password_reset_tokensListRelationFilter
+    authTokens?: XOR<Auth_tokensNullableScalarRelationFilter, auth_tokensWhereInput> | null
     emailVerificationTokens?: Email_verification_tokensListRelationFilter
+    passwordResetTokens?: Password_reset_tokensListRelationFilter
   }
 
   export type usersOrderByWithRelationInput = {
@@ -21877,9 +25220,9 @@ export namespace Prisma {
     created_at?: SortOrderInput | SortOrder
     updated_at?: SortOrderInput | SortOrder
     deleted_at?: SortOrderInput | SortOrder
-    authTokens?: auth_tokensOrderByRelationAggregateInput
-    passwordResetTokens?: password_reset_tokensOrderByRelationAggregateInput
+    authTokens?: auth_tokensOrderByWithRelationInput
     emailVerificationTokens?: email_verification_tokensOrderByRelationAggregateInput
+    passwordResetTokens?: password_reset_tokensOrderByRelationAggregateInput
     _relevance?: usersOrderByRelevanceInput
   }
 
@@ -21902,9 +25245,9 @@ export namespace Prisma {
     created_at?: DateTimeNullableFilter<"users"> | Date | string | null
     updated_at?: DateTimeNullableFilter<"users"> | Date | string | null
     deleted_at?: DateTimeNullableFilter<"users"> | Date | string | null
-    authTokens?: Auth_tokensListRelationFilter
-    passwordResetTokens?: Password_reset_tokensListRelationFilter
+    authTokens?: XOR<Auth_tokensNullableScalarRelationFilter, auth_tokensWhereInput> | null
     emailVerificationTokens?: Email_verification_tokensListRelationFilter
+    passwordResetTokens?: Password_reset_tokensListRelationFilter
   }, "id" | "id" | "email">
 
   export type usersOrderByWithAggregationInput = {
@@ -21947,6 +25290,269 @@ export namespace Prisma {
     created_at?: DateTimeNullableWithAggregatesFilter<"users"> | Date | string | null
     updated_at?: DateTimeNullableWithAggregatesFilter<"users"> | Date | string | null
     deleted_at?: DateTimeNullableWithAggregatesFilter<"users"> | Date | string | null
+  }
+
+  export type payment_providersWhereInput = {
+    AND?: payment_providersWhereInput | payment_providersWhereInput[]
+    OR?: payment_providersWhereInput[]
+    NOT?: payment_providersWhereInput | payment_providersWhereInput[]
+    id?: StringFilter<"payment_providers"> | string
+    name?: StringFilter<"payment_providers"> | string
+    is_enabled?: BoolNullableFilter<"payment_providers"> | boolean | null
+    config?: StringFilter<"payment_providers"> | string
+    created_at?: DateTimeNullableFilter<"payment_providers"> | Date | string | null
+    updated_at?: DateTimeNullableFilter<"payment_providers"> | Date | string | null
+  }
+
+  export type payment_providersOrderByWithRelationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    is_enabled?: SortOrderInput | SortOrder
+    config?: SortOrder
+    created_at?: SortOrderInput | SortOrder
+    updated_at?: SortOrderInput | SortOrder
+    _relevance?: payment_providersOrderByRelevanceInput
+  }
+
+  export type payment_providersWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: payment_providersWhereInput | payment_providersWhereInput[]
+    OR?: payment_providersWhereInput[]
+    NOT?: payment_providersWhereInput | payment_providersWhereInput[]
+    name?: StringFilter<"payment_providers"> | string
+    is_enabled?: BoolNullableFilter<"payment_providers"> | boolean | null
+    config?: StringFilter<"payment_providers"> | string
+    created_at?: DateTimeNullableFilter<"payment_providers"> | Date | string | null
+    updated_at?: DateTimeNullableFilter<"payment_providers"> | Date | string | null
+  }, "id">
+
+  export type payment_providersOrderByWithAggregationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    is_enabled?: SortOrderInput | SortOrder
+    config?: SortOrder
+    created_at?: SortOrderInput | SortOrder
+    updated_at?: SortOrderInput | SortOrder
+    _count?: payment_providersCountOrderByAggregateInput
+    _max?: payment_providersMaxOrderByAggregateInput
+    _min?: payment_providersMinOrderByAggregateInput
+  }
+
+  export type payment_providersScalarWhereWithAggregatesInput = {
+    AND?: payment_providersScalarWhereWithAggregatesInput | payment_providersScalarWhereWithAggregatesInput[]
+    OR?: payment_providersScalarWhereWithAggregatesInput[]
+    NOT?: payment_providersScalarWhereWithAggregatesInput | payment_providersScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"payment_providers"> | string
+    name?: StringWithAggregatesFilter<"payment_providers"> | string
+    is_enabled?: BoolNullableWithAggregatesFilter<"payment_providers"> | boolean | null
+    config?: StringWithAggregatesFilter<"payment_providers"> | string
+    created_at?: DateTimeNullableWithAggregatesFilter<"payment_providers"> | Date | string | null
+    updated_at?: DateTimeNullableWithAggregatesFilter<"payment_providers"> | Date | string | null
+  }
+
+  export type paymentsWhereInput = {
+    AND?: paymentsWhereInput | paymentsWhereInput[]
+    OR?: paymentsWhereInput[]
+    NOT?: paymentsWhereInput | paymentsWhereInput[]
+    id?: StringFilter<"payments"> | string
+    order_id?: StringFilter<"payments"> | string
+    provider?: StringFilter<"payments"> | string
+    provider_transaction_id?: StringNullableFilter<"payments"> | string | null
+    amount?: DecimalFilter<"payments"> | Decimal | DecimalJsLike | number | string
+    fee?: DecimalNullableFilter<"payments"> | Decimal | DecimalJsLike | number | string | null
+    net_amount?: DecimalNullableFilter<"payments"> | Decimal | DecimalJsLike | number | string | null
+    currency?: StringNullableFilter<"payments"> | string | null
+    method?: StringNullableFilter<"payments"> | string | null
+    status?: StringFilter<"payments"> | string
+    payment_url?: StringNullableFilter<"payments"> | string | null
+    deadline?: DateTimeFilter<"payments"> | Date | string
+    metadata?: StringNullableFilter<"payments"> | string | null
+    created_at?: DateTimeNullableFilter<"payments"> | Date | string | null
+    updated_at?: DateTimeNullableFilter<"payments"> | Date | string | null
+    paid_at?: DateTimeNullableFilter<"payments"> | Date | string | null
+    expired_at?: DateTimeNullableFilter<"payments"> | Date | string | null
+  }
+
+  export type paymentsOrderByWithRelationInput = {
+    id?: SortOrder
+    order_id?: SortOrder
+    provider?: SortOrder
+    provider_transaction_id?: SortOrderInput | SortOrder
+    amount?: SortOrder
+    fee?: SortOrderInput | SortOrder
+    net_amount?: SortOrderInput | SortOrder
+    currency?: SortOrderInput | SortOrder
+    method?: SortOrderInput | SortOrder
+    status?: SortOrder
+    payment_url?: SortOrderInput | SortOrder
+    deadline?: SortOrder
+    metadata?: SortOrderInput | SortOrder
+    created_at?: SortOrderInput | SortOrder
+    updated_at?: SortOrderInput | SortOrder
+    paid_at?: SortOrderInput | SortOrder
+    expired_at?: SortOrderInput | SortOrder
+    _relevance?: paymentsOrderByRelevanceInput
+  }
+
+  export type paymentsWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: paymentsWhereInput | paymentsWhereInput[]
+    OR?: paymentsWhereInput[]
+    NOT?: paymentsWhereInput | paymentsWhereInput[]
+    order_id?: StringFilter<"payments"> | string
+    provider?: StringFilter<"payments"> | string
+    provider_transaction_id?: StringNullableFilter<"payments"> | string | null
+    amount?: DecimalFilter<"payments"> | Decimal | DecimalJsLike | number | string
+    fee?: DecimalNullableFilter<"payments"> | Decimal | DecimalJsLike | number | string | null
+    net_amount?: DecimalNullableFilter<"payments"> | Decimal | DecimalJsLike | number | string | null
+    currency?: StringNullableFilter<"payments"> | string | null
+    method?: StringNullableFilter<"payments"> | string | null
+    status?: StringFilter<"payments"> | string
+    payment_url?: StringNullableFilter<"payments"> | string | null
+    deadline?: DateTimeFilter<"payments"> | Date | string
+    metadata?: StringNullableFilter<"payments"> | string | null
+    created_at?: DateTimeNullableFilter<"payments"> | Date | string | null
+    updated_at?: DateTimeNullableFilter<"payments"> | Date | string | null
+    paid_at?: DateTimeNullableFilter<"payments"> | Date | string | null
+    expired_at?: DateTimeNullableFilter<"payments"> | Date | string | null
+  }, "id">
+
+  export type paymentsOrderByWithAggregationInput = {
+    id?: SortOrder
+    order_id?: SortOrder
+    provider?: SortOrder
+    provider_transaction_id?: SortOrderInput | SortOrder
+    amount?: SortOrder
+    fee?: SortOrderInput | SortOrder
+    net_amount?: SortOrderInput | SortOrder
+    currency?: SortOrderInput | SortOrder
+    method?: SortOrderInput | SortOrder
+    status?: SortOrder
+    payment_url?: SortOrderInput | SortOrder
+    deadline?: SortOrder
+    metadata?: SortOrderInput | SortOrder
+    created_at?: SortOrderInput | SortOrder
+    updated_at?: SortOrderInput | SortOrder
+    paid_at?: SortOrderInput | SortOrder
+    expired_at?: SortOrderInput | SortOrder
+    _count?: paymentsCountOrderByAggregateInput
+    _avg?: paymentsAvgOrderByAggregateInput
+    _max?: paymentsMaxOrderByAggregateInput
+    _min?: paymentsMinOrderByAggregateInput
+    _sum?: paymentsSumOrderByAggregateInput
+  }
+
+  export type paymentsScalarWhereWithAggregatesInput = {
+    AND?: paymentsScalarWhereWithAggregatesInput | paymentsScalarWhereWithAggregatesInput[]
+    OR?: paymentsScalarWhereWithAggregatesInput[]
+    NOT?: paymentsScalarWhereWithAggregatesInput | paymentsScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"payments"> | string
+    order_id?: StringWithAggregatesFilter<"payments"> | string
+    provider?: StringWithAggregatesFilter<"payments"> | string
+    provider_transaction_id?: StringNullableWithAggregatesFilter<"payments"> | string | null
+    amount?: DecimalWithAggregatesFilter<"payments"> | Decimal | DecimalJsLike | number | string
+    fee?: DecimalNullableWithAggregatesFilter<"payments"> | Decimal | DecimalJsLike | number | string | null
+    net_amount?: DecimalNullableWithAggregatesFilter<"payments"> | Decimal | DecimalJsLike | number | string | null
+    currency?: StringNullableWithAggregatesFilter<"payments"> | string | null
+    method?: StringNullableWithAggregatesFilter<"payments"> | string | null
+    status?: StringWithAggregatesFilter<"payments"> | string
+    payment_url?: StringNullableWithAggregatesFilter<"payments"> | string | null
+    deadline?: DateTimeWithAggregatesFilter<"payments"> | Date | string
+    metadata?: StringNullableWithAggregatesFilter<"payments"> | string | null
+    created_at?: DateTimeNullableWithAggregatesFilter<"payments"> | Date | string | null
+    updated_at?: DateTimeNullableWithAggregatesFilter<"payments"> | Date | string | null
+    paid_at?: DateTimeNullableWithAggregatesFilter<"payments"> | Date | string | null
+    expired_at?: DateTimeNullableWithAggregatesFilter<"payments"> | Date | string | null
+  }
+
+  export type refundsWhereInput = {
+    AND?: refundsWhereInput | refundsWhereInput[]
+    OR?: refundsWhereInput[]
+    NOT?: refundsWhereInput | refundsWhereInput[]
+    id?: StringFilter<"refunds"> | string
+    payment_id?: StringFilter<"refunds"> | string
+    order_id?: StringFilter<"refunds"> | string
+    amount?: DecimalFilter<"refunds"> | Decimal | DecimalJsLike | number | string
+    type?: StringFilter<"refunds"> | string
+    reason?: StringNullableFilter<"refunds"> | string | null
+    provider_refund_id?: StringNullableFilter<"refunds"> | string | null
+    status?: StringFilter<"refunds"> | string
+    processed_at?: DateTimeNullableFilter<"refunds"> | Date | string | null
+    completed_at?: DateTimeNullableFilter<"refunds"> | Date | string | null
+    created_at?: DateTimeNullableFilter<"refunds"> | Date | string | null
+    metadata?: StringNullableFilter<"refunds"> | string | null
+  }
+
+  export type refundsOrderByWithRelationInput = {
+    id?: SortOrder
+    payment_id?: SortOrder
+    order_id?: SortOrder
+    amount?: SortOrder
+    type?: SortOrder
+    reason?: SortOrderInput | SortOrder
+    provider_refund_id?: SortOrderInput | SortOrder
+    status?: SortOrder
+    processed_at?: SortOrderInput | SortOrder
+    completed_at?: SortOrderInput | SortOrder
+    created_at?: SortOrderInput | SortOrder
+    metadata?: SortOrderInput | SortOrder
+    _relevance?: refundsOrderByRelevanceInput
+  }
+
+  export type refundsWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: refundsWhereInput | refundsWhereInput[]
+    OR?: refundsWhereInput[]
+    NOT?: refundsWhereInput | refundsWhereInput[]
+    payment_id?: StringFilter<"refunds"> | string
+    order_id?: StringFilter<"refunds"> | string
+    amount?: DecimalFilter<"refunds"> | Decimal | DecimalJsLike | number | string
+    type?: StringFilter<"refunds"> | string
+    reason?: StringNullableFilter<"refunds"> | string | null
+    provider_refund_id?: StringNullableFilter<"refunds"> | string | null
+    status?: StringFilter<"refunds"> | string
+    processed_at?: DateTimeNullableFilter<"refunds"> | Date | string | null
+    completed_at?: DateTimeNullableFilter<"refunds"> | Date | string | null
+    created_at?: DateTimeNullableFilter<"refunds"> | Date | string | null
+    metadata?: StringNullableFilter<"refunds"> | string | null
+  }, "id">
+
+  export type refundsOrderByWithAggregationInput = {
+    id?: SortOrder
+    payment_id?: SortOrder
+    order_id?: SortOrder
+    amount?: SortOrder
+    type?: SortOrder
+    reason?: SortOrderInput | SortOrder
+    provider_refund_id?: SortOrderInput | SortOrder
+    status?: SortOrder
+    processed_at?: SortOrderInput | SortOrder
+    completed_at?: SortOrderInput | SortOrder
+    created_at?: SortOrderInput | SortOrder
+    metadata?: SortOrderInput | SortOrder
+    _count?: refundsCountOrderByAggregateInput
+    _avg?: refundsAvgOrderByAggregateInput
+    _max?: refundsMaxOrderByAggregateInput
+    _min?: refundsMinOrderByAggregateInput
+    _sum?: refundsSumOrderByAggregateInput
+  }
+
+  export type refundsScalarWhereWithAggregatesInput = {
+    AND?: refundsScalarWhereWithAggregatesInput | refundsScalarWhereWithAggregatesInput[]
+    OR?: refundsScalarWhereWithAggregatesInput[]
+    NOT?: refundsScalarWhereWithAggregatesInput | refundsScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"refunds"> | string
+    payment_id?: StringWithAggregatesFilter<"refunds"> | string
+    order_id?: StringWithAggregatesFilter<"refunds"> | string
+    amount?: DecimalWithAggregatesFilter<"refunds"> | Decimal | DecimalJsLike | number | string
+    type?: StringWithAggregatesFilter<"refunds"> | string
+    reason?: StringNullableWithAggregatesFilter<"refunds"> | string | null
+    provider_refund_id?: StringNullableWithAggregatesFilter<"refunds"> | string | null
+    status?: StringWithAggregatesFilter<"refunds"> | string
+    processed_at?: DateTimeNullableWithAggregatesFilter<"refunds"> | Date | string | null
+    completed_at?: DateTimeNullableWithAggregatesFilter<"refunds"> | Date | string | null
+    created_at?: DateTimeNullableWithAggregatesFilter<"refunds"> | Date | string | null
+    metadata?: StringNullableWithAggregatesFilter<"refunds"> | string | null
   }
 
   export type CategoryCreateInput = {
@@ -23282,7 +26888,7 @@ export namespace Prisma {
   export type auth_tokensCreateInput = {
     id?: string
     refresh_token_hash: string
-    device_info?: NullableJsonNullValueInput | InputJsonValue
+    device_info?: string | null
     ip_address?: string | null
     expires_at: Date | string
     created_at?: Date | string
@@ -23295,7 +26901,7 @@ export namespace Prisma {
     id?: string
     user_id: string
     refresh_token_hash: string
-    device_info?: NullableJsonNullValueInput | InputJsonValue
+    device_info?: string | null
     ip_address?: string | null
     expires_at: Date | string
     created_at?: Date | string
@@ -23306,7 +26912,7 @@ export namespace Prisma {
   export type auth_tokensUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     refresh_token_hash?: StringFieldUpdateOperationsInput | string
-    device_info?: NullableJsonNullValueInput | InputJsonValue
+    device_info?: NullableStringFieldUpdateOperationsInput | string | null
     ip_address?: NullableStringFieldUpdateOperationsInput | string | null
     expires_at?: DateTimeFieldUpdateOperationsInput | Date | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -23319,7 +26925,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     user_id?: StringFieldUpdateOperationsInput | string
     refresh_token_hash?: StringFieldUpdateOperationsInput | string
-    device_info?: NullableJsonNullValueInput | InputJsonValue
+    device_info?: NullableStringFieldUpdateOperationsInput | string | null
     ip_address?: NullableStringFieldUpdateOperationsInput | string | null
     expires_at?: DateTimeFieldUpdateOperationsInput | Date | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -23331,7 +26937,7 @@ export namespace Prisma {
     id?: string
     user_id: string
     refresh_token_hash: string
-    device_info?: NullableJsonNullValueInput | InputJsonValue
+    device_info?: string | null
     ip_address?: string | null
     expires_at: Date | string
     created_at?: Date | string
@@ -23342,7 +26948,7 @@ export namespace Prisma {
   export type auth_tokensUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     refresh_token_hash?: StringFieldUpdateOperationsInput | string
-    device_info?: NullableJsonNullValueInput | InputJsonValue
+    device_info?: NullableStringFieldUpdateOperationsInput | string | null
     ip_address?: NullableStringFieldUpdateOperationsInput | string | null
     expires_at?: DateTimeFieldUpdateOperationsInput | Date | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -23354,7 +26960,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     user_id?: StringFieldUpdateOperationsInput | string
     refresh_token_hash?: StringFieldUpdateOperationsInput | string
-    device_info?: NullableJsonNullValueInput | InputJsonValue
+    device_info?: NullableStringFieldUpdateOperationsInput | string | null
     ip_address?: NullableStringFieldUpdateOperationsInput | string | null
     expires_at?: DateTimeFieldUpdateOperationsInput | Date | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -23502,9 +27108,9 @@ export namespace Prisma {
     created_at?: Date | string | null
     updated_at?: Date | string | null
     deleted_at?: Date | string | null
-    authTokens?: auth_tokensCreateNestedManyWithoutUserInput
-    passwordResetTokens?: password_reset_tokensCreateNestedManyWithoutUserInput
+    authTokens?: auth_tokensCreateNestedOneWithoutUserInput
     emailVerificationTokens?: email_verification_tokensCreateNestedManyWithoutUserInput
+    passwordResetTokens?: password_reset_tokensCreateNestedManyWithoutUserInput
   }
 
   export type usersUncheckedCreateInput = {
@@ -23523,9 +27129,9 @@ export namespace Prisma {
     created_at?: Date | string | null
     updated_at?: Date | string | null
     deleted_at?: Date | string | null
-    authTokens?: auth_tokensUncheckedCreateNestedManyWithoutUserInput
-    passwordResetTokens?: password_reset_tokensUncheckedCreateNestedManyWithoutUserInput
+    authTokens?: auth_tokensUncheckedCreateNestedOneWithoutUserInput
     emailVerificationTokens?: email_verification_tokensUncheckedCreateNestedManyWithoutUserInput
+    passwordResetTokens?: password_reset_tokensUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type usersUpdateInput = {
@@ -23544,9 +27150,9 @@ export namespace Prisma {
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    authTokens?: auth_tokensUpdateManyWithoutUserNestedInput
-    passwordResetTokens?: password_reset_tokensUpdateManyWithoutUserNestedInput
+    authTokens?: auth_tokensUpdateOneWithoutUserNestedInput
     emailVerificationTokens?: email_verification_tokensUpdateManyWithoutUserNestedInput
+    passwordResetTokens?: password_reset_tokensUpdateManyWithoutUserNestedInput
   }
 
   export type usersUncheckedUpdateInput = {
@@ -23565,9 +27171,9 @@ export namespace Prisma {
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    authTokens?: auth_tokensUncheckedUpdateManyWithoutUserNestedInput
-    passwordResetTokens?: password_reset_tokensUncheckedUpdateManyWithoutUserNestedInput
+    authTokens?: auth_tokensUncheckedUpdateOneWithoutUserNestedInput
     emailVerificationTokens?: email_verification_tokensUncheckedUpdateManyWithoutUserNestedInput
+    passwordResetTokens?: password_reset_tokensUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type usersCreateManyInput = {
@@ -23622,6 +27228,314 @@ export namespace Prisma {
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type payment_providersCreateInput = {
+    id: string
+    name: string
+    is_enabled?: boolean | null
+    config: string
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+  }
+
+  export type payment_providersUncheckedCreateInput = {
+    id: string
+    name: string
+    is_enabled?: boolean | null
+    config: string
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+  }
+
+  export type payment_providersUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    is_enabled?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    config?: StringFieldUpdateOperationsInput | string
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type payment_providersUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    is_enabled?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    config?: StringFieldUpdateOperationsInput | string
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type payment_providersCreateManyInput = {
+    id: string
+    name: string
+    is_enabled?: boolean | null
+    config: string
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+  }
+
+  export type payment_providersUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    is_enabled?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    config?: StringFieldUpdateOperationsInput | string
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type payment_providersUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    is_enabled?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    config?: StringFieldUpdateOperationsInput | string
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type paymentsCreateInput = {
+    id?: string
+    order_id: string
+    provider: string
+    provider_transaction_id?: string | null
+    amount: Decimal | DecimalJsLike | number | string
+    fee?: Decimal | DecimalJsLike | number | string | null
+    net_amount?: Decimal | DecimalJsLike | number | string | null
+    currency?: string | null
+    method?: string | null
+    status?: string
+    payment_url?: string | null
+    deadline: Date | string
+    metadata?: string | null
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+    paid_at?: Date | string | null
+    expired_at?: Date | string | null
+  }
+
+  export type paymentsUncheckedCreateInput = {
+    id?: string
+    order_id: string
+    provider: string
+    provider_transaction_id?: string | null
+    amount: Decimal | DecimalJsLike | number | string
+    fee?: Decimal | DecimalJsLike | number | string | null
+    net_amount?: Decimal | DecimalJsLike | number | string | null
+    currency?: string | null
+    method?: string | null
+    status?: string
+    payment_url?: string | null
+    deadline: Date | string
+    metadata?: string | null
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+    paid_at?: Date | string | null
+    expired_at?: Date | string | null
+  }
+
+  export type paymentsUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    order_id?: StringFieldUpdateOperationsInput | string
+    provider?: StringFieldUpdateOperationsInput | string
+    provider_transaction_id?: NullableStringFieldUpdateOperationsInput | string | null
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    fee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    net_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    currency?: NullableStringFieldUpdateOperationsInput | string | null
+    method?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    payment_url?: NullableStringFieldUpdateOperationsInput | string | null
+    deadline?: DateTimeFieldUpdateOperationsInput | Date | string
+    metadata?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    paid_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expired_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type paymentsUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    order_id?: StringFieldUpdateOperationsInput | string
+    provider?: StringFieldUpdateOperationsInput | string
+    provider_transaction_id?: NullableStringFieldUpdateOperationsInput | string | null
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    fee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    net_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    currency?: NullableStringFieldUpdateOperationsInput | string | null
+    method?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    payment_url?: NullableStringFieldUpdateOperationsInput | string | null
+    deadline?: DateTimeFieldUpdateOperationsInput | Date | string
+    metadata?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    paid_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expired_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type paymentsCreateManyInput = {
+    id?: string
+    order_id: string
+    provider: string
+    provider_transaction_id?: string | null
+    amount: Decimal | DecimalJsLike | number | string
+    fee?: Decimal | DecimalJsLike | number | string | null
+    net_amount?: Decimal | DecimalJsLike | number | string | null
+    currency?: string | null
+    method?: string | null
+    status?: string
+    payment_url?: string | null
+    deadline: Date | string
+    metadata?: string | null
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+    paid_at?: Date | string | null
+    expired_at?: Date | string | null
+  }
+
+  export type paymentsUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    order_id?: StringFieldUpdateOperationsInput | string
+    provider?: StringFieldUpdateOperationsInput | string
+    provider_transaction_id?: NullableStringFieldUpdateOperationsInput | string | null
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    fee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    net_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    currency?: NullableStringFieldUpdateOperationsInput | string | null
+    method?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    payment_url?: NullableStringFieldUpdateOperationsInput | string | null
+    deadline?: DateTimeFieldUpdateOperationsInput | Date | string
+    metadata?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    paid_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expired_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type paymentsUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    order_id?: StringFieldUpdateOperationsInput | string
+    provider?: StringFieldUpdateOperationsInput | string
+    provider_transaction_id?: NullableStringFieldUpdateOperationsInput | string | null
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    fee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    net_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    currency?: NullableStringFieldUpdateOperationsInput | string | null
+    method?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    payment_url?: NullableStringFieldUpdateOperationsInput | string | null
+    deadline?: DateTimeFieldUpdateOperationsInput | Date | string
+    metadata?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    paid_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expired_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type refundsCreateInput = {
+    id?: string
+    payment_id: string
+    order_id: string
+    amount: Decimal | DecimalJsLike | number | string
+    type: string
+    reason?: string | null
+    provider_refund_id?: string | null
+    status?: string
+    processed_at?: Date | string | null
+    completed_at?: Date | string | null
+    created_at?: Date | string | null
+    metadata?: string | null
+  }
+
+  export type refundsUncheckedCreateInput = {
+    id?: string
+    payment_id: string
+    order_id: string
+    amount: Decimal | DecimalJsLike | number | string
+    type: string
+    reason?: string | null
+    provider_refund_id?: string | null
+    status?: string
+    processed_at?: Date | string | null
+    completed_at?: Date | string | null
+    created_at?: Date | string | null
+    metadata?: string | null
+  }
+
+  export type refundsUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    payment_id?: StringFieldUpdateOperationsInput | string
+    order_id?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    type?: StringFieldUpdateOperationsInput | string
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    provider_refund_id?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    processed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    metadata?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type refundsUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    payment_id?: StringFieldUpdateOperationsInput | string
+    order_id?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    type?: StringFieldUpdateOperationsInput | string
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    provider_refund_id?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    processed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    metadata?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type refundsCreateManyInput = {
+    id?: string
+    payment_id: string
+    order_id: string
+    amount: Decimal | DecimalJsLike | number | string
+    type: string
+    reason?: string | null
+    provider_refund_id?: string | null
+    status?: string
+    processed_at?: Date | string | null
+    completed_at?: Date | string | null
+    created_at?: Date | string | null
+    metadata?: string | null
+  }
+
+  export type refundsUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    payment_id?: StringFieldUpdateOperationsInput | string
+    order_id?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    type?: StringFieldUpdateOperationsInput | string
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    provider_refund_id?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    processed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    metadata?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type refundsUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    payment_id?: StringFieldUpdateOperationsInput | string
+    order_id?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    type?: StringFieldUpdateOperationsInput | string
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    provider_refund_id?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    processed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    metadata?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type StringFilter<$PrismaModel = never> = {
@@ -24656,29 +28570,6 @@ export namespace Prisma {
     updated_at?: SortOrder
     deleted_at?: SortOrder
   }
-  export type JsonNullableFilter<$PrismaModel = never> =
-    | PatchUndefined<
-        Either<Required<JsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>,
-        Required<JsonNullableFilterBase<$PrismaModel>>
-      >
-    | OptionalFlat<Omit<Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>
-
-  export type JsonNullableFilterBase<$PrismaModel = never> = {
-    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    path?: string
-    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
-    string_contains?: string | StringFieldRefInput<$PrismaModel>
-    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
-    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
-    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    lt?: InputJsonValue
-    lte?: InputJsonValue
-    gt?: InputJsonValue
-    gte?: InputJsonValue
-    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-  }
 
   export type UsersScalarRelationFilter = {
     is?: usersWhereInput
@@ -24707,6 +28598,7 @@ export namespace Prisma {
     id?: SortOrder
     user_id?: SortOrder
     refresh_token_hash?: SortOrder
+    device_info?: SortOrder
     ip_address?: SortOrder
     expires_at?: SortOrder
     created_at?: SortOrder
@@ -24718,37 +28610,12 @@ export namespace Prisma {
     id?: SortOrder
     user_id?: SortOrder
     refresh_token_hash?: SortOrder
+    device_info?: SortOrder
     ip_address?: SortOrder
     expires_at?: SortOrder
     created_at?: SortOrder
     revoked_at?: SortOrder
     deleted_at?: SortOrder
-  }
-  export type JsonNullableWithAggregatesFilter<$PrismaModel = never> =
-    | PatchUndefined<
-        Either<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
-        Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>
-      >
-    | OptionalFlat<Omit<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
-
-  export type JsonNullableWithAggregatesFilterBase<$PrismaModel = never> = {
-    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    path?: string
-    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
-    string_contains?: string | StringFieldRefInput<$PrismaModel>
-    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
-    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
-    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    lt?: InputJsonValue
-    lte?: InputJsonValue
-    gt?: InputJsonValue
-    gte?: InputJsonValue
-    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedJsonNullableFilter<$PrismaModel>
-    _max?: NestedJsonNullableFilter<$PrismaModel>
   }
 
   export type password_reset_tokensOrderByRelevanceInput = {
@@ -24817,16 +28684,9 @@ export namespace Prisma {
     created_at?: SortOrder
   }
 
-  export type Auth_tokensListRelationFilter = {
-    every?: auth_tokensWhereInput
-    some?: auth_tokensWhereInput
-    none?: auth_tokensWhereInput
-  }
-
-  export type Password_reset_tokensListRelationFilter = {
-    every?: password_reset_tokensWhereInput
-    some?: password_reset_tokensWhereInput
-    none?: password_reset_tokensWhereInput
+  export type Auth_tokensNullableScalarRelationFilter = {
+    is?: auth_tokensWhereInput | null
+    isNot?: auth_tokensWhereInput | null
   }
 
   export type Email_verification_tokensListRelationFilter = {
@@ -24835,15 +28695,17 @@ export namespace Prisma {
     none?: email_verification_tokensWhereInput
   }
 
-  export type auth_tokensOrderByRelationAggregateInput = {
+  export type Password_reset_tokensListRelationFilter = {
+    every?: password_reset_tokensWhereInput
+    some?: password_reset_tokensWhereInput
+    none?: password_reset_tokensWhereInput
+  }
+
+  export type email_verification_tokensOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
   export type password_reset_tokensOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type email_verification_tokensOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -24905,6 +28767,176 @@ export namespace Prisma {
     created_at?: SortOrder
     updated_at?: SortOrder
     deleted_at?: SortOrder
+  }
+
+  export type payment_providersOrderByRelevanceInput = {
+    fields: payment_providersOrderByRelevanceFieldEnum | payment_providersOrderByRelevanceFieldEnum[]
+    sort: SortOrder
+    search: string
+  }
+
+  export type payment_providersCountOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    is_enabled?: SortOrder
+    config?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type payment_providersMaxOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    is_enabled?: SortOrder
+    config?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type payment_providersMinOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    is_enabled?: SortOrder
+    config?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type paymentsOrderByRelevanceInput = {
+    fields: paymentsOrderByRelevanceFieldEnum | paymentsOrderByRelevanceFieldEnum[]
+    sort: SortOrder
+    search: string
+  }
+
+  export type paymentsCountOrderByAggregateInput = {
+    id?: SortOrder
+    order_id?: SortOrder
+    provider?: SortOrder
+    provider_transaction_id?: SortOrder
+    amount?: SortOrder
+    fee?: SortOrder
+    net_amount?: SortOrder
+    currency?: SortOrder
+    method?: SortOrder
+    status?: SortOrder
+    payment_url?: SortOrder
+    deadline?: SortOrder
+    metadata?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    paid_at?: SortOrder
+    expired_at?: SortOrder
+  }
+
+  export type paymentsAvgOrderByAggregateInput = {
+    amount?: SortOrder
+    fee?: SortOrder
+    net_amount?: SortOrder
+  }
+
+  export type paymentsMaxOrderByAggregateInput = {
+    id?: SortOrder
+    order_id?: SortOrder
+    provider?: SortOrder
+    provider_transaction_id?: SortOrder
+    amount?: SortOrder
+    fee?: SortOrder
+    net_amount?: SortOrder
+    currency?: SortOrder
+    method?: SortOrder
+    status?: SortOrder
+    payment_url?: SortOrder
+    deadline?: SortOrder
+    metadata?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    paid_at?: SortOrder
+    expired_at?: SortOrder
+  }
+
+  export type paymentsMinOrderByAggregateInput = {
+    id?: SortOrder
+    order_id?: SortOrder
+    provider?: SortOrder
+    provider_transaction_id?: SortOrder
+    amount?: SortOrder
+    fee?: SortOrder
+    net_amount?: SortOrder
+    currency?: SortOrder
+    method?: SortOrder
+    status?: SortOrder
+    payment_url?: SortOrder
+    deadline?: SortOrder
+    metadata?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    paid_at?: SortOrder
+    expired_at?: SortOrder
+  }
+
+  export type paymentsSumOrderByAggregateInput = {
+    amount?: SortOrder
+    fee?: SortOrder
+    net_amount?: SortOrder
+  }
+
+  export type refundsOrderByRelevanceInput = {
+    fields: refundsOrderByRelevanceFieldEnum | refundsOrderByRelevanceFieldEnum[]
+    sort: SortOrder
+    search: string
+  }
+
+  export type refundsCountOrderByAggregateInput = {
+    id?: SortOrder
+    payment_id?: SortOrder
+    order_id?: SortOrder
+    amount?: SortOrder
+    type?: SortOrder
+    reason?: SortOrder
+    provider_refund_id?: SortOrder
+    status?: SortOrder
+    processed_at?: SortOrder
+    completed_at?: SortOrder
+    created_at?: SortOrder
+    metadata?: SortOrder
+  }
+
+  export type refundsAvgOrderByAggregateInput = {
+    amount?: SortOrder
+  }
+
+  export type refundsMaxOrderByAggregateInput = {
+    id?: SortOrder
+    payment_id?: SortOrder
+    order_id?: SortOrder
+    amount?: SortOrder
+    type?: SortOrder
+    reason?: SortOrder
+    provider_refund_id?: SortOrder
+    status?: SortOrder
+    processed_at?: SortOrder
+    completed_at?: SortOrder
+    created_at?: SortOrder
+    metadata?: SortOrder
+  }
+
+  export type refundsMinOrderByAggregateInput = {
+    id?: SortOrder
+    payment_id?: SortOrder
+    order_id?: SortOrder
+    amount?: SortOrder
+    type?: SortOrder
+    reason?: SortOrder
+    provider_refund_id?: SortOrder
+    status?: SortOrder
+    processed_at?: SortOrder
+    completed_at?: SortOrder
+    created_at?: SortOrder
+    metadata?: SortOrder
+  }
+
+  export type refundsSumOrderByAggregateInput = {
+    amount?: SortOrder
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -25005,18 +29037,10 @@ export namespace Prisma {
     update?: XOR<XOR<usersUpdateToOneWithWhereWithoutEmailVerificationTokensInput, usersUpdateWithoutEmailVerificationTokensInput>, usersUncheckedUpdateWithoutEmailVerificationTokensInput>
   }
 
-  export type auth_tokensCreateNestedManyWithoutUserInput = {
-    create?: XOR<auth_tokensCreateWithoutUserInput, auth_tokensUncheckedCreateWithoutUserInput> | auth_tokensCreateWithoutUserInput[] | auth_tokensUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: auth_tokensCreateOrConnectWithoutUserInput | auth_tokensCreateOrConnectWithoutUserInput[]
-    createMany?: auth_tokensCreateManyUserInputEnvelope
-    connect?: auth_tokensWhereUniqueInput | auth_tokensWhereUniqueInput[]
-  }
-
-  export type password_reset_tokensCreateNestedManyWithoutUserInput = {
-    create?: XOR<password_reset_tokensCreateWithoutUserInput, password_reset_tokensUncheckedCreateWithoutUserInput> | password_reset_tokensCreateWithoutUserInput[] | password_reset_tokensUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: password_reset_tokensCreateOrConnectWithoutUserInput | password_reset_tokensCreateOrConnectWithoutUserInput[]
-    createMany?: password_reset_tokensCreateManyUserInputEnvelope
-    connect?: password_reset_tokensWhereUniqueInput | password_reset_tokensWhereUniqueInput[]
+  export type auth_tokensCreateNestedOneWithoutUserInput = {
+    create?: XOR<auth_tokensCreateWithoutUserInput, auth_tokensUncheckedCreateWithoutUserInput>
+    connectOrCreate?: auth_tokensCreateOrConnectWithoutUserInput
+    connect?: auth_tokensWhereUniqueInput
   }
 
   export type email_verification_tokensCreateNestedManyWithoutUserInput = {
@@ -25026,18 +29050,17 @@ export namespace Prisma {
     connect?: email_verification_tokensWhereUniqueInput | email_verification_tokensWhereUniqueInput[]
   }
 
-  export type auth_tokensUncheckedCreateNestedManyWithoutUserInput = {
-    create?: XOR<auth_tokensCreateWithoutUserInput, auth_tokensUncheckedCreateWithoutUserInput> | auth_tokensCreateWithoutUserInput[] | auth_tokensUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: auth_tokensCreateOrConnectWithoutUserInput | auth_tokensCreateOrConnectWithoutUserInput[]
-    createMany?: auth_tokensCreateManyUserInputEnvelope
-    connect?: auth_tokensWhereUniqueInput | auth_tokensWhereUniqueInput[]
-  }
-
-  export type password_reset_tokensUncheckedCreateNestedManyWithoutUserInput = {
+  export type password_reset_tokensCreateNestedManyWithoutUserInput = {
     create?: XOR<password_reset_tokensCreateWithoutUserInput, password_reset_tokensUncheckedCreateWithoutUserInput> | password_reset_tokensCreateWithoutUserInput[] | password_reset_tokensUncheckedCreateWithoutUserInput[]
     connectOrCreate?: password_reset_tokensCreateOrConnectWithoutUserInput | password_reset_tokensCreateOrConnectWithoutUserInput[]
     createMany?: password_reset_tokensCreateManyUserInputEnvelope
     connect?: password_reset_tokensWhereUniqueInput | password_reset_tokensWhereUniqueInput[]
+  }
+
+  export type auth_tokensUncheckedCreateNestedOneWithoutUserInput = {
+    create?: XOR<auth_tokensCreateWithoutUserInput, auth_tokensUncheckedCreateWithoutUserInput>
+    connectOrCreate?: auth_tokensCreateOrConnectWithoutUserInput
+    connect?: auth_tokensWhereUniqueInput
   }
 
   export type email_verification_tokensUncheckedCreateNestedManyWithoutUserInput = {
@@ -25047,32 +29070,21 @@ export namespace Prisma {
     connect?: email_verification_tokensWhereUniqueInput | email_verification_tokensWhereUniqueInput[]
   }
 
-  export type auth_tokensUpdateManyWithoutUserNestedInput = {
-    create?: XOR<auth_tokensCreateWithoutUserInput, auth_tokensUncheckedCreateWithoutUserInput> | auth_tokensCreateWithoutUserInput[] | auth_tokensUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: auth_tokensCreateOrConnectWithoutUserInput | auth_tokensCreateOrConnectWithoutUserInput[]
-    upsert?: auth_tokensUpsertWithWhereUniqueWithoutUserInput | auth_tokensUpsertWithWhereUniqueWithoutUserInput[]
-    createMany?: auth_tokensCreateManyUserInputEnvelope
-    set?: auth_tokensWhereUniqueInput | auth_tokensWhereUniqueInput[]
-    disconnect?: auth_tokensWhereUniqueInput | auth_tokensWhereUniqueInput[]
-    delete?: auth_tokensWhereUniqueInput | auth_tokensWhereUniqueInput[]
-    connect?: auth_tokensWhereUniqueInput | auth_tokensWhereUniqueInput[]
-    update?: auth_tokensUpdateWithWhereUniqueWithoutUserInput | auth_tokensUpdateWithWhereUniqueWithoutUserInput[]
-    updateMany?: auth_tokensUpdateManyWithWhereWithoutUserInput | auth_tokensUpdateManyWithWhereWithoutUserInput[]
-    deleteMany?: auth_tokensScalarWhereInput | auth_tokensScalarWhereInput[]
-  }
-
-  export type password_reset_tokensUpdateManyWithoutUserNestedInput = {
+  export type password_reset_tokensUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<password_reset_tokensCreateWithoutUserInput, password_reset_tokensUncheckedCreateWithoutUserInput> | password_reset_tokensCreateWithoutUserInput[] | password_reset_tokensUncheckedCreateWithoutUserInput[]
     connectOrCreate?: password_reset_tokensCreateOrConnectWithoutUserInput | password_reset_tokensCreateOrConnectWithoutUserInput[]
-    upsert?: password_reset_tokensUpsertWithWhereUniqueWithoutUserInput | password_reset_tokensUpsertWithWhereUniqueWithoutUserInput[]
     createMany?: password_reset_tokensCreateManyUserInputEnvelope
-    set?: password_reset_tokensWhereUniqueInput | password_reset_tokensWhereUniqueInput[]
-    disconnect?: password_reset_tokensWhereUniqueInput | password_reset_tokensWhereUniqueInput[]
-    delete?: password_reset_tokensWhereUniqueInput | password_reset_tokensWhereUniqueInput[]
     connect?: password_reset_tokensWhereUniqueInput | password_reset_tokensWhereUniqueInput[]
-    update?: password_reset_tokensUpdateWithWhereUniqueWithoutUserInput | password_reset_tokensUpdateWithWhereUniqueWithoutUserInput[]
-    updateMany?: password_reset_tokensUpdateManyWithWhereWithoutUserInput | password_reset_tokensUpdateManyWithWhereWithoutUserInput[]
-    deleteMany?: password_reset_tokensScalarWhereInput | password_reset_tokensScalarWhereInput[]
+  }
+
+  export type auth_tokensUpdateOneWithoutUserNestedInput = {
+    create?: XOR<auth_tokensCreateWithoutUserInput, auth_tokensUncheckedCreateWithoutUserInput>
+    connectOrCreate?: auth_tokensCreateOrConnectWithoutUserInput
+    upsert?: auth_tokensUpsertWithoutUserInput
+    disconnect?: auth_tokensWhereInput | boolean
+    delete?: auth_tokensWhereInput | boolean
+    connect?: auth_tokensWhereUniqueInput
+    update?: XOR<XOR<auth_tokensUpdateToOneWithWhereWithoutUserInput, auth_tokensUpdateWithoutUserInput>, auth_tokensUncheckedUpdateWithoutUserInput>
   }
 
   export type email_verification_tokensUpdateManyWithoutUserNestedInput = {
@@ -25089,21 +29101,7 @@ export namespace Prisma {
     deleteMany?: email_verification_tokensScalarWhereInput | email_verification_tokensScalarWhereInput[]
   }
 
-  export type auth_tokensUncheckedUpdateManyWithoutUserNestedInput = {
-    create?: XOR<auth_tokensCreateWithoutUserInput, auth_tokensUncheckedCreateWithoutUserInput> | auth_tokensCreateWithoutUserInput[] | auth_tokensUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: auth_tokensCreateOrConnectWithoutUserInput | auth_tokensCreateOrConnectWithoutUserInput[]
-    upsert?: auth_tokensUpsertWithWhereUniqueWithoutUserInput | auth_tokensUpsertWithWhereUniqueWithoutUserInput[]
-    createMany?: auth_tokensCreateManyUserInputEnvelope
-    set?: auth_tokensWhereUniqueInput | auth_tokensWhereUniqueInput[]
-    disconnect?: auth_tokensWhereUniqueInput | auth_tokensWhereUniqueInput[]
-    delete?: auth_tokensWhereUniqueInput | auth_tokensWhereUniqueInput[]
-    connect?: auth_tokensWhereUniqueInput | auth_tokensWhereUniqueInput[]
-    update?: auth_tokensUpdateWithWhereUniqueWithoutUserInput | auth_tokensUpdateWithWhereUniqueWithoutUserInput[]
-    updateMany?: auth_tokensUpdateManyWithWhereWithoutUserInput | auth_tokensUpdateManyWithWhereWithoutUserInput[]
-    deleteMany?: auth_tokensScalarWhereInput | auth_tokensScalarWhereInput[]
-  }
-
-  export type password_reset_tokensUncheckedUpdateManyWithoutUserNestedInput = {
+  export type password_reset_tokensUpdateManyWithoutUserNestedInput = {
     create?: XOR<password_reset_tokensCreateWithoutUserInput, password_reset_tokensUncheckedCreateWithoutUserInput> | password_reset_tokensCreateWithoutUserInput[] | password_reset_tokensUncheckedCreateWithoutUserInput[]
     connectOrCreate?: password_reset_tokensCreateOrConnectWithoutUserInput | password_reset_tokensCreateOrConnectWithoutUserInput[]
     upsert?: password_reset_tokensUpsertWithWhereUniqueWithoutUserInput | password_reset_tokensUpsertWithWhereUniqueWithoutUserInput[]
@@ -25115,6 +29113,16 @@ export namespace Prisma {
     update?: password_reset_tokensUpdateWithWhereUniqueWithoutUserInput | password_reset_tokensUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: password_reset_tokensUpdateManyWithWhereWithoutUserInput | password_reset_tokensUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: password_reset_tokensScalarWhereInput | password_reset_tokensScalarWhereInput[]
+  }
+
+  export type auth_tokensUncheckedUpdateOneWithoutUserNestedInput = {
+    create?: XOR<auth_tokensCreateWithoutUserInput, auth_tokensUncheckedCreateWithoutUserInput>
+    connectOrCreate?: auth_tokensCreateOrConnectWithoutUserInput
+    upsert?: auth_tokensUpsertWithoutUserInput
+    disconnect?: auth_tokensWhereInput | boolean
+    delete?: auth_tokensWhereInput | boolean
+    connect?: auth_tokensWhereUniqueInput
+    update?: XOR<XOR<auth_tokensUpdateToOneWithWhereWithoutUserInput, auth_tokensUpdateWithoutUserInput>, auth_tokensUncheckedUpdateWithoutUserInput>
   }
 
   export type email_verification_tokensUncheckedUpdateManyWithoutUserNestedInput = {
@@ -25129,6 +29137,20 @@ export namespace Prisma {
     update?: email_verification_tokensUpdateWithWhereUniqueWithoutUserInput | email_verification_tokensUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: email_verification_tokensUpdateManyWithWhereWithoutUserInput | email_verification_tokensUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: email_verification_tokensScalarWhereInput | email_verification_tokensScalarWhereInput[]
+  }
+
+  export type password_reset_tokensUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<password_reset_tokensCreateWithoutUserInput, password_reset_tokensUncheckedCreateWithoutUserInput> | password_reset_tokensCreateWithoutUserInput[] | password_reset_tokensUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: password_reset_tokensCreateOrConnectWithoutUserInput | password_reset_tokensCreateOrConnectWithoutUserInput[]
+    upsert?: password_reset_tokensUpsertWithWhereUniqueWithoutUserInput | password_reset_tokensUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: password_reset_tokensCreateManyUserInputEnvelope
+    set?: password_reset_tokensWhereUniqueInput | password_reset_tokensWhereUniqueInput[]
+    disconnect?: password_reset_tokensWhereUniqueInput | password_reset_tokensWhereUniqueInput[]
+    delete?: password_reset_tokensWhereUniqueInput | password_reset_tokensWhereUniqueInput[]
+    connect?: password_reset_tokensWhereUniqueInput | password_reset_tokensWhereUniqueInput[]
+    update?: password_reset_tokensUpdateWithWhereUniqueWithoutUserInput | password_reset_tokensUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: password_reset_tokensUpdateManyWithWhereWithoutUserInput | password_reset_tokensUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: password_reset_tokensScalarWhereInput | password_reset_tokensScalarWhereInput[]
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -25402,29 +29424,6 @@ export namespace Prisma {
     _min?: NestedDateTimeFilter<$PrismaModel>
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
-  export type NestedJsonNullableFilter<$PrismaModel = never> =
-    | PatchUndefined<
-        Either<Required<NestedJsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>,
-        Required<NestedJsonNullableFilterBase<$PrismaModel>>
-      >
-    | OptionalFlat<Omit<Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>
-
-  export type NestedJsonNullableFilterBase<$PrismaModel = never> = {
-    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    path?: string
-    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
-    string_contains?: string | StringFieldRefInput<$PrismaModel>
-    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
-    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
-    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    lt?: InputJsonValue
-    lte?: InputJsonValue
-    gt?: InputJsonValue
-    gte?: InputJsonValue
-    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-  }
 
   export type usersCreateWithoutAuthTokensInput = {
     id?: string
@@ -25442,8 +29441,8 @@ export namespace Prisma {
     created_at?: Date | string | null
     updated_at?: Date | string | null
     deleted_at?: Date | string | null
-    passwordResetTokens?: password_reset_tokensCreateNestedManyWithoutUserInput
     emailVerificationTokens?: email_verification_tokensCreateNestedManyWithoutUserInput
+    passwordResetTokens?: password_reset_tokensCreateNestedManyWithoutUserInput
   }
 
   export type usersUncheckedCreateWithoutAuthTokensInput = {
@@ -25462,8 +29461,8 @@ export namespace Prisma {
     created_at?: Date | string | null
     updated_at?: Date | string | null
     deleted_at?: Date | string | null
-    passwordResetTokens?: password_reset_tokensUncheckedCreateNestedManyWithoutUserInput
     emailVerificationTokens?: email_verification_tokensUncheckedCreateNestedManyWithoutUserInput
+    passwordResetTokens?: password_reset_tokensUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type usersCreateOrConnectWithoutAuthTokensInput = {
@@ -25498,8 +29497,8 @@ export namespace Prisma {
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    passwordResetTokens?: password_reset_tokensUpdateManyWithoutUserNestedInput
     emailVerificationTokens?: email_verification_tokensUpdateManyWithoutUserNestedInput
+    passwordResetTokens?: password_reset_tokensUpdateManyWithoutUserNestedInput
   }
 
   export type usersUncheckedUpdateWithoutAuthTokensInput = {
@@ -25518,8 +29517,8 @@ export namespace Prisma {
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    passwordResetTokens?: password_reset_tokensUncheckedUpdateManyWithoutUserNestedInput
     emailVerificationTokens?: email_verification_tokensUncheckedUpdateManyWithoutUserNestedInput
+    passwordResetTokens?: password_reset_tokensUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type usersCreateWithoutPasswordResetTokensInput = {
@@ -25538,7 +29537,7 @@ export namespace Prisma {
     created_at?: Date | string | null
     updated_at?: Date | string | null
     deleted_at?: Date | string | null
-    authTokens?: auth_tokensCreateNestedManyWithoutUserInput
+    authTokens?: auth_tokensCreateNestedOneWithoutUserInput
     emailVerificationTokens?: email_verification_tokensCreateNestedManyWithoutUserInput
   }
 
@@ -25558,7 +29557,7 @@ export namespace Prisma {
     created_at?: Date | string | null
     updated_at?: Date | string | null
     deleted_at?: Date | string | null
-    authTokens?: auth_tokensUncheckedCreateNestedManyWithoutUserInput
+    authTokens?: auth_tokensUncheckedCreateNestedOneWithoutUserInput
     emailVerificationTokens?: email_verification_tokensUncheckedCreateNestedManyWithoutUserInput
   }
 
@@ -25594,7 +29593,7 @@ export namespace Prisma {
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    authTokens?: auth_tokensUpdateManyWithoutUserNestedInput
+    authTokens?: auth_tokensUpdateOneWithoutUserNestedInput
     emailVerificationTokens?: email_verification_tokensUpdateManyWithoutUserNestedInput
   }
 
@@ -25614,7 +29613,7 @@ export namespace Prisma {
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    authTokens?: auth_tokensUncheckedUpdateManyWithoutUserNestedInput
+    authTokens?: auth_tokensUncheckedUpdateOneWithoutUserNestedInput
     emailVerificationTokens?: email_verification_tokensUncheckedUpdateManyWithoutUserNestedInput
   }
 
@@ -25634,7 +29633,7 @@ export namespace Prisma {
     created_at?: Date | string | null
     updated_at?: Date | string | null
     deleted_at?: Date | string | null
-    authTokens?: auth_tokensCreateNestedManyWithoutUserInput
+    authTokens?: auth_tokensCreateNestedOneWithoutUserInput
     passwordResetTokens?: password_reset_tokensCreateNestedManyWithoutUserInput
   }
 
@@ -25654,7 +29653,7 @@ export namespace Prisma {
     created_at?: Date | string | null
     updated_at?: Date | string | null
     deleted_at?: Date | string | null
-    authTokens?: auth_tokensUncheckedCreateNestedManyWithoutUserInput
+    authTokens?: auth_tokensUncheckedCreateNestedOneWithoutUserInput
     passwordResetTokens?: password_reset_tokensUncheckedCreateNestedManyWithoutUserInput
   }
 
@@ -25690,7 +29689,7 @@ export namespace Prisma {
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    authTokens?: auth_tokensUpdateManyWithoutUserNestedInput
+    authTokens?: auth_tokensUpdateOneWithoutUserNestedInput
     passwordResetTokens?: password_reset_tokensUpdateManyWithoutUserNestedInput
   }
 
@@ -25710,14 +29709,14 @@ export namespace Prisma {
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    authTokens?: auth_tokensUncheckedUpdateManyWithoutUserNestedInput
+    authTokens?: auth_tokensUncheckedUpdateOneWithoutUserNestedInput
     passwordResetTokens?: password_reset_tokensUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type auth_tokensCreateWithoutUserInput = {
     id?: string
     refresh_token_hash: string
-    device_info?: NullableJsonNullValueInput | InputJsonValue
+    device_info?: string | null
     ip_address?: string | null
     expires_at: Date | string
     created_at?: Date | string
@@ -25728,7 +29727,7 @@ export namespace Prisma {
   export type auth_tokensUncheckedCreateWithoutUserInput = {
     id?: string
     refresh_token_hash: string
-    device_info?: NullableJsonNullValueInput | InputJsonValue
+    device_info?: string | null
     ip_address?: string | null
     expires_at: Date | string
     created_at?: Date | string
@@ -25741,8 +29740,29 @@ export namespace Prisma {
     create: XOR<auth_tokensCreateWithoutUserInput, auth_tokensUncheckedCreateWithoutUserInput>
   }
 
-  export type auth_tokensCreateManyUserInputEnvelope = {
-    data: auth_tokensCreateManyUserInput | auth_tokensCreateManyUserInput[]
+  export type email_verification_tokensCreateWithoutUserInput = {
+    id?: string
+    token_hash: string
+    expires_at: Date | string
+    verified_at?: Date | string | null
+    created_at?: Date | string
+  }
+
+  export type email_verification_tokensUncheckedCreateWithoutUserInput = {
+    id?: string
+    token_hash: string
+    expires_at: Date | string
+    verified_at?: Date | string | null
+    created_at?: Date | string
+  }
+
+  export type email_verification_tokensCreateOrConnectWithoutUserInput = {
+    where: email_verification_tokensWhereUniqueInput
+    create: XOR<email_verification_tokensCreateWithoutUserInput, email_verification_tokensUncheckedCreateWithoutUserInput>
+  }
+
+  export type email_verification_tokensCreateManyUserInputEnvelope = {
+    data: email_verification_tokensCreateManyUserInput | email_verification_tokensCreateManyUserInput[]
     skipDuplicates?: boolean
   }
 
@@ -25772,89 +29792,37 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type email_verification_tokensCreateWithoutUserInput = {
-    id?: string
-    token_hash: string
-    expires_at: Date | string
-    verified_at?: Date | string | null
-    created_at?: Date | string
-  }
-
-  export type email_verification_tokensUncheckedCreateWithoutUserInput = {
-    id?: string
-    token_hash: string
-    expires_at: Date | string
-    verified_at?: Date | string | null
-    created_at?: Date | string
-  }
-
-  export type email_verification_tokensCreateOrConnectWithoutUserInput = {
-    where: email_verification_tokensWhereUniqueInput
-    create: XOR<email_verification_tokensCreateWithoutUserInput, email_verification_tokensUncheckedCreateWithoutUserInput>
-  }
-
-  export type email_verification_tokensCreateManyUserInputEnvelope = {
-    data: email_verification_tokensCreateManyUserInput | email_verification_tokensCreateManyUserInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type auth_tokensUpsertWithWhereUniqueWithoutUserInput = {
-    where: auth_tokensWhereUniqueInput
+  export type auth_tokensUpsertWithoutUserInput = {
     update: XOR<auth_tokensUpdateWithoutUserInput, auth_tokensUncheckedUpdateWithoutUserInput>
     create: XOR<auth_tokensCreateWithoutUserInput, auth_tokensUncheckedCreateWithoutUserInput>
+    where?: auth_tokensWhereInput
   }
 
-  export type auth_tokensUpdateWithWhereUniqueWithoutUserInput = {
-    where: auth_tokensWhereUniqueInput
+  export type auth_tokensUpdateToOneWithWhereWithoutUserInput = {
+    where?: auth_tokensWhereInput
     data: XOR<auth_tokensUpdateWithoutUserInput, auth_tokensUncheckedUpdateWithoutUserInput>
   }
 
-  export type auth_tokensUpdateManyWithWhereWithoutUserInput = {
-    where: auth_tokensScalarWhereInput
-    data: XOR<auth_tokensUpdateManyMutationInput, auth_tokensUncheckedUpdateManyWithoutUserInput>
+  export type auth_tokensUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    refresh_token_hash?: StringFieldUpdateOperationsInput | string
+    device_info?: NullableStringFieldUpdateOperationsInput | string | null
+    ip_address?: NullableStringFieldUpdateOperationsInput | string | null
+    expires_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    revoked_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
-  export type auth_tokensScalarWhereInput = {
-    AND?: auth_tokensScalarWhereInput | auth_tokensScalarWhereInput[]
-    OR?: auth_tokensScalarWhereInput[]
-    NOT?: auth_tokensScalarWhereInput | auth_tokensScalarWhereInput[]
-    id?: StringFilter<"auth_tokens"> | string
-    user_id?: StringFilter<"auth_tokens"> | string
-    refresh_token_hash?: StringFilter<"auth_tokens"> | string
-    device_info?: JsonNullableFilter<"auth_tokens">
-    ip_address?: StringNullableFilter<"auth_tokens"> | string | null
-    expires_at?: DateTimeFilter<"auth_tokens"> | Date | string
-    created_at?: DateTimeFilter<"auth_tokens"> | Date | string
-    revoked_at?: DateTimeNullableFilter<"auth_tokens"> | Date | string | null
-    deleted_at?: DateTimeNullableFilter<"auth_tokens"> | Date | string | null
-  }
-
-  export type password_reset_tokensUpsertWithWhereUniqueWithoutUserInput = {
-    where: password_reset_tokensWhereUniqueInput
-    update: XOR<password_reset_tokensUpdateWithoutUserInput, password_reset_tokensUncheckedUpdateWithoutUserInput>
-    create: XOR<password_reset_tokensCreateWithoutUserInput, password_reset_tokensUncheckedCreateWithoutUserInput>
-  }
-
-  export type password_reset_tokensUpdateWithWhereUniqueWithoutUserInput = {
-    where: password_reset_tokensWhereUniqueInput
-    data: XOR<password_reset_tokensUpdateWithoutUserInput, password_reset_tokensUncheckedUpdateWithoutUserInput>
-  }
-
-  export type password_reset_tokensUpdateManyWithWhereWithoutUserInput = {
-    where: password_reset_tokensScalarWhereInput
-    data: XOR<password_reset_tokensUpdateManyMutationInput, password_reset_tokensUncheckedUpdateManyWithoutUserInput>
-  }
-
-  export type password_reset_tokensScalarWhereInput = {
-    AND?: password_reset_tokensScalarWhereInput | password_reset_tokensScalarWhereInput[]
-    OR?: password_reset_tokensScalarWhereInput[]
-    NOT?: password_reset_tokensScalarWhereInput | password_reset_tokensScalarWhereInput[]
-    id?: StringFilter<"password_reset_tokens"> | string
-    user_id?: StringFilter<"password_reset_tokens"> | string
-    token_hash?: StringFilter<"password_reset_tokens"> | string
-    expires_at?: DateTimeFilter<"password_reset_tokens"> | Date | string
-    used_at?: DateTimeNullableFilter<"password_reset_tokens"> | Date | string | null
-    created_at?: DateTimeFilter<"password_reset_tokens"> | Date | string
+  export type auth_tokensUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    refresh_token_hash?: StringFieldUpdateOperationsInput | string
+    device_info?: NullableStringFieldUpdateOperationsInput | string | null
+    ip_address?: NullableStringFieldUpdateOperationsInput | string | null
+    expires_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    revoked_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type email_verification_tokensUpsertWithWhereUniqueWithoutUserInput = {
@@ -25885,23 +29853,32 @@ export namespace Prisma {
     created_at?: DateTimeFilter<"email_verification_tokens"> | Date | string
   }
 
-  export type auth_tokensCreateManyUserInput = {
-    id?: string
-    refresh_token_hash: string
-    device_info?: NullableJsonNullValueInput | InputJsonValue
-    ip_address?: string | null
-    expires_at: Date | string
-    created_at?: Date | string
-    revoked_at?: Date | string | null
-    deleted_at?: Date | string | null
+  export type password_reset_tokensUpsertWithWhereUniqueWithoutUserInput = {
+    where: password_reset_tokensWhereUniqueInput
+    update: XOR<password_reset_tokensUpdateWithoutUserInput, password_reset_tokensUncheckedUpdateWithoutUserInput>
+    create: XOR<password_reset_tokensCreateWithoutUserInput, password_reset_tokensUncheckedCreateWithoutUserInput>
   }
 
-  export type password_reset_tokensCreateManyUserInput = {
-    id?: string
-    token_hash: string
-    expires_at: Date | string
-    used_at?: Date | string | null
-    created_at?: Date | string
+  export type password_reset_tokensUpdateWithWhereUniqueWithoutUserInput = {
+    where: password_reset_tokensWhereUniqueInput
+    data: XOR<password_reset_tokensUpdateWithoutUserInput, password_reset_tokensUncheckedUpdateWithoutUserInput>
+  }
+
+  export type password_reset_tokensUpdateManyWithWhereWithoutUserInput = {
+    where: password_reset_tokensScalarWhereInput
+    data: XOR<password_reset_tokensUpdateManyMutationInput, password_reset_tokensUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type password_reset_tokensScalarWhereInput = {
+    AND?: password_reset_tokensScalarWhereInput | password_reset_tokensScalarWhereInput[]
+    OR?: password_reset_tokensScalarWhereInput[]
+    NOT?: password_reset_tokensScalarWhereInput | password_reset_tokensScalarWhereInput[]
+    id?: StringFilter<"password_reset_tokens"> | string
+    user_id?: StringFilter<"password_reset_tokens"> | string
+    token_hash?: StringFilter<"password_reset_tokens"> | string
+    expires_at?: DateTimeFilter<"password_reset_tokens"> | Date | string
+    used_at?: DateTimeNullableFilter<"password_reset_tokens"> | Date | string | null
+    created_at?: DateTimeFilter<"password_reset_tokens"> | Date | string
   }
 
   export type email_verification_tokensCreateManyUserInput = {
@@ -25912,61 +29889,12 @@ export namespace Prisma {
     created_at?: Date | string
   }
 
-  export type auth_tokensUpdateWithoutUserInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    refresh_token_hash?: StringFieldUpdateOperationsInput | string
-    device_info?: NullableJsonNullValueInput | InputJsonValue
-    ip_address?: NullableStringFieldUpdateOperationsInput | string | null
-    expires_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    revoked_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  }
-
-  export type auth_tokensUncheckedUpdateWithoutUserInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    refresh_token_hash?: StringFieldUpdateOperationsInput | string
-    device_info?: NullableJsonNullValueInput | InputJsonValue
-    ip_address?: NullableStringFieldUpdateOperationsInput | string | null
-    expires_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    revoked_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  }
-
-  export type auth_tokensUncheckedUpdateManyWithoutUserInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    refresh_token_hash?: StringFieldUpdateOperationsInput | string
-    device_info?: NullableJsonNullValueInput | InputJsonValue
-    ip_address?: NullableStringFieldUpdateOperationsInput | string | null
-    expires_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    revoked_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  }
-
-  export type password_reset_tokensUpdateWithoutUserInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    token_hash?: StringFieldUpdateOperationsInput | string
-    expires_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    used_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type password_reset_tokensUncheckedUpdateWithoutUserInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    token_hash?: StringFieldUpdateOperationsInput | string
-    expires_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    used_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type password_reset_tokensUncheckedUpdateManyWithoutUserInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    token_hash?: StringFieldUpdateOperationsInput | string
-    expires_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    used_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  export type password_reset_tokensCreateManyUserInput = {
+    id?: string
+    token_hash: string
+    expires_at: Date | string
+    used_at?: Date | string | null
+    created_at?: Date | string
   }
 
   export type email_verification_tokensUpdateWithoutUserInput = {
@@ -25990,6 +29918,30 @@ export namespace Prisma {
     token_hash?: StringFieldUpdateOperationsInput | string
     expires_at?: DateTimeFieldUpdateOperationsInput | Date | string
     verified_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type password_reset_tokensUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    token_hash?: StringFieldUpdateOperationsInput | string
+    expires_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    used_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type password_reset_tokensUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    token_hash?: StringFieldUpdateOperationsInput | string
+    expires_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    used_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type password_reset_tokensUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    token_hash?: StringFieldUpdateOperationsInput | string
+    expires_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    used_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 

@@ -8,6 +8,18 @@ import {
   IsString,
 } from "class-validator";
 
+enum ShippingMethodEnum {
+  standard = "standard",
+  express = "express",
+  sameday = "same-day",
+}
+
+enum paymentMethod {
+  midtrans = "midtrans",
+  xendit = "xendit",
+  banktransfer = "bank-transfer",
+}
+
 export class CreateOrderRequest {
   @IsNotEmpty()
   subtotal!: Decimal;
@@ -26,7 +38,7 @@ export class CreateOrderRequest {
 
   @IsString()
   @IsOptional()
-  shippingMethod?: string | null;
+  shippingMethod?: ShippingMethodEnum | null;
 
   @IsString()
   @IsOptional()
@@ -72,6 +84,14 @@ export class GetOrderResponse {
   orderNumber!: string;
   userId!: string;
   status!: string;
+  items?: [
+    {
+      productId: string;
+      variantId: string;
+      quantity: number;
+      price: Decimal;
+    },
+  ];
   subtotal!: Decimal;
   shippingCost!: Decimal;
   discount!: Decimal;
