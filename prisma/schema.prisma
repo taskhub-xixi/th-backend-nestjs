@@ -253,7 +253,7 @@ model user_addresses {
 
 model auth_tokens {
   id                 String    @id @default(dbgenerated("(uuid())")) @db.Char(36)
-  user_id            String    @db.Char(36)
+  user_id            String    @db.Char(36) @unique
   refresh_token_hash String    @db.VarChar(255)
   device_info        Json?
   ip_address         String?   @db.VarChar(45)
@@ -298,7 +298,7 @@ model email_verification_tokens {
 }
 
 model users {
-  id                      String                      @id @default(dbgenerated("(uuid())")) @db.Char(36)
+  id                      String                      @id @unique @default(dbgenerated("(uuid())")) @db.Char(36)
   email                   String                      @unique(map: "email") @db.VarChar(255)
   password_hash           String                      @db.VarChar(255)
   first_name              String                      @db.VarChar(50)
