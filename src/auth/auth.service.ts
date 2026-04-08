@@ -23,7 +23,6 @@ import {
 } from "../model/auth.model";
 import { IAuthService } from "./interface/auth.service.interface";
 import { TokenService } from "./services/token.service";
-import { ConfigService } from "@nestjs/config";
 
 @Injectable()
 export class AuthService implements IAuthService {
