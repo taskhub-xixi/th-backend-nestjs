@@ -32,7 +32,7 @@ export class OrderController {
     @Req() payload: Request,
   ): Promise<WebResponse<OrderResponse>> {
     if (!payload.user) {
-      throw new HttpException("User not found", 404);
+      throw new HttpException("User not found", 403);
     }
     const result = await this.orderService.createOrder(req, payload.user);
     return {
