@@ -1,16 +1,18 @@
+import { randomInt } from "node:crypto";
 import { HttpException, Inject, Injectable } from "@nestjs/common";
 import { WINSTON_MODULE_PROVIDER } from "nest-winston";
 import { Logger } from "winston";
 import { JwtPayload } from "../auth/dto/payload-interface";
 import { PrismaService } from "../common/prisma.service";
+import { $OrderPayload } from "../generated/prisma/models";
 import {
   CreateOrderRequest,
   GetOrderRequest,
-  OrderResponse,
   GetOrderResponse,
+  OrderQueryResponse,
+  OrderResponse,
+  PaymentsResponseFromGetOrderResponse,
 } from "./order.model";
-import { randomInt, randomUUID } from "node:crypto";
-import { Order } from "../generated/prisma/client";
 
 @Injectable()
 export class OrderService {
@@ -76,36 +78,54 @@ export class OrderService {
     if (!req) {
       throw new HttpException("User Id not found", 403);
     }
-    const result = await this.prismaService
-      .$queryRaw<Order>`SELECT * FROM orders WHERE order_number = ${req.orderNumber}`;
 
-    const validateOrder = await this.prismaService.order.findUnique({
-      where: { orderNumber: req.orderNumber },
-    });
+    const u = await this.prismaService.$queryRaw<
+      OrderQueryResponse[]
+    >`SELECT * FROM orders WHERE id = ${req.id}`;
 
-    if (!validateOrder?.shippingMethod) {
+    if (!u) {
       throw new HttpException("Order not found", 403);
     }
 
+    const user = u[0];
+
+    const productOrderJoin = await this.prismaService.orderItem.findFirst({
+      where: { orderId: user.id },
+    });
+
+    const paymentOrderJoin = await this.prismaService
+      .$queryRaw<PaymentsResponseFromGetOrderResponse>`SELECT p.method, p.status, p.amount, p.deadline from orders as o left join payments as p on p.order_id = o.id where o.id = ${user.id}`;
+
+    if (!productOrderJoin) {
+      throw new HttpException("product not found", 403);
+    }
+
     return {
-      id: result.id,
-      orderNumber: result.orderNumber,
-      userId: result.userId,
-      status: result.status,
-      subtotal: result.subtotal,
-      shippingCost: result.shippingCost,
-      discount: result.discount,
-      tax: result.tax,
-      total: result.total,
-      shippingMethod: result.shippingMethod,
-      shippingAddress: result.shippingAddress,
-      billingAddress: result.billingAddress,
-      trackingNumber: result.trackingNumber,
-      notes: result.notes,
-      couponId: result.couponId,
-      createdAt: result.createdAt,
-      updatedAt: result.updatedAt,
-      deletedAt: result.deletedAt,
+      id: user.id,
+      orderNumber: user.order_number,
+      status: user.status,
+      items: [
+        {
+          productId: productOrderJoin.productId,
+          variantId: productOrderJoin.variantId || "null",
+          quantity: productOrderJoin.quantity,
+          price: productOrderJoin.price,
+        },
+      ],
+      subtotal: user.subtotal,
+      shippingCost: user.shipping_cost,
+      discount: user.discount,
+      tax: user.tax,
+      total: user.total,
+      shippingMethod: user.shipping_method || "null",
+      shippingAddress: user.shipping_address,
+      payment: {
+        method: paymentOrderJoin.method,
+        status: paymentOrderJoin.status,
+        amount: paymentOrderJoin.amount,
+        deadline: paymentOrderJoin.deadline,
+      },
+      createdAt: user.created_at,
     };
   }
 }
