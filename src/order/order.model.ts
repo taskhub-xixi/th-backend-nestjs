@@ -76,8 +76,14 @@ export class CreateOrderRequest {
 
 export class GetOrderRequest {
   @IsNotEmpty()
-  @IsString()
   id!: string;
+}
+
+export class GetOrderRequestService {
+  @IsNotEmpty()
+  params!: {
+    id: string;
+  };
 }
 
 export class OrderQueryResponse {
@@ -99,6 +105,30 @@ export class OrderQueryResponse {
   created_at!: Date | null;
   updated_at!: Date | null;
   deleted_at!: Date | null;
+}
+
+// unf
+export class GetAllOrderResponse {
+  orders!: {
+    id: string;
+    orderNumber: string;
+    userId: string;
+    status: string;
+    subtotal: Decimal;
+    shippingCost: Decimal;
+    discount: Decimal;
+    tax: Decimal;
+    total: Decimal;
+    shippingMethod?: string | null;
+    shippingAddress: string;
+    billingAddress: string | null;
+    trackingNumber: string | null;
+    notes: string | null;
+    couponId: string | null;
+    createdAt: Date | null;
+    updatedAt: Date | null;
+    deletedAt: Date | null;
+  }[];
 }
 
 export class GetOrderResponse {

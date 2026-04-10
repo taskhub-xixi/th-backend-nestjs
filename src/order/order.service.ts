@@ -4,15 +4,17 @@ import { WINSTON_MODULE_PROVIDER } from "nest-winston";
 import { Logger } from "winston";
 import { JwtPayload } from "../auth/dto/payload-interface";
 import { PrismaService } from "../common/prisma.service";
-import { $OrderPayload } from "../generated/prisma/models";
 import {
   CreateOrderRequest,
+  GetAllOrderResponse,
   GetOrderRequest,
+  GetOrderRequestService,
   GetOrderResponse,
   OrderQueryResponse,
   OrderResponse,
   PaymentsResponseFromGetOrderResponse,
 } from "./order.model";
+import { Order } from "../generated/prisma";
 
 @Injectable()
 export class OrderService {
@@ -74,14 +76,22 @@ export class OrderService {
     };
   }
 
-  async getOrderById(req: GetOrderRequest): Promise<GetOrderResponse> {
-    if (!req) {
+  // unf -> join
+  async getAllOrders(): Promise<GetAllOrderResponse> {
+    const result = await this.prismaService.order.findMany();
+    return {
+      orders: result,
+    };
+  }
+
+  async getOrderById(req: GetOrderRequestService): Promise<GetOrderResponse> {
+    if (!req.params.id || req.params.id === undefined) {
       throw new HttpException("User Id not found", 403);
     }
 
     const u = await this.prismaService.$queryRaw<
       OrderQueryResponse[]
-    >`SELECT * FROM orders WHERE id = ${req.id}`;
+    >`SELECT * FROM orders WHERE id = ${req.params.id}`;
 
     if (!u) {
       throw new HttpException("Order not found", 403);
@@ -94,7 +104,11 @@ export class OrderService {
     });
 
     const paymentOrderJoin = await this.prismaService
-      .$queryRaw<PaymentsResponseFromGetOrderResponse>`SELECT p.method, p.status, p.amount, p.deadline from orders as o left join payments as p on p.order_id = o.id where o.id = ${user.id}`;
+      .$queryRaw<PaymentsResponseFromGetOrderResponse>`
+      SELECT p.method, p.status, p.amount, p.deadline 
+      from orders as o 
+      left join payments as p on p.order_id = o.id 
+      where o.id = ${user.id}`;
 
     if (!productOrderJoin) {
       throw new HttpException("product not found", 403);

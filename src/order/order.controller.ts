@@ -15,6 +15,7 @@ import { WebResponse } from "../model/web.mode";
 import {
   CreateOrderRequest,
   GetOrderRequest,
+  GetOrderRequestService,
   GetOrderResponse,
   OrderResponse,
 } from "./order.model";
@@ -44,8 +45,16 @@ export class OrderController {
   @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.OK)
   @Get()
+  async getAllOrders() {
+    const result = await this.orderService.getAllOrders();
+    return result;
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @HttpCode(HttpStatus.OK)
+  @Get("/:id")
   async getOrderByOrderNumber(
-    @Body() req: GetOrderRequest,
+    @Req() req: GetOrderRequestService,
   ): Promise<WebResponse<GetOrderResponse>> {
     const result = await this.orderService.getOrderById(req);
     return {
