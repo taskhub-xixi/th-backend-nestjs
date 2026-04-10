@@ -211,7 +211,7 @@ exports.Prisma.ProductReviewScalarFieldEnum = {
 };
 
 exports.Prisma.ProductTagScalarFieldEnum = {
-  id: 'id',
+  tags_id: 'tags_id',
   productId: 'productId',
   tag: 'tag',
   createdAt: 'createdAt'
@@ -439,6 +439,11 @@ exports.Prisma.Stock_reservationsScalarFieldEnum = {
   released_at: 'released_at'
 };
 
+exports.Prisma.TagsScalarFieldEnum = {
+  id: 'id',
+  tag: 'tag'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -505,7 +510,7 @@ exports.Prisma.ProductReviewOrderByRelevanceFieldEnum = {
 };
 
 exports.Prisma.ProductTagOrderByRelevanceFieldEnum = {
-  id: 'id',
+  tags_id: 'tags_id',
   productId: 'productId',
   tag: 'tag'
 };
@@ -658,6 +663,11 @@ exports.Prisma.stock_reservationsOrderByRelevanceFieldEnum = {
   status: 'status'
 };
 
+exports.Prisma.tagsOrderByRelevanceFieldEnum = {
+  id: 'id',
+  tag: 'tag'
+};
+
 
 exports.Prisma.ModelName = {
   Category: 'Category',
@@ -683,7 +693,8 @@ exports.Prisma.ModelName = {
   refunds: 'refunds',
   inventory: 'inventory',
   inventory_transactions: 'inventory_transactions',
-  stock_reservations: 'stock_reservations'
+  stock_reservations: 'stock_reservations',
+  tags: 'tags'
 };
 
 /**

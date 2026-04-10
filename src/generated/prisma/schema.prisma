@@ -44,32 +44,35 @@ model Brand {
 }
 
 model Product {
-  id                 String             @id @default(dbgenerated("(uuid())")) @db.Char(36)
-  name               String             @db.VarChar(200)
-  slug               String             @unique(map: "slug") @db.VarChar(200)
-  sku                String             @unique(map: "sku") @db.VarChar(50)
-  description        String             @db.Text
-  shortDescription   String?            @map("short_description") @db.VarChar(500)
-  price              Decimal            @db.Decimal(15, 2)
-  originalPrice      Decimal?           @map("original_price") @db.Decimal(15, 2)
-  categoryId         String             @map("category_id") @db.Char(36)
-  brandId            String?            @map("brand_id") @db.Char(36)
-  stock              Int                @default(0)
-  lowStockThreshold  Int?               @default(10) @map("low_stock_threshold")
-  ratingAverage      Decimal?           @default(0.00) @map("rating_average") @db.Decimal(3, 2)
-  ratingCount        Int?               @default(0) @map("rating_count")
-  reviewCount        Int?               @default(0) @map("review_count")
-  isActive           Boolean            @default(true) @map("is_active")
-  metadata           String?            @default("{}") @db.LongText
-  createdAt          DateTime?          @default(now()) @map("created_at") @db.DateTime(0)
-  updatedAt          DateTime?          @default(now()) @updatedAt @map("updated_at") @db.DateTime(0)
-  deletedAt          DateTime?          @map("deleted_at") @db.DateTime(0)
-  order_items        OrderItem[]
-  product_attributes ProductAttribute[]
-  product_images     ProductImage[]
-  product_reviews    ProductReview[]
-  product_tags       ProductTag[]
-  product_variants   ProductVariant[]
+  id                     String                   @id @default(dbgenerated("(uuid())")) @db.Char(36)
+  name                   String                   @db.VarChar(200)
+  slug                   String                   @unique(map: "slug") @db.VarChar(200)
+  sku                    String                   @unique(map: "sku") @db.VarChar(50)
+  description            String                   @db.Text
+  shortDescription       String?                  @map("short_description") @db.VarChar(500)
+  price                  Decimal                  @db.Decimal(15, 2)
+  originalPrice          Decimal?                 @map("original_price") @db.Decimal(15, 2)
+  categoryId             String                   @map("category_id") @db.Char(36)
+  brandId                String?                  @map("brand_id") @db.Char(36)
+  stock                  Int                      @default(0)
+  lowStockThreshold      Int?                     @default(10) @map("low_stock_threshold")
+  ratingAverage          Decimal?                 @default(0.00) @map("rating_average") @db.Decimal(3, 2)
+  ratingCount            Int?                     @default(0) @map("rating_count")
+  reviewCount            Int?                     @default(0) @map("review_count")
+  isActive               Boolean                  @default(true) @map("is_active")
+  metadata               String?                  @default("{}") @db.LongText
+  createdAt              DateTime?                @default(now()) @map("created_at") @db.DateTime(0)
+  updatedAt              DateTime?                @default(now()) @updatedAt @map("updated_at") @db.DateTime(0)
+  deletedAt              DateTime?                @map("deleted_at") @db.DateTime(0)
+  inventory              inventory[]
+  inventory_transactions inventory_transactions[]
+  order_items            OrderItem[]
+  product_attributes     ProductAttribute[]
+  product_images         ProductImage[]
+  product_reviews        ProductReview[]
+  product_tags           ProductTag[]
+  product_variants       ProductVariant[]
+  stock_reservations     stock_reservations[]
 
   @@index([categoryId], map: "idx_products_category")
   @@index([price], map: "idx_products_price")
@@ -81,17 +84,21 @@ model Product {
 }
 
 model ProductVariant {
-  id              String    @id @default(dbgenerated("(uuid())")) @db.Char(36)
-  productId       String    @map("product_id") @db.Char(36)
-  sku             String    @unique(map: "sku") @db.VarChar(50)
-  name            String    @db.VarChar(100)
-  priceAdjustment Decimal?  @default(0.00) @map("price_adjustment") @db.Decimal(15, 2)
-  stock           Int?      @default(0)
-  attributes      String    @default("{}") @db.LongText
-  isActive        Boolean?  @default(true) @map("is_active")
-  createdAt       DateTime? @default(now()) @map("created_at") @db.DateTime(0)
-  updatedAt       DateTime? @default(now()) @updatedAt @map("updated_at") @db.DateTime(0)
-  products        Product   @relation(fields: [productId], references: [id], onDelete: Cascade, map: "product_variants_product_id_fk")
+  id                     String                   @id @default(dbgenerated("(uuid())")) @db.Char(36)
+  productId              String                   @map("product_id") @db.Char(36)
+  sku                    String                   @unique(map: "sku") @db.VarChar(50)
+  name                   String                   @db.VarChar(100)
+  priceAdjustment        Decimal?                 @default(0.00) @map("price_adjustment") @db.Decimal(15, 2)
+  stock                  Int?                     @default(0)
+  attributes             String                   @default("{}") @db.LongText
+  isActive               Boolean?                 @default(true) @map("is_active")
+  createdAt              DateTime?                @default(now()) @map("created_at") @db.DateTime(0)
+  updatedAt              DateTime?                @default(now()) @updatedAt @map("updated_at") @db.DateTime(0)
+  inventory              inventory[]
+  inventory_transactions inventory_transactions[]
+  order_items            OrderItem[]
+  products               Product                  @relation(fields: [productId], references: [id], onDelete: Cascade, map: "product_variants_product_id_fk")
+  stock_reservations     stock_reservations[]
 
   @@index([productId], map: "idx_product_variants_product")
   @@index([sku], map: "idx_product_variants_sku")
@@ -136,7 +143,7 @@ model ProductReview {
 }
 
 model ProductTag {
-  id        String    @id @default(dbgenerated("(uuid())")) @db.Char(36)
+  tags_id   String    @id @default("uuid()") @db.Char(36)
   productId String    @map("product_id") @db.Char(36)
   tag       String    @db.VarChar(50)
   createdAt DateTime? @default(now()) @map("created_at") @db.DateTime(0)
@@ -197,27 +204,31 @@ model CouponUsage {
 }
 
 model Order {
-  id                   String               @id @default(dbgenerated("(uuid())")) @db.Char(36)
-  orderNumber          String               @unique(map: "order_number") @map("order_number") @db.VarChar(250)
-  userId               String               @map("user_id") @db.Char(36)
-  status               String               @default("pending") @db.VarChar(20)
-  subtotal             Decimal              @db.Decimal(15, 2)
-  shippingCost         Decimal              @default(0.00) @map("shipping_cost") @db.Decimal(15, 2)
-  discount             Decimal              @default(0.00) @db.Decimal(15, 2)
-  tax                  Decimal              @default(0.00) @db.Decimal(15, 2)
-  total                Decimal              @db.Decimal(15, 2)
-  shippingMethod       String?              @map("shipping_method") @db.VarChar(20)
-  shippingAddress      String               @map("shipping_address") @db.LongText
-  billingAddress       String?              @map("billing_address") @db.LongText
-  trackingNumber       String?              @map("tracking_number") @db.VarChar(100)
-  notes                String?              @db.Text
-  couponId             String?              @map("coupon_id") @db.Char(36)
-  createdAt            DateTime?            @default(now()) @map("created_at") @db.DateTime(0)
-  updatedAt            DateTime?            @default(now()) @updatedAt @map("updated_at") @db.DateTime(0)
-  deletedAt            DateTime?            @map("deleted_at") @db.DateTime(0)
-  coupon_usage         CouponUsage[]
-  order_items          OrderItem[]
-  order_status_history OrderStatusHistory[]
+  id                     String                   @id @default(dbgenerated("(uuid())")) @db.Char(36)
+  orderNumber            String                   @unique(map: "order_number") @map("order_number") @db.VarChar(250)
+  userId                 String                   @map("user_id") @db.Char(36)
+  status                 String                   @default("pending") @db.VarChar(20)
+  subtotal               Decimal                  @db.Decimal(15, 2)
+  shippingCost           Decimal                  @default(0.00) @map("shipping_cost") @db.Decimal(15, 2)
+  discount               Decimal                  @default(0.00) @db.Decimal(15, 2)
+  tax                    Decimal                  @default(0.00) @db.Decimal(15, 2)
+  total                  Decimal                  @db.Decimal(15, 2)
+  shippingMethod         String?                  @map("shipping_method") @db.VarChar(20)
+  shippingAddress        String                   @map("shipping_address") @db.LongText
+  billingAddress         String?                  @map("billing_address") @db.LongText
+  trackingNumber         String?                  @map("tracking_number") @db.VarChar(100)
+  notes                  String?                  @db.Text
+  couponId               String?                  @map("coupon_id") @db.Char(36)
+  createdAt              DateTime?                @default(now()) @map("created_at") @db.DateTime(0)
+  updatedAt              DateTime?                @default(now()) @updatedAt @map("updated_at") @db.DateTime(0)
+  deletedAt              DateTime?                @map("deleted_at") @db.DateTime(0)
+  coupon_usage           CouponUsage[]
+  inventory_transactions inventory_transactions[]
+  order_items            OrderItem[]
+  order_status_history   OrderStatusHistory[]
+  payments               payments[]
+  refunds                refunds[]
+  stock_reservations     stock_reservations[]
 
   @@index([createdAt(sort: Desc)], map: "idx_orders_created_at")
   @@index([orderNumber], map: "idx_orders_number")
@@ -227,19 +238,21 @@ model Order {
 }
 
 model OrderItem {
-  id        String    @id @default(dbgenerated("(uuid())")) @db.Char(36)
-  orderId   String    @map("order_id") @db.Char(36)
-  productId String    @map("product_id") @db.Char(36)
-  variantId String?   @map("variant_id") @db.Char(36)
-  quantity  Int
-  price     Decimal   @db.Decimal(15, 2)
-  subtotal  Decimal   @db.Decimal(15, 2)
-  createdAt DateTime? @default(now()) @map("created_at") @db.DateTime(0)
-  orders    Order     @relation(fields: [orderId], references: [id], onDelete: Cascade, map: "order_items_order_id_fk")
-  products  Product   @relation(fields: [productId], references: [id], onDelete: Cascade, map: "order_items_product_id_fk")
+  id               String          @id @default(dbgenerated("(uuid())")) @db.Char(36)
+  orderId          String          @map("order_id") @db.Char(36)
+  productId        String          @map("product_id") @db.Char(36)
+  variantId        String?         @map("variant_id") @db.Char(36)
+  quantity         Int
+  price            Decimal         @db.Decimal(15, 2)
+  subtotal         Decimal         @db.Decimal(15, 2)
+  createdAt        DateTime?       @default(now()) @map("created_at") @db.DateTime(0)
+  orders           Order           @relation(fields: [orderId], references: [id], onDelete: Cascade, map: "order_items_order_id_fk")
+  products         Product         @relation(fields: [productId], references: [id], onDelete: Cascade, map: "order_items_product_id_fk")
+  product_variants ProductVariant? @relation(fields: [variantId], references: [id], onDelete: Cascade, map: "order_items_variant_id")
 
   @@index([orderId], map: "idx_order_items_order")
   @@index([productId], map: "order_items_product_id_fk")
+  @@index([variantId], map: "order_items_variant_id")
   @@map("order_items")
 }
 
@@ -377,6 +390,8 @@ model payments {
   updated_at              DateTime? @default(now()) @db.DateTime(0)
   paid_at                 DateTime? @db.DateTime(0)
   expired_at              DateTime? @db.DateTime(0)
+  orders                  Order     @relation(fields: [order_id], references: [id], onDelete: Cascade, map: "payments_order_id")
+  refunds                 refunds[]
 
   @@index([order_id], map: "idx_payments_order")
   @@index([provider, provider_transaction_id], map: "idx_payments_provider_tx")
@@ -396,56 +411,76 @@ model refunds {
   completed_at       DateTime? @db.DateTime(0)
   created_at         DateTime? @default(now()) @db.DateTime(0)
   metadata           String?   @default("{}") @db.LongText
+  orders             Order     @relation(fields: [order_id], references: [id], onDelete: Cascade, map: "refunds_order_id")
+  payments           payments  @relation(fields: [payment_id], references: [id], onDelete: Cascade, map: "refunds_payment_id")
 
   @@index([payment_id], map: "idx_refunds_payment")
   @@index([status], map: "idx_refunds_status")
+  @@index([order_id], map: "refunds_order_id")
 }
 
 model inventory {
-  id                  String    @id @default(dbgenerated("(uuid())")) @db.Char(36)
-  product_id          String    @db.Char(36)
-  variant_id          String?   @db.Char(36)
-  available_stock     Int       @default(0)
-  reserved_stock      Int       @default(0)
-  low_stock_threshold Int?      @default(10)
-  created_at          DateTime? @default(now()) @db.DateTime(0)
-  updated_at          DateTime? @default(now()) @db.DateTime(0)
+  id                  String          @id @default(dbgenerated("(uuid())")) @db.Char(36)
+  product_id          String          @db.Char(36)
+  variant_id          String?         @db.Char(36)
+  available_stock     Int             @default(0)
+  reserved_stock      Int             @default(0)
+  low_stock_threshold Int?            @default(10)
+  created_at          DateTime?       @default(now()) @db.DateTime(0)
+  updated_at          DateTime?       @default(now()) @db.DateTime(0)
+  products            Product         @relation(fields: [product_id], references: [id], onDelete: Cascade, map: "inventory_product_id")
+  product_variants    ProductVariant? @relation(fields: [variant_id], references: [id], onDelete: Cascade, map: "inventory_product_variant_fk")
 
   @@unique([product_id, variant_id], map: "uk_inventory_product_variant")
   @@index([product_id], map: "idx_inventory_product")
+  @@index([variant_id], map: "inventory_product_variant_fk")
 }
 
 model inventory_transactions {
-  id            String    @id @default(dbgenerated("(uuid())")) @db.Char(36)
-  product_id    String    @db.Char(36)
-  variant_id    String?   @db.Char(36)
-  order_id      String?   @db.Char(36)
-  type          String    @db.VarChar(20)
-  quantity      Int
-  balance_after Int
-  reason        String?   @db.VarChar(50)
-  note          String?   @db.Text
-  created_by    String?   @db.Char(36)
-  created_at    DateTime? @default(now()) @db.DateTime(0)
+  id               String          @id @default(dbgenerated("(uuid())")) @db.Char(36)
+  product_id       String          @db.Char(36)
+  variant_id       String?         @db.Char(36)
+  order_id         String?         @db.Char(36)
+  type             String          @db.VarChar(20)
+  quantity         Int
+  balance_after    Int
+  reason           String?         @db.VarChar(50)
+  note             String?         @db.Text
+  created_by       String?         @db.Char(36)
+  created_at       DateTime?       @default(now()) @db.DateTime(0)
+  orders           Order?          @relation(fields: [order_id], references: [id], onDelete: Cascade, map: "inventory_transactions_order_id")
+  products         Product         @relation(fields: [product_id], references: [id], onDelete: Cascade, map: "inventory_transactions_product_id_fk")
+  product_variants ProductVariant? @relation(fields: [variant_id], references: [id], onDelete: Cascade, map: "inventory_transactions_variant_id")
 
   @@index([created_at(sort: Desc)], map: "idx_inventory_transactions_created")
   @@index([order_id], map: "idx_inventory_transactions_order")
   @@index([product_id], map: "idx_inventory_transactions_product")
   @@index([type], map: "idx_inventory_transactions_type")
+  @@index([variant_id], map: "inventory_transactions_variant_id")
 }
 
 model stock_reservations {
-  id          String    @id @default(dbgenerated("(uuid())")) @db.Char(36)
-  order_id    String    @db.Char(36)
-  product_id  String    @db.Char(36)
-  variant_id  String?   @db.Char(36)
-  quantity    Int
-  status      String    @default("active") @db.VarChar(20)
-  expires_at  DateTime? @db.DateTime(0)
-  created_at  DateTime? @default(now()) @db.DateTime(0)
-  released_at DateTime? @db.DateTime(0)
+  id               String          @id @default(dbgenerated("(uuid())")) @db.Char(36)
+  order_id         String          @db.Char(36)
+  product_id       String          @db.Char(36)
+  variant_id       String?         @db.Char(36)
+  quantity         Int
+  status           String          @default("active") @db.VarChar(20)
+  expires_at       DateTime?       @db.DateTime(0)
+  created_at       DateTime?       @default(now()) @db.DateTime(0)
+  released_at      DateTime?       @db.DateTime(0)
+  orders           Order           @relation(fields: [order_id], references: [id], onDelete: Cascade, map: "stock_reservations_order_id_fk")
+  products         Product         @relation(fields: [product_id], references: [id], onDelete: Cascade, map: "stock_reservations_product_id_fk")
+  product_variants ProductVariant? @relation(fields: [variant_id], references: [id], onDelete: Cascade, map: "stock_reservations_variant_id_fk")
 
   @@index([expires_at], map: "idx_stock_reservations_expires")
   @@index([order_id], map: "idx_stock_reservations_order")
   @@index([status], map: "idx_stock_reservations_status")
+  @@index([product_id], map: "stock_reservations_product_id_fk")
+  @@index([variant_id], map: "stock_reservations_variant_id_fk")
+}
+
+model tags {
+  id  String @id @default(dbgenerated("(uuid())")) @db.Char(36)
+  tag String @db.VarChar(50)
 }
