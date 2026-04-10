@@ -74,7 +74,7 @@ export class ProductController {
   @UseGuards(PublicGuard)
   @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.OK)
-  @Get("category")
+  @Get()
   async getProductByCategory(
     @Query() req: GetProductsRequest,
   ): Promise<WebResponse<GetProductByCategoryResponse>> {
