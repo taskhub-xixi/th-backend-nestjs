@@ -26,17 +26,55 @@ export class ProductService {
     req: CreateProductRequest,
   ): Promise<CreateProductResponseSuccess> {
     this.logger.info(`PRODUCT_SERVICE.createProduct: ${JSON.stringify(req)}`);
-    const product = await this.prismaService.product.create({
-      data: {
-        name: req.name,
+    const category_id = await this.prismaService.category.findFirst({
+      where: { name: req.categoryId },
+    });
+    if (!category_id) {
+      throw new HttpException("category not found", 403);
+    }
+    const checkBrandId = await this.prismaService.brand.findFirst({
+      where: { name: req.brandId },
+    });
+    if (!checkBrandId) {
+      await this.prismaService.brand.create({
+        data: {
+          name: "PressPlay",
+          slug: "pressplay",
+          description: "Electronics store",
+          isActive: true,
+          websiteUrl: "www.pressplay.com",
+        },
+      });
+    }
+    const brand_id = await this.prismaService.brand.findFirst({
+      where: { name: req.brandId },
+    });
+    if (!brand_id) {
+      throw new HttpException("Brand not found", 403);
+    }
+
+    await this.prismaService.$executeRaw<Product>`
+    insert into products (
+        name, slug, sku, description, short_description, price, 
+        original_price, category_id, brand_id, stock, low_stock_threshold,
+        rating_average, rating_count, review_count, is_active, metadata
+    ) values (
+        ${req.name}, ${req.slug}, ${req.sku}, ${req.description}, 
+        ${req.shortDescription}, ${req.price}, ${req.originalPrice},
+        ${category_id.id}, ${brand_id.id}, ${req.stock}, ${req.lowStockThreshold},
+        ${req.ratingAverage}, ${req.ratingCount}, ${req.reviewCount},
+        ${req.isActive}, ${req.metadata}
+    )`;
+
+    const product = await this.prismaService.product.findUnique({
+      where: {
         slug: req.slug,
-        sku: req.sku,
-        description: req.description,
-        price: req.price,
-        categoryId: req.categoryId,
-        brandId: req.brandId,
       },
     });
+
+    if (!product) {
+      throw new HttpException("Product not created", 403);
+    }
 
     return {
       id: product.id,
@@ -73,11 +111,13 @@ export class ProductService {
     const limit = Number(req.limit);
     const total = await this.prismaService.product.count();
     let totalPages: number;
+
     if (limit === 20) {
       totalPages = Math.ceil(total / 20);
     } else {
       totalPages = Math.ceil(total / limit);
     }
+
     const page = Number(req.page);
     const countPage = limit * page - 20;
 
