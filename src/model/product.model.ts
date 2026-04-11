@@ -22,12 +22,17 @@ export class CreateProductRequest {
   @IsString()
   sku!: string;
 
-  @IsNumber()
   @Min(1)
   price!: Decimal;
 
+  @Min(1)
+  originalPrice!: Decimal;
+
   @IsString()
   description!: string;
+
+  @IsString()
+  shortDescription!: string;
 
   @IsString()
   brandId!: string;
@@ -35,6 +40,27 @@ export class CreateProductRequest {
   @IsString()
   @IsNotEmpty()
   categoryId!: string;
+
+  @IsNumber()
+  stock!: number;
+
+  @IsNumber()
+  lowStockThreshold!: number;
+
+  @Min(1)
+  ratingAverage!: Decimal;
+
+  @IsNumber()
+  ratingCount!: number;
+
+  @IsNumber()
+  reviewCount!: number;
+
+  @IsBoolean()
+  isActive!: boolean;
+
+  @IsString()
+  metadata!: string;
 }
 
 export class CreateProductResponseSuccess {
