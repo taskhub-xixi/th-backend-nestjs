@@ -52,11 +52,11 @@ export class ProductController {
     };
   }
 
-  @Admin()
-  @Public()
-  @UseGuards(PublicGuard)
-  @UseGuards(AdminGuard)
-  @UseGuards(JwtAuthGuard)
+  // @Admin()
+  // @Public()
+  // @UseGuards(PublicGuard)
+  // @UseGuards(AdminGuard)
+  // @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.OK)
   @Get("all")
   async getProductAll(
