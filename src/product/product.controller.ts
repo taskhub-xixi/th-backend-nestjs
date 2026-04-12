@@ -23,6 +23,7 @@ import {
   GetProductByCategoryResponse,
   GetProductsRequest,
   GetProductsResponseSuccess,
+  GetProductsResponseSuccessAll,
   SearchRequest,
   UpdateProductRequest,
   UpdateProductResponse,
@@ -57,10 +58,10 @@ export class ProductController {
   @UseGuards(AdminGuard)
   @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.OK)
-  @Get()
+  @Get("all")
   async getProductAll(
     @Query() req: GetProductsRequest,
-  ): Promise<WebResponse<GetProductsResponseSuccess>> {
+  ): Promise<WebResponse<GetProductsResponseSuccessAll>> {
     const result = await this.productService.getProductAll(req);
     return {
       data: result,
