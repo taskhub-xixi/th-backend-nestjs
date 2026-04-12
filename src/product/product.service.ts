@@ -1,5 +1,5 @@
 import { HttpException, Inject, Injectable } from "@nestjs/common";
-import { Product } from "@prisma/client";
+import { Brand, Category, Product } from "@prisma/client";
 import { WINSTON_MODULE_PROVIDER } from "nest-winston";
 import { Logger } from "winston";
 import { PrismaService } from "../common/prisma.service";
@@ -10,6 +10,8 @@ import {
   GetProductByCategoryResponse,
   GetProductsRequest,
   GetProductsResponseSuccess,
+  GetProductsResponseSuccessAll,
+  GetProductResponseSuccessQuery,
   TotalResultCategories,
   UpdateProductRequest,
   UpdateProductResponse,
@@ -29,26 +31,23 @@ export class ProductService {
     const category_id = await this.prismaService.category.findFirst({
       where: { name: req.categoryId },
     });
+
     if (!category_id) {
       throw new HttpException("category not found", 403);
     }
+
     const checkBrandId = await this.prismaService.brand.findFirst({
       where: { name: req.brandId },
     });
+
     if (!checkBrandId) {
-      await this.prismaService.brand.create({
-        data: {
-          name: "PressPlay",
-          slug: "pressplay",
-          description: "Electronics store",
-          isActive: true,
-          websiteUrl: "www.pressplay.com",
-        },
-      });
+      await this.createBrand(req.brandId);
     }
+
     const brand_id = await this.prismaService.brand.findFirst({
       where: { name: req.brandId },
     });
+
     if (!brand_id) {
       throw new HttpException("Brand not found", 403);
     }
@@ -102,10 +101,8 @@ export class ProductService {
 
   async getProductAll(
     req: GetProductsRequest,
-  ): Promise<GetProductsResponseSuccess> {
-    this.logger.info(
-      `PRODUCT_SERVICE.getProductList: ${JSON.stringify(req.search)}`,
-    );
+  ): Promise<GetProductsResponseSuccessAll> {
+    this.logger.info(`PRODUCT_SERVICE.getProductAll: ${JSON.stringify(req)}`);
 
     // const where = this.queryQondition(reqresult);
     const limit = Number(req.limit);
@@ -121,16 +118,60 @@ export class ProductService {
     const page = Number(req.page);
     const countPage = limit * page - 20;
 
-    const productRaw = await this.prismaService.product.findMany({
-      where: {
-        categoryId: req.category !== undefined ? req.category : undefined,
+    // const dataProduct = await this.prismaService.product.findMany({
+    //   where: {
+    //     categoryId: req.category !== undefined ? req.category : undefined,
+    //   },
+    //   take: limit,
+    //   skip: page === 1 ? 0 : countPage,
+    // });
+
+    // if (page === 1) {
+    //   page = 0;
+    // }
+
+    const dataProduct = await this.prismaService.$queryRaw<
+      GetProductResponseSuccessQuery[]
+    >`
+      select p.*, 
+      c.id as category_id, c.name as category_name, c.slug as category_slug, 
+      b.id as brand_id, b.name as brand_name 
+      from products as p 
+      left join brands as b on p.brand_id = b.id
+      left join categories as c on c.id = p.category_id
+      limit ${limit}
+      offset ${page === 1 ? 0 : countPage};`;
+
+    const dp = dataProduct.map((i) => ({
+      id: i.id,
+      name: i.name,
+      price: i.price,
+      originalPrice: i.original_price,
+      slug: i.slug,
+      sku: i.slug,
+      description: i.description,
+      shortDescription: i.short_description,
+      category: {
+        id: i.category_id,
+        name: i.category_name,
+        slug: i.category_slug,
       },
-      take: limit,
-      skip: page === 1 ? 0 : countPage,
-    });
+      brand: {
+        id: i.brand_id,
+        name: i.brand_name,
+      },
+      stock: i.stock,
+      lowStockThreshold: i.low_stock_threshold,
+      ratingAverage: i.rating_average,
+      ratingCount: i.rating_count,
+      reviewCount: i.review_count,
+      isActive: i.isActive,
+      metadata: i.metadata,
+      createdAt: i.created_at,
+    }));
 
     return {
-      products: productRaw,
+      products: dp,
       total: total,
       limit: limit,
       page: page,
@@ -140,18 +181,61 @@ export class ProductService {
 
   async getProductById(id: string): Promise<GetProductsResponseSuccess> {
     this.logger.info(`PRODUCT_SERVICE.getProductById: ${id}`);
-    const data = await this.prismaService.$queryRaw<
-      Product[]
-    >`SELECT * FROM products WHERE id = ${id} LIMIT 5`;
 
-    if (data.length === 0) {
+    const dataProduct = await this.prismaService
+      .$queryRaw<Product>`select p.*, b.*, c.* from product as p 
+      left join brands as b on p.brand_id = b.id
+      left join categories as c on c.id = p.category_id where p.id = ${id}`;
+
+    const product = await this.prismaService.product.findUnique({
+      where: { id: id },
+    });
+
+    const total = await this.prismaService.product.count({ where: { id: id } });
+
+    if (!product) {
       throw new HttpException("Data Not Found", 404);
     }
 
-    this.logger.info(`PRODUCT_SERVICE.getProductById: ${JSON.stringify(data)}`);
+    const dataCategory = await this.prismaService
+      .$queryRaw<Category>`select * from categories where id = ${product.categoryId}`;
+
+    const dataBrand = await this.prismaService
+      .$queryRaw<Brand>`select * from brand_id where id = ${product.brandId}`;
+
+    if (!dataProduct) {
+      throw new HttpException("Data Not Found", 404);
+    }
 
     return {
-      products: data,
+      products: {
+        id: dataProduct.id,
+        name: dataProduct.name,
+        price: dataProduct.price,
+        originalPrice: dataProduct.originalPrice,
+        slug: dataProduct.slug,
+        sku: dataProduct.slug,
+        description: dataProduct.description,
+        shortDescription: dataProduct.shortDescription,
+        category: {
+          id: dataCategory.id,
+          name: dataCategory.name,
+          slug: dataCategory.slug,
+        },
+        brand: {
+          id: dataBrand.id,
+          name: dataBrand.name,
+        },
+        stock: dataProduct.stock,
+        lowStockThreshold: dataProduct.lowStockThreshold,
+        ratingAverage: dataProduct.ratingAverage,
+        ratingCount: dataProduct.ratingCount,
+        reviewCount: dataProduct.reviewCount,
+        isActive: dataProduct.isActive,
+        metadata: dataProduct.metadata,
+        createdAt: dataProduct.createdAt,
+      },
+      total: total,
     };
   }
 
@@ -202,6 +286,10 @@ export class ProductService {
       deleted: dtd,
     };
   }
+
+  // async getProductBySlug() {
+  //     const product = await this.prismaService.product
+  // }
 
   async getProductByCategory(
     req: GetProductsRequest,
@@ -255,7 +343,7 @@ GROUP BY
     };
   }
 
-  async search(name: string): Promise<GetProductByCategoryResponse> {
+  async search(name: string): Promise<GetProductsResponseSuccess> {
     this.logger.info(`PRODUCT_SERVICE:search ${name}`);
 
     if (!name || typeof name !== "string") {
@@ -266,11 +354,14 @@ GROUP BY
 
     const flex = sanitized.concat("%");
 
-    const resultRaw = await this.prismaService.$queryRaw<
-      Product[]
-    >`SELECT * FROM products WHERE name LIKE ${flex}`;
+    const dataProduct = await this.prismaService
+      .$queryRaw<GetProductResponseSuccessQuery>`
+      SELECT * FROM products as p 
+      left join categories as c on c.id = p.category_id 
+      left join brands as b on b.id = p.brand_id
+      WHERE p.name LIKE ${flex}`;
 
-    if (!resultRaw || resultRaw.length === 0) {
+    if (!dataProduct) {
       throw new HttpException("Product not found", 404);
     }
 
@@ -279,8 +370,46 @@ GROUP BY
     });
 
     return {
-      products: resultRaw,
+      products: {
+        id: dataProduct.id,
+        name: dataProduct.name,
+        price: dataProduct.price,
+        originalPrice: dataProduct.original_price,
+        slug: dataProduct.slug,
+        sku: dataProduct.slug,
+        description: dataProduct.description,
+        shortDescription: dataProduct.short_description,
+        category: {
+          id: dataProduct.category_id,
+          name: dataProduct.category_name,
+          slug: dataProduct.category_slug,
+        },
+        brand: {
+          id: dataProduct.brand_id,
+          name: dataProduct.brand_name,
+        },
+        stock: dataProduct.stock,
+        lowStockThreshold: dataProduct.low_stock_threshold,
+        ratingAverage: dataProduct.rating_average,
+        ratingCount: dataProduct.rating_count,
+        reviewCount: dataProduct.review_count,
+        isActive: dataProduct.isActive,
+        metadata: dataProduct.metadata,
+        createdAt: dataProduct.created_at,
+      },
       total: counting,
     };
+  }
+
+  async createBrand(brand: string): Promise<void> {
+    await this.prismaService.brand.create({
+      data: {
+        name: brand,
+        slug: brand.toLowerCase(),
+        description: brand,
+        isActive: true,
+        websiteUrl: `www.${brand.toLowerCase()}.com`,
+      },
+    });
   }
 }
