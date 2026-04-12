@@ -131,8 +131,20 @@ export class GetProductsResponseSuccess {
     sku: string;
     description: string;
     originalPrice: Decimal | null;
-    categoryId: string;
-    brandId: string | null;
+    category: {
+      id: string;
+      name: string;
+      slug: string;
+      parent?: {
+        id: string;
+        name: string;
+        slug: string;
+      };
+    };
+    brand: {
+      id: string;
+      name: string;
+    };
     stock: number;
     lowStockThreshold: number | null;
     ratingAverage: Decimal | null;
@@ -141,15 +153,77 @@ export class GetProductsResponseSuccess {
     isActive: boolean;
     metadata: {} | null;
     createdAt: Date | null;
-    updatedAt: Date | null;
     shortDescription: string | null;
-    deletedAt?: Date | null;
+  };
+  total?: number;
+  page?: number;
+  limit?: number;
+  totalPages?: number;
+}
+
+export class GetProductsResponseSuccessAll {
+  products!: {
+    id: string;
+    name: string;
+    price: Decimal;
+    slug: string;
+    sku: string;
+    description: string;
+    originalPrice: Decimal | null;
+    category: {
+      id: string;
+      name: string;
+      slug: string;
+      parent?: {
+        id: string;
+        name: string;
+        slug: string;
+      };
+    };
+    brand: {
+      id: string;
+      name: string;
+    };
+    stock: number;
+    lowStockThreshold: number | null;
+    ratingAverage: Decimal | null;
+    ratingCount: number | null;
+    reviewCount: number | null;
+    isActive: boolean;
+    metadata: {} | null;
+    createdAt: Date | null;
+    shortDescription: string | null;
   }[];
   total?: number;
   page?: number;
   limit?: number;
   totalPages?: number;
 }
+
+export class GetProductResponseSuccessQuery {
+  id!: string;
+  name!: string;
+  price!: Decimal;
+  slug!: string;
+  sku!: string;
+  description!: string;
+  original_price!: Decimal | null;
+  category_id!: string;
+  category_name!: string;
+  category_slug!: string;
+  brand_id!: string;
+  brand_name!: string;
+  stock!: number;
+  low_stock_threshold!: number | null;
+  rating_average!: Decimal | null;
+  rating_count!: number | null;
+  review_count!: number | null;
+  isActive!: boolean;
+  metadata!: {} | null;
+  created_at!: Date | null;
+  short_description!: string | null;
+}
+
 export class GetProductsResponseError {
   message!: string[];
   statusCode!: number;
