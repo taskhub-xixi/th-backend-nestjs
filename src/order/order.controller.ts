@@ -14,6 +14,7 @@ import { JwtAuthGuard } from "../common/guards";
 import { WebResponse } from "../model/web.mode";
 import {
   CreateOrderRequest,
+  GetAllOrderResponse,
   GetOrderRequest,
   GetOrderRequestService,
   GetOrderResponse,
@@ -45,7 +46,7 @@ export class OrderController {
   @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.OK)
   @Get()
-  async getAllOrders() {
+  async getAllOrders(): Promise<GetAllOrderResponse> {
     const result = await this.orderService.getAllOrders();
     return result;
   }
