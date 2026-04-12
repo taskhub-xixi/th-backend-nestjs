@@ -8,10 +8,10 @@ import {
   CreateProductResponseSuccess,
   DeleteProductResponse,
   GetProductByCategoryResponse,
+  GetProductResponseSuccessQuery,
   GetProductsRequest,
   GetProductsResponseSuccess,
   GetProductsResponseSuccessAll,
-  GetProductResponseSuccessQuery,
   TotalResultCategories,
   UpdateProductRequest,
   UpdateProductResponse,
@@ -183,7 +183,8 @@ export class ProductService {
     this.logger.info(`PRODUCT_SERVICE.getProductById: ${id}`);
 
     const dataProduct = await this.prismaService
-      .$queryRaw<Product>`select p.*, b.*, c.* from product as p 
+      .$queryRaw<GetProductResponseSuccessQuery>`
+      select p.*, b.*, c.* from product as p 
       left join brands as b on p.brand_id = b.id
       left join categories as c on c.id = p.category_id where p.id = ${id}`;
 
@@ -212,11 +213,11 @@ export class ProductService {
         id: dataProduct.id,
         name: dataProduct.name,
         price: dataProduct.price,
-        originalPrice: dataProduct.originalPrice,
+        originalPrice: dataProduct.original_price,
         slug: dataProduct.slug,
         sku: dataProduct.slug,
         description: dataProduct.description,
-        shortDescription: dataProduct.shortDescription,
+        shortDescription: dataProduct.short_description,
         category: {
           id: dataCategory.id,
           name: dataCategory.name,
@@ -227,13 +228,13 @@ export class ProductService {
           name: dataBrand.name,
         },
         stock: dataProduct.stock,
-        lowStockThreshold: dataProduct.lowStockThreshold,
-        ratingAverage: dataProduct.ratingAverage,
-        ratingCount: dataProduct.ratingCount,
-        reviewCount: dataProduct.reviewCount,
+        lowStockThreshold: dataProduct.low_stock_threshold,
+        ratingAverage: dataProduct.rating_average,
+        ratingCount: dataProduct.rating_count,
+        reviewCount: dataProduct.review_count,
         isActive: dataProduct.isActive,
         metadata: dataProduct.metadata,
-        createdAt: dataProduct.createdAt,
+        createdAt: dataProduct.created_at,
       },
       total: total,
     };
