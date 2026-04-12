@@ -28,14 +28,14 @@ import { OrderModule } from "./order/order.module";
         secret: config.get<string>("JWT_SECRET"),
       }),
     }),
-    ThrottlerModule.forRoot({
-      throttlers: [
-        {
-          ttl: 60000,
-          limit: 10,
-        },
-      ],
-    }),
+    // ThrottlerModule.forRoot({
+    //   throttlers: [
+    //     {
+    //       ttl: 60000,
+    //       limit: 10,
+    //     },
+    //   ],
+    // }),
     // TypeOrmModule.forRoot({
     //   type: "mysql",
     //   host: "localhost",
@@ -54,10 +54,10 @@ import { OrderModule } from "./order/order.module";
   ],
   controllers: [],
   providers: [
-    {
-      provide: APP_GUARD,
-      useClass: ThrottlerGuard,
-    },
+    // {
+    //   provide: APP_GUARD,
+    //   useClass: ThrottlerGuard,
+    // },
   ],
 })
 // register middleware
