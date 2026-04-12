@@ -184,7 +184,10 @@ export class ProductService {
 
     const dataProduct = await this.prismaService
       .$queryRaw<GetProductResponseSuccessQuery>`
-      select p.*, b.*, c.* from product as p 
+      select p.id, p.price, p.original_price, p.slug, p.sku, p.description, 
+      p.short_description, p.stock, p.low_stock_threshold, p.rating_average, 
+      p.review_count, p.rating_count, p.is_active, p.metadata, p.created_at
+      b.*, c.* from product as p 
       left join brands as b on p.brand_id = b.id
       left join categories as c on c.id = p.category_id where p.id = ${id}`;
 
