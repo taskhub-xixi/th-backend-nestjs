@@ -1,20 +1,19 @@
-import { randomInt } from "node:crypto";
 import { HttpException, Inject, Injectable } from "@nestjs/common";
 import { WINSTON_MODULE_PROVIDER } from "nest-winston";
+import { randomInt } from "node:crypto";
 import { Logger } from "winston";
 import { JwtPayload } from "../auth/dto/payload-interface";
 import { PrismaService } from "../common/prisma.service";
 import {
   CreateOrderRequest,
   GetAllOrderResponse,
-  GetOrderRequest,
   GetOrderRequestService,
   GetOrderResponse,
   OrderQueryResponse,
+  OrderResponseQuery,
   OrderResponse,
   PaymentsResponseFromGetOrderResponse,
 } from "./order.model";
-import { Order } from "../generated/prisma";
 
 @Injectable()
 export class OrderService {
@@ -42,7 +41,7 @@ export class OrderService {
 
     const odn = payload.sub + randomInt(99999999);
 
-    const result = await this.prismaService.order.create({
+    const orderCreate = await this.prismaService.order.create({
       data: {
         orderNumber: "ORD-" + odn,
         userId: user.id,
@@ -55,23 +54,58 @@ export class OrderService {
       },
     });
 
-    const resultFinal = await this.prismaService.order.findUnique({
-      where: { id: result.id },
-    });
+    const orderResult = await this.prismaService.$queryRaw<OrderResponseQuery>`
+    select
+      o.id,
+      o.order_number,
+      o.status,
+      o.subtotal,
+      o.shipping_cost,
+      o.discount,
+      o.tax,
+      o.total,
+      o.created_at,
+      oi.id as order_item_id,
+      oi.quantity as order_item_quantity,
+      oi.price as order_item_price,
+      oi.subtotal as order_item_subtotal,
+      p.method as payment_method,
+      p.amount as payment_amount,
+      p.status as payment_status,
+      p.deadline as payment_deadline
+    from
+      orders as o
+      left join order_items as oi on oi.order_id = o.id
+      left join payments as p on p.order_id = o.id
+    where o.id = ${orderCreate.id}`;
 
-    if (!resultFinal) {
-      throw new HttpException("User not found", 404);
-    }
-
-    if (!result) {
+    if (!orderResult) {
       throw new HttpException("User not found", 404);
     }
 
     return {
       data: {
-        id: resultFinal.id,
-        userId: resultFinal.userId,
-        orderNumber: resultFinal.orderNumber,
+        id: orderResult.id,
+        orderNumber: orderResult.order_number,
+        status: orderResult.status,
+        items: {
+          id: orderResult.order_item_id,
+          quantity: orderResult.order_item_quantity,
+          price: orderResult.order_item_price,
+          subtotal: orderResult.order_item_subtotal,
+        },
+        subtotal: orderResult.subtotal,
+        shippingCost: orderResult.shippingCost,
+        discount: orderResult.discount,
+        tax: orderResult.tax,
+        total: orderResult.total,
+        payment: {
+          method: orderResult.payment_method,
+          status: orderResult.payment_status,
+          amount: orderResult.payment_amount,
+          deadline: orderResult.payment_deadline,
+        },
+        createdAt: orderResult.createdAt,
       },
     };
   }

@@ -170,6 +170,44 @@ export class OrderResponse {
   data!: {
     id: string;
     orderNumber: string;
-    userId: string;
+    status: string;
+    items: {
+      id: string;
+      quantity: number;
+      price: Decimal;
+      subtotal: Decimal;
+    };
+    subtotal: Decimal;
+    shippingCost: Decimal;
+    discount: Decimal;
+    tax: Decimal;
+    total: Decimal;
+    payment: {
+      method: string;
+      status: string;
+      amount: Decimal;
+      deadline: Date;
+    };
+    createdAt: Date;
   };
+}
+
+export class OrderResponseQuery {
+  id!: string;
+  order_number!: string;
+  status!: string;
+  order_item_id!: string;
+  order_item_quantity!: number;
+  order_item_price!: Decimal;
+  order_item_subtotal!: Decimal;
+  subtotal!: Decimal;
+  shippingCost!: Decimal;
+  discount!: Decimal;
+  tax!: Decimal;
+  total!: Decimal;
+  payment_method!: string;
+  payment_status!: string;
+  payment_amount!: Decimal;
+  payment_deadline!: Date;
+  createdAt!: Date;
 }

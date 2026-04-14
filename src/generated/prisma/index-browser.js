@@ -176,13 +176,12 @@ exports.Prisma.ProductVariantScalarFieldEnum = {
   id: 'id',
   productId: 'productId',
   sku: 'sku',
-  name: 'name',
+  color: 'color',
   priceAdjustment: 'priceAdjustment',
   stock: 'stock',
   attributes: 'attributes',
-  isActive: 'isActive',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  size: 'size',
+  isActive: 'isActive'
 };
 
 exports.Prisma.ProductImageScalarFieldEnum = {
@@ -208,13 +207,6 @@ exports.Prisma.ProductReviewScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   deleted_at: 'deleted_at'
-};
-
-exports.Prisma.ProductTagScalarFieldEnum = {
-  tags_id: 'tags_id',
-  productId: 'productId',
-  tag: 'tag',
-  createdAt: 'createdAt'
 };
 
 exports.Prisma.ProductAttributeScalarFieldEnum = {
@@ -264,9 +256,7 @@ exports.Prisma.OrderScalarFieldEnum = {
   shippingMethod: 'shippingMethod',
   shippingAddress: 'shippingAddress',
   billingAddress: 'billingAddress',
-  trackingNumber: 'trackingNumber',
   notes: 'notes',
-  couponId: 'couponId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   deletedAt: 'deletedAt'
@@ -371,16 +361,12 @@ exports.Prisma.PaymentsScalarFieldEnum = {
   id: 'id',
   order_id: 'order_id',
   provider: 'provider',
-  provider_transaction_id: 'provider_transaction_id',
   amount: 'amount',
   fee: 'fee',
-  net_amount: 'net_amount',
   currency: 'currency',
   method: 'method',
   status: 'status',
-  payment_url: 'payment_url',
   deadline: 'deadline',
-  metadata: 'metadata',
   created_at: 'created_at',
   updated_at: 'updated_at',
   paid_at: 'paid_at',
@@ -490,8 +476,9 @@ exports.Prisma.ProductVariantOrderByRelevanceFieldEnum = {
   id: 'id',
   productId: 'productId',
   sku: 'sku',
-  name: 'name',
-  attributes: 'attributes'
+  color: 'color',
+  attributes: 'attributes',
+  size: 'size'
 };
 
 exports.Prisma.ProductImageOrderByRelevanceFieldEnum = {
@@ -507,12 +494,6 @@ exports.Prisma.ProductReviewOrderByRelevanceFieldEnum = {
   userId: 'userId',
   title: 'title',
   content: 'content'
-};
-
-exports.Prisma.ProductTagOrderByRelevanceFieldEnum = {
-  tags_id: 'tags_id',
-  productId: 'productId',
-  tag: 'tag'
 };
 
 exports.Prisma.ProductAttributeOrderByRelevanceFieldEnum = {
@@ -543,9 +524,7 @@ exports.Prisma.OrderOrderByRelevanceFieldEnum = {
   shippingMethod: 'shippingMethod',
   shippingAddress: 'shippingAddress',
   billingAddress: 'billingAddress',
-  trackingNumber: 'trackingNumber',
-  notes: 'notes',
-  couponId: 'couponId'
+  notes: 'notes'
 };
 
 exports.Prisma.OrderItemOrderByRelevanceFieldEnum = {
@@ -619,12 +598,9 @@ exports.Prisma.paymentsOrderByRelevanceFieldEnum = {
   id: 'id',
   order_id: 'order_id',
   provider: 'provider',
-  provider_transaction_id: 'provider_transaction_id',
   currency: 'currency',
   method: 'method',
-  status: 'status',
-  payment_url: 'payment_url',
-  metadata: 'metadata'
+  status: 'status'
 };
 
 exports.Prisma.refundsOrderByRelevanceFieldEnum = {
@@ -676,7 +652,6 @@ exports.Prisma.ModelName = {
   ProductVariant: 'ProductVariant',
   ProductImage: 'ProductImage',
   ProductReview: 'ProductReview',
-  ProductTag: 'ProductTag',
   ProductAttribute: 'ProductAttribute',
   Coupon: 'Coupon',
   CouponUsage: 'CouponUsage',
