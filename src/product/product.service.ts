@@ -322,22 +322,22 @@ export class ProductService {
     const rawCategory = await this.prismaService.$queryRaw<
       Product[]
     >`SELECT p.*, c.name as category_name
-FROM products AS p
-    JOIN categories as c ON p.category_id = c.id
-WHERE
-    c.name LIKE ${category} 
-LIMIT ${limit}
-OFFSET
-    ${skip}`;
+      FROM products AS p
+      JOIN categories as c ON p.category_id = c.id
+      WHERE
+      c.name LIKE ${category} 
+      LIMIT ${limit}
+      OFFSET
+      ${skip}`;
 
     const total = await this.prismaService.$queryRaw<
       TotalResultCategories[]
     >`SELECT COUNT(*) as perCategory, c.name
-FROM products as p
-    JOIN categories as c ON p.category_id = c.id
-WHERE c.name = ${category}
-GROUP BY
-    category_id, c.name;`;
+      FROM products as p
+      JOIN categories as c ON p.category_id = c.id
+      WHERE c.name = ${category}
+      GROUP BY
+      category_id, c.name;`;
 
     const totalCategory = Number(total[0].perCategory);
 
@@ -414,6 +414,7 @@ GROUP BY
       left join brands as b on b.id = p.brand_id
       where
       p.slug like ${slug};`;
+
     return {
       products: {
         id: dataProduct.id,
