@@ -25,6 +25,7 @@ import {
   GetProductsResponseSuccess,
   GetProductsResponseSuccessAll,
   SearchRequest,
+  SlugRequest,
   UpdateProductRequest,
   UpdateProductResponse,
 } from "../model/product.model";
@@ -52,11 +53,11 @@ export class ProductController {
     };
   }
 
-  // @Admin()
-  // @Public()
-  // @UseGuards(PublicGuard)
-  // @UseGuards(AdminGuard)
-  // @UseGuards(JwtAuthGuard)
+  @Admin()
+  @Public()
+  @UseGuards(PublicGuard)
+  @UseGuards(AdminGuard)
+  @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.OK)
   @Get("all")
   async getProductAll(
@@ -98,6 +99,19 @@ export class ProductController {
   ): Promise<WebResponse<GetProductsResponseSuccess>> {
     console.log(typeof req);
     const result = await this.productService.search(req.name);
+    return {
+      data: result,
+      statusCode: HttpStatus.OK,
+    };
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @HttpCode(HttpStatus.OK)
+  @Get("/:slug")
+  async searchWithSlug(
+    @Query() req: SlugRequest,
+  ): Promise<WebResponse<GetProductsResponseSuccess>> {
+    const result = await this.productService.searchWithSlug(req.slug);
     return {
       data: result,
       statusCode: HttpStatus.OK,

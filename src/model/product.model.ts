@@ -370,6 +370,12 @@ export class SearchRequest {
   name!: string;
 }
 
+export class SlugRequest {
+  @IsString()
+  @IsNotEmpty()
+  slug!: string;
+}
+
 export class DeleteProductResponse {
   @IsBoolean()
   deleted!: boolean;

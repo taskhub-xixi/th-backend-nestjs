@@ -405,6 +405,46 @@ GROUP BY
     };
   }
 
+  async searchWithSlug(slug: string): Promise<GetProductsResponseSuccess> {
+    const dataProduct = await this.prismaService
+      .$queryRaw<GetProductResponseSuccessQuery>`
+      select * from
+      products as p
+      left join categories as c on c.id = p.category_id
+      left join brands as b on b.id = p.brand_id
+      where
+      p.slug like ${slug};`;
+    return {
+      products: {
+        id: dataProduct.id,
+        name: dataProduct.name,
+        price: dataProduct.price,
+        originalPrice: dataProduct.original_price,
+        slug: dataProduct.slug,
+        sku: dataProduct.slug,
+        description: dataProduct.description,
+        shortDescription: dataProduct.short_description,
+        category: {
+          id: dataProduct.category_id,
+          name: dataProduct.category_name,
+          slug: dataProduct.category_slug,
+        },
+        brand: {
+          id: dataProduct.brand_id,
+          name: dataProduct.brand_name,
+        },
+        stock: dataProduct.stock,
+        lowStockThreshold: dataProduct.low_stock_threshold,
+        ratingAverage: dataProduct.rating_average,
+        ratingCount: dataProduct.rating_count,
+        reviewCount: dataProduct.review_count,
+        isActive: dataProduct.isActive,
+        metadata: dataProduct.metadata,
+        createdAt: dataProduct.created_at,
+      },
+    };
+  }
+
   async createBrand(brand: string): Promise<void> {
     await this.prismaService.brand.create({
       data: {
