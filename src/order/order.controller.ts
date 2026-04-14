@@ -63,4 +63,9 @@ export class OrderController {
       statusCode: HttpStatus.OK,
     };
   }
+
+  async getOrderWithCoupons(coupons_id: number) {
+    const result = await this.orderService.getOrderWithCoupons(coupons_id);
+    return result;
+  }
 }
