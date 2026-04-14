@@ -142,4 +142,10 @@ export class OrderService {
       createdAt: user.created_at,
     };
   }
+
+  async getOrderWithCoupons(coupons_id: number) {
+    const result = await this.prismaService
+      .$queryRaw`select * from orders as o left join coupons as c on c.id = o.coupon_id where o.coupon_id = ${coupons_id}`;
+    return result;
+  }
 }
