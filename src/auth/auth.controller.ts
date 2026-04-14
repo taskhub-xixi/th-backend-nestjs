@@ -1,13 +1,13 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   HttpException,
   HttpStatus,
   Patch,
   Post,
-  Delete,
   Req,
   Res,
   UseGuards,
@@ -17,6 +17,7 @@ import { JwtAuthGuard } from "../common/guards/jwt-auth.guard";
 import { RTGuard } from "../common/guards/rt-token.guard";
 import {
   CookiePayload,
+  DeleteDTO,
   LoginDTO,
   LoginResponse,
   LogoutDTO,
@@ -25,7 +26,6 @@ import {
   RegisterResponse,
   UpdateDTO,
   VerifyResponseToken,
-  DeleteDTO,
 } from "../model/auth.model";
 import { WebResponse } from "../model/web.mode";
 import { AuthService } from "./auth.service";
