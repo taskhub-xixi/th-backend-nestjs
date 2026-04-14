@@ -176,7 +176,10 @@ export class AuthService implements IAuthService {
     };
   }
 
-  async delete(deleteDTO: DeleteDTO, res: Response) {
+  async delete(
+    deleteDTO: DeleteDTO,
+    response: Response,
+  ): Promise<{ message: string }> {
     const data = await this.prismaService.users.findUnique({
       where: { email: deleteDTO.email },
     });
